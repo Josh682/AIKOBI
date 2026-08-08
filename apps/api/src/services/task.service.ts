@@ -57,7 +57,7 @@ export class TaskService {
             result.data = cache.resultData;
           }
         }
-      } else if (task.type === 'PRODUCT' && task.payload) {
+      } else if (task.type === 'PRODUCT_DETAIL' && task.payload) {
         const p = task.payload as { url?: string };
         if (p.url) {
           const prod = await prisma.product.findFirst({

@@ -58,7 +58,7 @@ export async function processProductJob(
         rating: detail.rating ? new Decimal(detail.rating) : null,
         totalReviews: detail.totalReviews,
         totalSold: detail.totalSold,
-        rawData: detail as unknown as Record<string, unknown>,
+        rawData: JSON.parse(JSON.stringify(detail)) as any,
         lastScrapedAt: new Date(),
       },
       update: {
@@ -70,7 +70,7 @@ export async function processProductJob(
         rating: detail.rating ? new Decimal(detail.rating) : null,
         totalReviews: detail.totalReviews,
         totalSold: detail.totalSold,
-        rawData: detail as unknown as Record<string, unknown>,
+        rawData: JSON.parse(JSON.stringify(detail)) as any,
         lastScrapedAt: new Date(),
       },
     });

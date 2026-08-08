@@ -102,8 +102,8 @@ export class ShopeeScraper extends BaseScraper {
         originalPrice,
         discountPercent: info['discount'] ? Number(info['discount']) : calcDiscount(originalPrice ?? 0, price),
         imageUrl: info['image'] ? `https://down-id.img.susercontent.com/file/${info['image']}` : '',
-        rating: Number(info['item_rating']?.['rating_star'] ?? info['rating_star'] ?? 0),
-        totalReviews: normalizeReviewCount(String(info['item_rating']?.['rating_count']?.[0] ?? 0)),
+        rating: Number((info['item_rating'] as Record<string, unknown> | undefined)?.['rating_star'] ?? info['rating_star'] ?? 0),
+        totalReviews: normalizeReviewCount(String(((info['item_rating'] as Record<string, unknown> | undefined)?.['rating_count'] as unknown[] | undefined)?.[0] ?? 0)),
         totalSold: normalizeSoldCount(String(info['sold'] ?? info['historical_sold'] ?? 0)),
         seller: {
           name: String(info['shop_name'] ?? ''),
@@ -251,15 +251,15 @@ export class ShopeeScraper extends BaseScraper {
       price,
       originalPrice,
       discountPercent: originalPrice ? calcDiscount(originalPrice, price) : 0,
-      rating: Number(item['item_rating']?.['rating_star'] ?? 0),
-      totalReviews: normalizeReviewCount(String(item['item_rating']?.['rating_count']?.[0] ?? 0)),
+      rating: Number((item['item_rating'] as Record<string, unknown> | undefined)?.['rating_star'] ?? 0),
+      totalReviews: normalizeReviewCount(String(((item['item_rating'] as Record<string, unknown> | undefined)?.['rating_count'] as unknown[] | undefined)?.[0] ?? 0)),
       totalSold: normalizeSoldCount(String(item['historical_sold'] ?? 0)),
       seller: {
         name: String(item['shop_name'] ?? ''),
         isOfficial: Boolean(item['is_official_shop']),
         location: String(item['shop_location'] ?? ''),
       },
-      category: String(item['categories']?.[0]?.['display_name'] ?? ''),
+      category: String(((item['categories'] as Record<string, unknown>[] | undefined)?.[0] as Record<string, unknown> | undefined)?.['display_name'] ?? ''),
       variants,
       reviews: [],
       specifications: specs,
@@ -322,7 +322,8 @@ export class ShopeeScraper extends BaseScraper {
         return resp.json();
       }, { shopId, itemId }) as Record<string, unknown> | null;
 
-      const ratings = (data?.['data']?.['ratings'] as Record<string, unknown>[] | undefined) ?? [];
+      const dataObj = data?.['data'] as Record<string, unknown> | undefined;
+      const ratings = (dataObj?.['ratings'] as Record<string, unknown>[] | undefined) ?? [];
       return ratings.map((r: Record<string, unknown>) => ({
         author: String(r['author_username'] ?? ''),
         rating: Number(r['rating_star'] ?? 5),

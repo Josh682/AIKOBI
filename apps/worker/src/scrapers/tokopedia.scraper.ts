@@ -99,7 +99,7 @@ export class TokopediaScraper extends BaseScraper {
   }
 
   private async domSearchScrape(page: import('playwright').Page, keyword: string, pageNum: number): Promise<SearchResult> {
-    const items: SearchResultItem[] = await page.$$eval(
+    const rawCards = await page.$$eval(
       '[data-testid="divSRPContentProducts"] > div, .css-bk6tzz',
       (cards) => cards.slice(0, 20).map((card) => {
         const name = card.querySelector('[data-testid="linkProductName"], .prd_link-product-name')?.textContent?.trim() ?? '';
@@ -115,17 +115,17 @@ export class TokopediaScraper extends BaseScraper {
       }),
     );
 
-    const normalized: SearchResultItem[] = items.map((item, i) => ({
+    const normalized: SearchResultItem[] = rawCards.map((item, i) => ({
       externalId: `toped-dom-${pageNum}-${i}`,
       marketplace: 'TOKOPEDIA' as const,
-      url: item['url'] as string,
-      name: item['name'] as string,
-      price: normalizePrice(item['price'] as string),
-      imageUrl: item['imageUrl'] as string,
-      rating: normalizeRating(item['rating'] as string),
-      totalSold: normalizeSoldCount(item['sold'] as string),
-      seller: { name: item['shop'] as string, location: item['location'] as string },
-      location: item['location'] as string,
+      url: item.url,
+      name: item.name,
+      price: normalizePrice(item.price),
+      imageUrl: item.imageUrl,
+      rating: normalizeRating(item.rating),
+      totalSold: normalizeSoldCount(item.sold),
+      seller: { name: item.shop, location: item.location },
+      location: item.location,
     }));
 
     return { keyword, marketplace: 'TOKOPEDIA', totalFound: normalized.length, page: pageNum, perPage: 20, items: normalized };
@@ -285,7 +285,7 @@ export class TokopediaScraper extends BaseScraper {
         price: normalizePrice(String(v['price'] ?? defaultPrice)),
         originalPrice: v['priceBefore'] ? normalizePrice(String(v['priceBefore'])) : undefined,
         stock: normalizeStock(String(v['stock'] ?? '0')),
-        imageUrl: String(v['picture']?.['url70'] ?? ''),
+        imageUrl: String((v['picture'] as Record<string, unknown> | undefined)?.['url70'] ?? ''),
       }));
     } catch {
       return [];

@@ -22,7 +22,9 @@ async function main() {
   const user = await prisma.user.upsert({
     where: { email: 'test@datascrapper.dev' },
     update: {
-      passwordHash, // update hash setiap seed
+      passwordHash,
+      quotaUsed: 0,
+      isActive: true,
     },
     create: {
       email: 'test@datascrapper.dev',
@@ -31,14 +33,19 @@ async function main() {
       plan: 'FREE',
       quotaLimit: 100,
       quotaUsed: 0,
-      apiKeys: {
-        create: {
-          key,
-          keyPrefix: prefix,
-          name: 'Test API Key',
-          isActive: true,
-        },
-      },
+      isActive: true,
+    },
+  });
+
+  // Always create/update a fresh test API key for the user
+  await prisma.apiKey.deleteMany({ where: { userId: user.id } });
+  await prisma.apiKey.create({
+    data: {
+      userId: user.id,
+      key,
+      keyPrefix: prefix,
+      name: 'Test API Key',
+      isActive: true,
     },
   });
 

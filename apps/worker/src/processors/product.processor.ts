@@ -37,10 +37,15 @@ export async function processProductJob(
 
     // Upsert product in DB
     const product = await prisma.product.upsert({
-      where: { url },
+      where: {
+        marketplace_externalId: {
+          marketplace,
+          externalId: detail.externalId || url,
+        },
+      },
       create: {
         marketplace,
-        externalId: detail.externalId,
+        externalId: detail.externalId || url,
         url,
         name: detail.name,
         description: detail.description,
@@ -57,6 +62,7 @@ export async function processProductJob(
         lastScrapedAt: new Date(),
       },
       update: {
+        url,
         name: detail.name,
         description: detail.description,
         imageUrl: detail.imageUrl,

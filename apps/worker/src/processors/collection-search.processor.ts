@@ -160,7 +160,12 @@ async function processItems(
   for (const item of items) {
     try {
       const product = await prisma.product.upsert({
-        where: { url: item.url },
+        where: {
+          marketplace_externalId: {
+            marketplace: marketplace as 'TOKOPEDIA' | 'SHOPEE' | 'BUKALAPAK' | 'LAZADA' | 'BLIBLI',
+            externalId: item.externalId,
+          },
+        },
         create: {
           marketplace: marketplace as 'TOKOPEDIA' | 'SHOPEE' | 'BUKALAPAK' | 'LAZADA' | 'BLIBLI',
           externalId: item.externalId,
@@ -175,6 +180,7 @@ async function processItems(
           lastScrapedAt: new Date(),
         },
         update: {
+          url: item.url,
           name: item.name,
           imageUrl: item.imageUrl,
           rating: item.rating != null ? new Decimal(item.rating) : null,

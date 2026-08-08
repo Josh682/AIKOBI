@@ -4,6 +4,7 @@ import type { ProxyRotator } from '../browser/proxy.rotator.js';
 import { TokopediaScraper } from '../scrapers/tokopedia.scraper.js';
 import { ShopeeScraper } from '../scrapers/shopee.scraper.js';
 import { prisma } from '@datascrapper/db';
+import { Decimal } from '@prisma/client/runtime/library';
 import { logger } from '../utils/logger.js';
 
 // ── Mock data generator (dev mode fallback) ──────────────────

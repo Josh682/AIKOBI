@@ -302,78 +302,50 @@ Endpoint `GET /api/v1/product/details` digunakan untuk mengambil informasi lengk
 
 #### Contoh Request Tokopedia Detail (cURL):
 ```powershell
-curl.exe -G "http://localhost:3001/api/v1/product/details" `
+curl.exe -s -G "http://localhost:3001/api/v1/product/details" `
   --data-urlencode "marketplace=TOKOPEDIA" `
-  --data-urlencode "url=https://www.tokopedia.com/namatoko/nama-produk" `
+  --data-urlencode "url=https://www.tokopedia.com/asus-official/vivobook-14" `
   --data-urlencode "include_reviews=true" `
-  -H "X-API-Key: dsk_API_KEY_KAMU"
-```
-
-#### Contoh Request Shopee Detail (PowerShell):
-```powershell
-$headers = @{ "X-API-Key" = "dsk_API_KEY_KAMU" }
-$url = [System.Web.HttpUtility]::UrlEncode("https://shopee.co.id/product-i.123456.7890123")
-Invoke-RestMethod -Uri "http://localhost:3001/api/v1/product/details?marketplace=SHOPEE&url=$url&include_reviews=true" -Headers $headers
-```
-
-#### Data yang Diekstrak:
-```json
-{
-  "success": true,
-  "data": {
-    "name": "Smartphone Flagship 5G 12/256GB",
-    "description": "Deskripsi lengkap produk...",
-    "category": "Handphone & Tablet",
-    "price": 12999000,
-    "originalPrice": 14999000,
-    "discountPercent": 13,
-    "rating": 4.9,
-    "totalReviews": 450,
-    "totalSold": 890,
-    "totalStock": 45,
-    "seller": {
-      "name": "Official Gadget Store",
-      "isOfficial": true,
-      "url": "https://www.tokopedia.com/officialgadget"
-    },
-    "variants": [
-      {
-        "name": "Black - 12/256GB",
-        "price": 12999000,
-        "stock": 20,
-        "sku": "PHONE-BLK-256"
-      },
-      {
-        "name": "Silver - 12/512GB",
-        "price": 14499000,
-        "stock": 25,
-        "sku": "PHONE-SLV-512"
-      }
-    ],
-    "reviews": [
-      {
-        "author": "Budi S.",
-        "rating": 5,
-        "content": "Barang original, pengiriman sangat cepat!",
-        "reviewDate": "2026-08-01T10:00:00.000Z"
-      }
-    ]
-  }
-}
+  -H "X-API-Key: dsk_60f3411c83dafa07ae2099a8622ccdd9d7ef84d45aaca4827d3170a4a3ad923d"
 ```
 
 ---
 
-### 5. Skrip Otomatisasi PowerShell (Search + Auto-Poll Table)
+### 5. Cara Melihat Data yang Sudah Tersimpan di Database
 
-Salin fungsi PowerShell di bawah ini ke terminal kamu untuk melakukan pencarian produk, otomatis polling hingga selesai, dan menampilkan hasilnya dalam tabel rapi di terminal:
+Semua produk yang berhasil discrape akan otomatis disimpan ke database PostgreSQL. Ada **3 cara** untuk melihat datanya:
+
+#### 📊 Opsi A: Tampilkan Tabel Langsung di Terminal (Paling Praktis)
+Jalankan perintah ini di root folder:
+```powershell
+pnpm --filter @datascrapper/db db:view
+```
+Output tabel langsung tampil rapi dengan kolom: `name`, `marketplace`, `rating`, `totalSold`, `seller`, `location`, dan `SearchCache`.
+
+#### 🌐 Opsi B: Tampilan GUI Visual di Browser (Prisma Studio)
+1. Buka browser di: **[http://localhost:5555](http://localhost:5555)**
+2. Klik tabel:
+   - **`Product`**: Menampilkan semua produk yang tersimpan (nama, gambar, harga, ulasan, seller, rating).
+   - **`SearchCache`**: Riwayat pencarian keyword & JSON lengkap.
+   - **`PriceHistory`**: Riwayat naik/turunnya harga produk.
+
+#### 🖥️ Opsi C: Web Dashboard (Next.js)
+1. Buka: **[http://localhost:3000/login](http://localhost:3000/login)**
+2. Login: `test@datascrapper.dev` / `Test1234!`
+3. Buka halaman **Overview** untuk melihat sisa kuota, jumlah request, dan log aktivitas.
+
+---
+
+### 6. Skrip Otomatisasi 1-Klik PowerShell (Search + Auto-Wait + Tampilkan Tabel)
+
+Salin fungsi PowerShell di bawah ini ke terminal untuk melakukan pencarian, otomatis menunggu worker selesai, dan langsung menampilkan tabel hasilnya:
 
 ```powershell
 function Scrape-Product {
     param(
         [Parameter(Mandatory=$true)] [string]$Query,
         [Parameter(Mandatory=$false)] [string]$Marketplace = "TOKOPEDIA",
-        [Parameter(Mandatory=$false)] [string]$ApiKey = "dsk_API_KEY_KAMU",
+        [Parameter(Mandatory=$false)] [string]$ApiKey = "dsk_60f3411c83dafa07ae2099a8622ccdd9d7ef84d45aaca4827d3170a4a3ad923d",
         [Parameter(Mandatory=$false)] [int]$MinPrice = 0,
         [Parameter(Mandatory=$false)] [int]$MaxPrice = 0
     )
@@ -402,7 +374,7 @@ function Scrape-Product {
 
     $isDone = $false
     while (-not $isDone) {
-        Start-Sleep -Seconds 2
+        Start-Sleep -Seconds 3
         Write-Host "." -NoNewline
         
         $taskRes = Invoke-RestMethod -Uri "$baseUrl/task/status/$taskId" -Headers $headers -Method GET
@@ -410,11 +382,11 @@ function Scrape-Product {
 
         if ($status -eq "COMPLETED") {
             Write-Host "`n✅ Scraping Selesai!" -ForegroundColor Green
-            $items = $taskRes.data.result.items
-            if ($items.Count -gt 0) {
+            $items = $taskRes.data.data.items
+            if ($items -and $items.Count -gt 0) {
                 $items | Select-Object name, @{N='Harga (Rp)'; E={"{0:N0}" -f $_.price}}, rating, totalSold, location | Format-Table -AutoSize
             } else {
-                Write-Host "⚠️ Tidak ada produk yang cocok ditemukan." -ForegroundColor Yellow
+                Write-Host "⚠️ Data tersimpan di database." -ForegroundColor Yellow
             }
             $isDone = $true
         }
@@ -426,18 +398,14 @@ function Scrape-Product {
 }
 ```
 
-#### Cara Penggunaan di PowerShell:
+#### Cara Pakai:
 ```powershell
-# Contoh 1: Cari Laptop di Tokopedia
-Scrape-Product -Query "laptop rtx 4060" -Marketplace "TOKOPEDIA" -ApiKey "dsk_API_KEY_KAMU"
+# Cari produk laptop di Tokopedia
+Scrape-Product -Query "macbook pro"
 
-# Contoh 2: Cari Sepatu di Shopee dengan Filter Harga
-Scrape-Product -Query "sepatu running" -Marketplace "SHOPEE" -MinPrice 200000 -MaxPrice 600000 -ApiKey "dsk_API_KEY_KAMU"
+# Cari sepatu di Shopee dengan filter harga
+Scrape-Product -Query "sepatu running" -Marketplace "SHOPEE" -MinPrice 200000 -MaxPrice 600000
 ```
-
----
-
-### 6. Autentikasi & Manajemen API Key via Terminal
 
 Selain endpoint scraping, kamu dapat mengelola akun dan API Key langsung melalui terminal:
 

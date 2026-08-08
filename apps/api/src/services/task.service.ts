@@ -40,8 +40,38 @@ export class TaskService {
       retryCount: task.retryCount,
     };
 
-    // If completed, cache the result briefly
-    if (task.status === 'COMPLETED' || task.status === 'FAILED') {
+    // If completed, attach scraped result data
+    if (task.status === 'COMPLETED') {
+      if (task.type === 'SEARCH' && task.payload) {
+        const p = task.payload as { keyword?: string; page?: number };
+        if (p.keyword) {
+          const cache = await prisma.searchCache.findFirst({
+            where: {
+              marketplace: task.marketplace,
+              keyword: p.keyword.toLowerCase(),
+              page: p.page ?? 1,
+            },
+            orderBy: { createdAt: 'desc' },
+          });
+          if (cache) {
+            result.data = cache.resultData;
+          }
+        }
+      } else if (task.type === 'PRODUCT' && task.payload) {
+        const p = task.payload as { url?: string };
+        if (p.url) {
+          const prod = await prisma.product.findFirst({
+            where: { url: p.url },
+            include: { variants: true, reviews: { take: 10 } },
+          });
+          if (prod) {
+            result.data = prod;
+          }
+        }
+      }
+
+      await this.cache.setTaskStatus(taskId, result);
+    } else if (task.status === 'FAILED') {
       await this.cache.setTaskStatus(taskId, result);
     }
 

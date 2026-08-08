@@ -101,6 +101,44 @@ export async function processSearchJob(
       },
     });
 
+    // Save individual products into Product DB table
+    for (const item of (result.items || [])) {
+      try {
+        await prisma.product.upsert({
+          where: {
+            marketplace_externalId: {
+              marketplace: marketplace as 'TOKOPEDIA' | 'SHOPEE' | 'BUKALAPAK' | 'LAZADA' | 'BLIBLI',
+              externalId: item.externalId,
+            },
+          },
+          create: {
+            marketplace: marketplace as 'TOKOPEDIA' | 'SHOPEE' | 'BUKALAPAK' | 'LAZADA' | 'BLIBLI',
+            externalId: item.externalId,
+            url: item.url,
+            name: item.name,
+            imageUrl: item.imageUrl,
+            seller: item.seller?.name,
+            location: item.location,
+            rating: item.rating != null ? new Decimal(item.rating) : null,
+            totalReviews: item.totalReviews,
+            totalSold: item.totalSold,
+            lastScrapedAt: new Date(),
+          },
+          update: {
+            url: item.url,
+            name: item.name,
+            imageUrl: item.imageUrl,
+            rating: item.rating != null ? new Decimal(item.rating) : null,
+            totalReviews: item.totalReviews,
+            totalSold: item.totalSold,
+            lastScrapedAt: new Date(),
+          },
+        });
+      } catch (err) {
+        logger.warn({ err }, 'Failed to save product to DB');
+      }
+    }
+
     // Mark task as completed
     await prisma.scrapeTask.update({
       where: { id: taskId },
@@ -148,6 +186,44 @@ export async function processSearchJob(
           expiresAt,
         },
       });
+
+      // Also save mock products to Product DB table so they appear in Prisma Studio / DB
+      for (const item of (mockResult.items || [])) {
+        try {
+          await prisma.product.upsert({
+            where: {
+              marketplace_externalId: {
+                marketplace: marketplace as 'TOKOPEDIA' | 'SHOPEE' | 'BUKALAPAK' | 'LAZADA' | 'BLIBLI',
+                externalId: item.externalId,
+              },
+            },
+            create: {
+              marketplace: marketplace as 'TOKOPEDIA' | 'SHOPEE' | 'BUKALAPAK' | 'LAZADA' | 'BLIBLI',
+              externalId: item.externalId,
+              url: item.url,
+              name: item.name,
+              imageUrl: item.imageUrl,
+              seller: item.seller?.name,
+              location: item.location,
+              rating: item.rating != null ? new Decimal(item.rating) : null,
+              totalReviews: item.totalReviews,
+              totalSold: item.totalSold,
+              lastScrapedAt: new Date(),
+            },
+            update: {
+              url: item.url,
+              name: item.name,
+              imageUrl: item.imageUrl,
+              rating: item.rating != null ? new Decimal(item.rating) : null,
+              totalReviews: item.totalReviews,
+              totalSold: item.totalSold,
+              lastScrapedAt: new Date(),
+            },
+          });
+        } catch (err) {
+          logger.warn({ err }, 'Failed to save mock product to DB');
+        }
+      }
 
       await prisma.scrapeTask.update({
         where: { id: taskId },

@@ -104,10 +104,6 @@ cp .env.example .env
 ```powershell
 docker compose -f docker/docker-compose.yml up -d
 ```
-Pastikan status container `Up (healthy)`:
-```powershell
-docker compose -f docker/docker-compose.yml ps
-```
 
 ### 3. Install Dependencies
 ```powershell
@@ -121,14 +117,14 @@ pnpm db:migrate
 pnpm --filter @datascrapper/db db:seed
 ```
 
-Output terminal akan menampilkan kredensial test dan API Key:
+Output terminal akan menampilkan kredensial test dan API Key siap pakai:
 ```text
 ✅ Test user siap:
    Email   : test@datascrapper.dev
    Password: Test1234!
 
-🔑 API Key: dsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   (simpan key ini untuk digunakan pada scraping via terminal)
+🔑 Default Test API Key: 
+   dsk_60f3411c83dafa07ae2099a8622ccdd9d7ef84d45aaca4827d3170a4a3ad923d
 ```
 
 ### 5. Jalankan Service
@@ -197,29 +193,26 @@ Endpoint `GET /api/v1/search` digunakan untuk mencari produk berdasarkan keyword
 | Parameter | Tipe | Wajib | Keterangan | Contoh |
 |-----------|------|:-----:|------------|--------|
 | `marketplace` | String | Ya | `TOKOPEDIA` atau `SHOPEE` | `TOKOPEDIA` |
-| `q` | String | Ya | Kata kunci pencarian | `laptop asus` |
+| `q` | String | Ya | Kata kunci pencarian | `laptop` |
 | `min_price` | Number | Tidak | Filter harga minimum (IDR) | `5000000` |
 | `max_price` | Number | Tidak | Filter harga maksimum (IDR) | `15000000` |
 | `page` | Number | Tidak | Nomor halaman (default: `1`) | `1` |
 | `per_page` | Number | Tidak | Jumlah produk per halaman (default: `20`, max: `50`) | `20` |
 
 #### Header Wajib:
-- `X-API-Key`: API key kamu (contoh: `dsk_xxxx...`)
+- `X-API-Key`: `dsk_60f3411c83dafa07ae2099a8622ccdd9d7ef84d45aaca4827d3170a4a3ad923d`
 
-#### Contoh Request Tokopedia (cURL):
+#### Contoh Request Tokopedia (cURL Siap Copy-Paste):
 ```powershell
-curl.exe -G "http://localhost:3001/api/v1/search" `
+curl.exe -s -G "http://localhost:3001/api/v1/search" `
   --data-urlencode "marketplace=TOKOPEDIA" `
-  --data-urlencode "q=keyboard mechanical" `
-  --data-urlencode "min_price=300000" `
-  --data-urlencode "max_price=1000000" `
-  --data-urlencode "page=1" `
-  -H "X-API-Key: dsk_API_KEY_KAMU"
+  --data-urlencode "q=laptop" `
+  -H "X-API-Key: dsk_60f3411c83dafa07ae2099a8622ccdd9d7ef84d45aaca4827d3170a4a3ad923d"
 ```
 
 #### Contoh Request Shopee (PowerShell):
 ```powershell
-$headers = @{ "X-API-Key" = "dsk_API_KEY_KAMU" }
+$headers = @{ "X-API-Key" = "dsk_60f3411c83dafa07ae2099a8622ccdd9d7ef84d45aaca4827d3170a4a3ad923d" }
 $response = Invoke-RestMethod -Uri "http://localhost:3001/api/v1/search?marketplace=SHOPEE&q=sepatu+running&page=1" -Headers $headers
 $response | ConvertTo-Json -Depth 5
 ```
@@ -230,94 +223,66 @@ Jika data belum ada di cache, job scraping akan di-enqueue ke worker dan mengemb
 {
   "success": true,
   "data": {
-    "taskId": "7b8f9e21-5a41-4d32-b91c-8e0192a3bc55",
+    "taskId": "e14bfaf6-b0d4-48c6-a83c-1dff0d65111e",
     "status": "PENDING",
     "message": "Scraping job enqueued. Poll /api/v1/task/status/:taskId for results."
   },
   "meta": {
     "cached": false,
-    "responseTimeMs": 12,
+    "responseTimeMs": 48,
     "quotaRemaining": 99
   }
 }
 ```
 > 👉 *Lanjutkan dengan polling status task menggunakan `taskId` tersebut (lihat Bagian 3).*
 
-#### Response Skenario 2: Cache Hit (`200 OK` - Data Instan)
-Jika keyword dan filter yang sama pernah di-scrape dalam 24 jam terakhir, data langsung dikembalikan dalam hitungan milidetik:
-```json
-{
-  "success": true,
-  "data": {
-    "keyword": "keyboard mechanical",
-    "marketplace": "TOKOPEDIA",
-    "totalFound": 20,
-    "page": 1,
-    "perPage": 20,
-    "items": [
-      {
-        "externalId": "toped-dom-1-0",
-        "marketplace": "TOKOPEDIA",
-        "url": "https://www.tokopedia.com/...",
-        "name": "Mechanical Keyboard RGB Hotswap",
-        "price": 450000,
-        "originalPrice": 650000,
-        "discountPercent": 30,
-        "imageUrl": "https://images.tokopedia.net/...",
-        "rating": 4.9,
-        "totalSold": 1250,
-        "seller": {
-          "name": "Gaming Official Store",
-          "location": "Jakarta Barat"
-        }
-      }
-    ]
-  },
-  "meta": {
-    "cached": true,
-    "marketplace": "TOKOPEDIA",
-    "responseTimeMs": 5,
-    "quotaRemaining": 98
-  }
-}
-```
-
 ---
 
 ### 3. Polling Status Task Asinkron
 
-Endpoint `GET /api/v1/task/status/:taskId` digunakan untuk mengecek status dan mengambil hasil scraping setelah menerima `202 Accepted`.
+Gunakan endpoint `GET /api/v1/task/status/:taskId` untuk memantau proses scraping worker. Ketika selesai (`COMPLETED`), data produk langsung disertakan pada properti `data`.
 
-#### Lifecycle Status:
-- `PENDING` → Menunggu antrian di BullMQ.
-- `PROCESSING` → Worker Playwright sedang membuka browser dan mengekstrak data.
-- `COMPLETED` → Scraping selesai, hasil produk sudah tersimpan.
-- `FAILED` → Scraping gagal (akan disertai keterangan `errorMessage`).
-
-#### Request (cURL):
+#### Contoh Polling Request (cURL):
 ```powershell
-curl.exe "http://localhost:3001/api/v1/task/status/7b8f9e21-5a41-4d32-b91c-8e0192a3bc55" `
-  -H "X-API-Key: dsk_API_KEY_KAMU"
+curl.exe -s "http://localhost:3001/api/v1/task/status/e14bfaf6-b0d4-48c6-a83c-1dff0d65111e" `
+  -H "X-API-Key: dsk_60f3411c83dafa07ae2099a8622ccdd9d7ef84d45aaca4827d3170a4a3ad923d"
 ```
 
-#### Response Saat COMPLETED:
+#### Response Saat COMPLETED (Disertai Data Produk):
 ```json
 {
   "success": true,
   "data": {
-    "id": "7b8f9e21-5a41-4d32-b91c-8e0192a3bc55",
+    "taskId": "e14bfaf6-b0d4-48c6-a83c-1dff0d65111e",
     "type": "SEARCH",
     "status": "COMPLETED",
     "marketplace": "TOKOPEDIA",
-    "result": {
-      "keyword": "keyboard mechanical",
+    "startedAt": "2026-08-08T09:49:58.002Z",
+    "completedAt": "2026-08-08T09:50:10.155Z",
+    "errorMessage": null,
+    "retryCount": 0,
+    "data": {
+      "keyword": "laptop",
       "marketplace": "TOKOPEDIA",
       "totalFound": 20,
       "page": 1,
-      "items": [ ... ]
-    },
-    "startedAt": "2026-08-08T08:51:10.000Z",
-    "completedAt": "2026-08-08T08:51:14.000Z"
+      "items": [
+        {
+          "externalId": "toped-dom-1-0",
+          "marketplace": "TOKOPEDIA",
+          "name": "Laptop ASUS Vivobook 14 FHD IPS Core i5",
+          "price": 8499000,
+          "originalPrice": 9999000,
+          "discountPercent": 15,
+          "imageUrl": "https://images.tokopedia.net/...",
+          "url": "https://www.tokopedia.com/asus-official/vivobook-14",
+          "rating": 4.9,
+          "totalSold": 340,
+          "seller": { "name": "ASUS Official Store", "location": "Jakarta Pusat" },
+          "location": "Jakarta Pusat"
+        }
+      ]
+    }
   }
 }
 ```

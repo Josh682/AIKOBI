@@ -1,0 +1,387 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================================================
+//  ENUMS
+// =====================================================
+
+enum Plan {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum Marketplace {
+  TOKOPEDIA
+  SHOPEE
+  BUKALAPAK
+  LAZADA
+  BLIBLI
+}
+
+enum TaskType {
+  SEARCH
+  PRODUCT_DETAIL
+  REVIEWS
+}
+
+enum TaskStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum TransactionType {
+  TOP_UP
+  SUBSCRIPTION
+  REFUND
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  EXPIRED
+  REFUNDED
+}
+
+enum CollectionType {
+  KEYWORD_SEARCH
+  PRODUCT_TRACK
+}
+
+enum CollectionStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+// =====================================================
+//  USER & AUTH
+// =====================================================
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  plan         Plan     @default(FREE)
+  quotaLimit   Int      @default(100)
+  quotaUsed    Int      @default(0)
+  quotaResetAt DateTime @default(now()) // Monthly reset date
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  apiKeys      ApiKey[]
+  transactions Transaction[]
+  auditLogs    AuditLog[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  userId      String
+  key         String    @unique
+  keyPrefix   String    // First 8 chars shown in UI (e.g. "dsk_ABCD")
+  name        String    @default("Default Key")
+  isActive    Boolean   @default(true)
+  lastUsedAt  DateTime?
+  usageCount  Int       @default(0)
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  auditLogs AuditLog[]
+
+  @@index([key])
+  @@index([userId])
+  @@map("api_keys")
+}
+
+// =====================================================
+//  SCRAPING DATA
+// =====================================================
+
+model Product {
+  id            String      @id @default(uuid())
+  marketplace   Marketplace
+  externalId    String
+  url           String      @unique
+  name          String
+  description   String?     @db.Text
+  imageUrl      String?
+  seller        String?
+  sellerUrl     String?
+  isOfficialStore Boolean   @default(false)
+  location      String?
+  category      String?
+  rating        Decimal?    @db.Decimal(3, 2)
+  totalReviews  Int?
+  totalSold     Int?
+  badge         String?     // "Terlaris", "Pilihan", etc.
+  rawData       Json?       // Full raw scraped JSON (JSONB)
+  lastScrapedAt DateTime    @default(now())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  variants     ProductVariant[]
+  priceHistory PriceHistory[]
+  reviews      Review[]
+
+  @@unique([marketplace, externalId])
+  @@index([marketplace, externalId])
+  @@index([name])
+  @@index([lastScrapedAt])
+  @@map("products")
+}
+
+model ProductVariant {
+  id             String   @id @default(uuid())
+  productId      String
+  name           String
+  price          Decimal  @db.Decimal(15, 2)
+  originalPrice  Decimal? @db.Decimal(15, 2)
+  discountPercent Int?
+  stock          Int      @default(0)
+  sku            String?
+  imageUrl       String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_variants")
+}
+
+model PriceHistory {
+  id            String   @id @default(uuid())
+  productId     String
+  price         Decimal  @db.Decimal(15, 2)
+  priceDisc     Decimal? @db.Decimal(15, 2)
+  priceChange   Decimal? @db.Decimal(15, 2) // Delta dari harga sebelumnya (bisa negatif)
+  changePercent Float?                      // % perubahan harga
+  sessionId     String?                     // Collection session yang menghasilkan snapshot ini
+  scrapedAt     DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, scrapedAt])
+  @@index([scrapedAt])
+  @@index([sessionId])
+  @@map("price_history")
+}
+
+model Review {
+  id         String    @id @default(uuid())
+  productId  String
+  author     String?
+  rating     Int
+  content    String?   @db.Text
+  reviewDate DateTime?
+  helpful    Int       @default(0)
+  scrapedAt  DateTime  @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, scrapedAt])
+  @@map("reviews")
+}
+
+// =====================================================
+//  SEARCH CACHE
+// =====================================================
+
+model SearchCache {
+  id          String      @id @default(uuid())
+  marketplace Marketplace
+  keyword     String
+  minPrice    Decimal?    @db.Decimal(15, 2)
+  maxPrice    Decimal?    @db.Decimal(15, 2)
+  page        Int         @default(1)
+  resultData  Json        // Cached search results (JSONB)
+  resultCount Int         @default(0)
+  expiresAt   DateTime    // Cache TTL
+  createdAt   DateTime    @default(now())
+
+  @@unique([marketplace, keyword, minPrice, maxPrice, page])
+  @@index([marketplace, keyword])
+  @@index([expiresAt])
+  @@map("search_cache")
+}
+
+// =====================================================
+//  TASK TRACKING (Async Job Status)
+// =====================================================
+
+model ScrapeTask {
+  id           String      @id @default(uuid())
+  type         TaskType
+  status       TaskStatus  @default(PENDING)
+  marketplace  Marketplace
+  payload      Json        // Input parameters snapshot
+  resultRef    String?     // Reference ID (product ID, search cache ID)
+  errorMessage String?
+  retryCount   Int         @default(0)
+  apiKeyId     String      // Which API key triggered this
+  startedAt    DateTime?
+  completedAt  DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([status])
+  @@index([apiKeyId])
+  @@index([createdAt])
+  @@map("scrape_tasks")
+}
+
+// =====================================================
+//  BILLING
+// =====================================================
+
+model Transaction {
+  id             String          @id @default(uuid())
+  userId         String
+  type           TransactionType
+  amount         Decimal         @db.Decimal(15, 2)
+  quotaAdded     Int             @default(0)
+  paymentGateway String?         // "midtrans" | "tripay" | "xendit"
+  externalId     String?         @unique // Payment gateway transaction ID
+  snapToken      String?         // Midtrans snap token
+  paymentUrl     String?         // Redirect URL
+  status         PaymentStatus   @default(PENDING)
+  paidAt         DateTime?
+  expiredAt      DateTime?
+  metadata       Json?           // Extra gateway-specific data
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([externalId])
+  @@index([status])
+  @@map("transactions")
+}
+
+// =====================================================
+//  AUDIT LOG
+// =====================================================
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  userId       String?
+  apiKeyId     String?
+  endpoint     String
+  method       String
+  statusCode   Int
+  clientIp     String
+  userAgent    String?
+  requestBody  Json?    // Sanitized request (no sensitive data)
+  durationMs   Int?
+  quotaCost    Int      @default(1) // How many quota units this consumed
+  createdAt    DateTime @default(now())
+
+  user   User?   @relation(fields: [userId], references: [id])
+  apiKey ApiKey? @relation(fields: [apiKeyId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([apiKeyId, createdAt])
+  @@index([createdAt])
+  @@index([endpoint])
+  @@map("audit_logs")
+}
+
+// =====================================================
+//  COLLECTION PLANS (Price Optimizer — Scheduled Scraping)
+// =====================================================
+
+model CollectionPlan {
+  id          String         @id @default(uuid())
+  name        String         // Nama deskriptif, e.g. "Tracking Sepatu Nike"
+  type        CollectionType
+  marketplace Marketplace
+
+  // Untuk KEYWORD_SEARCH
+  keyword     String?
+  minPrice    Decimal?       @db.Decimal(15, 2)
+  maxPrice    Decimal?       @db.Decimal(15, 2)
+  maxPages    Int            @default(3)
+
+  // Untuk PRODUCT_TRACK
+  productUrls String[]       // Array of product URLs to track
+
+  // Schedule (cron expression)
+  cronExpr    String         @default("0 */6 * * *") // Default: setiap 6 jam
+  isActive    Boolean        @default(true)
+
+  // Metadata
+  lastRunAt   DateTime?
+  nextRunAt   DateTime?
+  totalRuns   Int            @default(0)
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  sessions    CollectionSession[]
+
+  @@index([isActive, nextRunAt])
+  @@index([marketplace])
+  @@map("collection_plans")
+}
+
+model CollectionSession {
+  id            String           @id @default(uuid())
+  planId        String
+  status        CollectionStatus @default(RUNNING)
+
+  // Statistik eksekusi
+  totalJobs     Int              @default(0)
+  completedJobs Int              @default(0)
+  failedJobs    Int              @default(0)
+  productsFound Int              @default(0)
+  priceChanges  Int              @default(0)  // Jumlah produk dengan perubahan harga
+
+  startedAt     DateTime         @default(now())
+  completedAt   DateTime?
+  durationMs    Int?
+  errorMessage  String?
+
+  plan          CollectionPlan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+  logs          CollectionLog[]
+
+  @@index([planId, startedAt])
+  @@index([status])
+  @@map("collection_sessions")
+}
+
+model CollectionLog {
+  id        String            @id @default(uuid())
+  sessionId String
+  level     String            @default("INFO") // INFO | WARN | ERROR
+  message   String
+  metadata  Json?             // Extra context data
+  createdAt DateTime          @default(now())
+
+  session   CollectionSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
+  @@map("collection_logs")
+}

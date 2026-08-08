@@ -1,0 +1,62 @@
+# ========================
+# Node & Package Managers
+# ========================
+node_modules/
+.pnp
+.pnp.js
+.yarn/
+
+# ========================
+# Build Outputs
+# ========================
+dist/
+build/
+.next/
+out/
+
+# ========================
+# Environment Variables
+# ========================
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ========================
+# Turbo Cache
+# ========================
+.turbo/
+
+# ========================
+# Logs
+# ========================
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# ========================
+# Database
+# ========================
+*.sqlite
+*.sqlite3
+
+# ========================
+# OS Files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# IDE
+# ========================
+.vscode/settings.json
+.idea/
+
+# ========================
+# Playwright
+# ========================
+test-results/
+playwright-report/
+
+

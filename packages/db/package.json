@@ -16,8 +16,8 @@
     "clean": "rimraf dist",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
+    "db:view": "tsx prisma/view.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force"
   },

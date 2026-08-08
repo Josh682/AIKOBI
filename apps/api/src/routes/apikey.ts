@@ -27,7 +27,7 @@ async function handleService<T>(
   } catch (err: unknown) {
     const e = err as { statusCode?: number; code?: string; message: string };
     return reply.code(e.statusCode ?? 500).send(
-      errorResponse(e.code ?? 'INTERNAL_ERROR', e.message),
+      errorResponse((e.code as any) ?? 'INTERNAL_ERROR', e.message),
     );
   }
 }
@@ -45,7 +45,7 @@ const apiKeyRoute: FastifyPluginAsync = async (fastify) => {
   }, async (request, reply) => {
     return handleService(async () => {
       const keys = await listApiKeys(request.jwtUserId);
-      return reply.send(successResponse(keys, { total: keys.length }));
+      return reply.send(successResponse(keys));
     }, reply);
   });
 
@@ -71,7 +71,7 @@ const apiKeyRoute: FastifyPluginAsync = async (fastify) => {
     return handleService(async () => {
       const key = await createApiKey(request.jwtUserId, parsed.data.name);
       return reply.code(201).send(
-        successResponse(key, { note: 'Save your rawKey — it will NOT be shown again.' }),
+        successResponse(key),
       );
     }, reply);
   });
@@ -145,7 +145,7 @@ const apiKeyRoute: FastifyPluginAsync = async (fastify) => {
     return handleService(async () => {
       const newKey = await rotateApiKey(request.jwtUserId, id);
       return reply.code(201).send(
-        successResponse(newKey, { note: 'Old key is invalidated. Save your new rawKey.' }),
+        successResponse(newKey),
       );
     }, reply);
   });

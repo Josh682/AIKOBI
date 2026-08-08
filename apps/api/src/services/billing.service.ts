@@ -134,7 +134,7 @@ export async function handleMidtransWebhook(notification: Record<string, string>
   let newStatus: 'PENDING' | 'PAID' | 'FAILED' | 'EXPIRED' = 'PENDING';
   if (txnStatus === 'capture' && fraudStatus === 'accept') newStatus = 'PAID';
   else if (txnStatus === 'settlement') newStatus = 'PAID';
-  else if (['cancel', 'deny', 'failure'].includes(txnStatus)) newStatus = 'FAILED';
+  else if (txnStatus && ['cancel', 'deny', 'failure'].includes(txnStatus)) newStatus = 'FAILED';
   else if (txnStatus === 'expire') newStatus = 'EXPIRED';
 
   await prisma.transaction.update({

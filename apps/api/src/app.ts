@@ -31,7 +31,6 @@ export async function buildApp() {
       customOptions: {
         strict: 'log',          // Warn instead of throw on unknown keywords
         keywords: ['example'],  // Allow OpenAPI 'example' annotation
-        unknownFormats: 'ignore',
       },
     },
   });

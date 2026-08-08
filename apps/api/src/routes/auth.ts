@@ -48,12 +48,12 @@ const authRoute: FastifyPluginAsync = async (fastify) => {
     try {
       const { user, tokens } = await registerUser(parsed.data);
       return reply.code(201).send(
-        successResponse({ user, tokens }, { message: 'Account created successfully' }),
+        successResponse({ user, tokens }),
       );
     } catch (err: unknown) {
       const e = err as { statusCode?: number; code?: string; message: string };
       return reply.code(e.statusCode ?? 500).send(
-        errorResponse(e.code ?? 'INTERNAL_ERROR', e.message),
+        errorResponse((e.code as any) ?? 'INTERNAL_ERROR', e.message),
       );
     }
   });
@@ -86,7 +86,7 @@ const authRoute: FastifyPluginAsync = async (fastify) => {
     } catch (err: unknown) {
       const e = err as { statusCode?: number; code?: string; message: string };
       return reply.code(e.statusCode ?? 500).send(
-        errorResponse(e.code ?? 'INTERNAL_ERROR', e.message),
+        errorResponse((e.code as any) ?? 'INTERNAL_ERROR', e.message),
       );
     }
   });
@@ -118,7 +118,7 @@ const authRoute: FastifyPluginAsync = async (fastify) => {
     } catch (err: unknown) {
       const e = err as { statusCode?: number; code?: string; message: string };
       return reply.code(e.statusCode ?? 500).send(
-        errorResponse(e.code ?? 'INTERNAL_ERROR', e.message),
+        errorResponse((e.code as any) ?? 'INTERNAL_ERROR', e.message),
       );
     }
   });
@@ -137,7 +137,7 @@ const authRoute: FastifyPluginAsync = async (fastify) => {
     } catch (err: unknown) {
       const e = err as { statusCode?: number; code?: string; message: string };
       return reply.code(e.statusCode ?? 500).send(
-        errorResponse(e.code ?? 'INTERNAL_ERROR', e.message),
+        errorResponse((e.code as any) ?? 'INTERNAL_ERROR', e.message),
       );
     }
   });

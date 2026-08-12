@@ -7,13 +7,13 @@ export const metadata: Metadata = {
 };
 
 export default function TentangPage() {
-  const leftTeam = [
+  const topTeam = [
     { name: 'Tio', role: 'Frontend Developer', initial: 'T' },
     { name: 'Zhafran', role: 'Project Manager', initial: 'Z' },
     { name: 'Ferry', role: 'AI Developer', initial: 'F' },
   ];
 
-  const rightTeam = [
+  const bottomTeam = [
     { name: 'Azka', role: 'Scraping Engineer', initial: 'A' },
     { name: 'Joshua', role: 'Backend Developer', initial: 'J' },
   ];
@@ -108,51 +108,44 @@ export default function TentangPage() {
             </div>
           </div>
 
-          {/* Card 3: Tim di balik proyek ini */}
-          <div style={{ background: '#FFFFFF', paddingTop: '28px', paddingBottom: '28px', paddingLeft: '32px', paddingRight: '32px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginTop: '0px', marginBottom: '32px', marginLeft: '0px', marginRight: '0px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '24px', marginLeft: '0px', marginRight: '0px' }}>
+          {/* Card 3: Tim di balik proyek ini (2-Tier Centered Grid) */}
+          <div style={{ background: '#FFFFFF', paddingTop: '32px', paddingBottom: '32px', paddingLeft: '32px', paddingRight: '32px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginTop: '0px', marginBottom: '32px', marginLeft: '0px', marginRight: '0px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '28px', marginLeft: '0px', marginRight: '0px', textAlign: 'center' }}>
               Tim di balik proyek ini
             </h2>
-            
-            {/* 2-Column Grid Layout: 3 Members Left, 2 Members Right */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px 40px' }}>
-              {/* Left Column (3 Members) */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {leftTeam.map((member, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '15px', border: '1px solid #CBD5E1', flexShrink: 0 }}>
-                      {member.initial}
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '2px', marginLeft: '0px', marginRight: '0px' }}>
-                        {member.name}
-                      </div>
-                      <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 500, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
-                        {member.role}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
 
-              {/* Right Column (2 Members) */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {rightTeam.map((member, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '15px', border: '1px solid #CBD5E1', flexShrink: 0 }}>
-                      {member.initial}
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '2px', marginLeft: '0px', marginRight: '0px' }}>
-                        {member.name}
-                      </div>
-                      <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 500, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
-                        {member.role}
-                      </div>
-                    </div>
+            {/* Top Row: 3 Members */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginTop: '0px', marginBottom: '32px', marginLeft: '0px', marginRight: '0px' }}>
+              {topTeam.map((member, idx) => (
+                <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '16px', border: '1px.5 solid #CBD5E1', marginTop: '0px', marginBottom: '10px', marginLeft: '0px', marginRight: '0px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                    {member.initial}
                   </div>
-                ))}
-              </div>
+                  <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '3px', marginLeft: '0px', marginRight: '0px' }}>
+                    {member.name}
+                  </div>
+                  <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 500, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
+                    {member.role}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom Row: 2 Members (Centered) */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '64px', marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px', flexWrap: 'wrap' }}>
+              {bottomTeam.map((member, idx) => (
+                <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', minWidth: '150px' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '16px', border: '1px.5 solid #CBD5E1', marginTop: '0px', marginBottom: '10px', marginLeft: '0px', marginRight: '0px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                    {member.initial}
+                  </div>
+                  <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '3px', marginLeft: '0px', marginRight: '0px' }}>
+                    {member.name}
+                  </div>
+                  <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 500, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
+                    {member.role}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </main>

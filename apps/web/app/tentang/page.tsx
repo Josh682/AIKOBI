@@ -7,8 +7,16 @@ export const metadata: Metadata = {
 };
 
 export default function TentangPage() {
+  const teamMembers = [
+    { name: 'Tio', role: 'Frontend Developer', initial: 'T' },
+    { name: 'Zhafran', role: 'Dokumentasi', initial: 'Z' },
+    { name: 'Ferry', role: 'AI Developer', initial: 'F' },
+    { name: 'Azka', role: 'Scraping', initial: 'A' },
+    { name: 'Joshua', role: 'Backend Developer', initial: 'J' },
+  ];
+
   return (
-    <div>
+    <div style={{ background: '#F8FAFC', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <header className="topbar">
         <div className="brand">
           <div className="brand-mark">Rp</div>
@@ -21,94 +29,109 @@ export default function TentangPage() {
         </nav>
       </header>
 
-      <section className="about-hero">
-        <h1>Tentang Price Optimizer</h1>
-        <p>
-          Kami bikin AI Price Optimizer supaya pelaku UMKM nggak lagi nebak-nebak
-          harga jual. Cukup satu tempat buat lihat posisi harga produkmu di
-          pasar, dan dapet rekomendasi yang jelas alasannya.
-        </p>
-      </section>
-
-      <main className="about-wrap">
-        <div className="about-mission">
-          <h2>Misi kami</h2>
-          <p>
-            Banyak UMKM nentuin harga cuma modal insting atau ngikutin kompetitor
-            tanpa data yang jelas — akibatnya bisa kemahalan sampai kalah saing,
-            atau kemurahan sampai untungnya tergerus. Price Optimizer hadir buat
-            nutup gap itu: mengubah data harga, rating, dan tren pasar jadi
-            rekomendasi harga yang gampang dimengerti dan langsung bisa
-            diterapkan.
+      <div style={{ flex: 1, paddingTop: '40px', paddingBottom: '60px' }}>
+        {/* Header Hero Section */}
+        <section style={{ textAlign: 'center', marginTop: '0px', marginBottom: '36px', marginLeft: 'auto', marginRight: 'auto', maxWidth: '680px', paddingLeft: '20px', paddingRight: '20px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '12px', marginLeft: '0px', marginRight: '0px', letterSpacing: '-0.5px' }}>
+            Tentang Price Optimizer
+          </h1>
+          <p style={{ fontSize: '15px', color: '#475569', lineHeight: 1.65, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px', fontWeight: 450 }}>
+            Kami bikin AI Price Optimizer supaya pelaku UMKM nggak lagi nebak-nebak harga jual. Cukup satu tempat buat lihat posisi harga produkmu di pasar, dan dapet rekomendasi yang jelas alasannya.
           </p>
-        </div>
+        </section>
 
-        <div className="about-grid">
-          <div className="about-card">
-            <div className="about-card-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
-            </div>
-            <h3>Berbasis Data</h3>
-            <p>
-              Rekomendasi ditarik dari data harga, rating, dan penjualan produk
-              sejenis di marketplace, bukan tebakan.
+        {/* Main Card Content Container */}
+        <main style={{ maxWidth: '900px', marginTop: '0px', marginBottom: '0px', marginLeft: 'auto', marginRight: 'auto', paddingLeft: '20px', paddingRight: '20px' }}>
+          {/* Card 1: Misi Kami */}
+          <div style={{ background: '#FFFFFF', paddingTop: '28px', paddingBottom: '28px', paddingLeft: '32px', paddingRight: '32px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginTop: '0px', marginBottom: '24px', marginLeft: '0px', marginRight: '0px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '12px', marginLeft: '0px', marginRight: '0px' }}>
+              Misi kami
+            </h2>
+            <p style={{ fontSize: '14.5px', color: '#475569', lineHeight: 1.68, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px', textAlign: 'justify', fontWeight: 450 }}>
+              Banyak UMKM nentuin harga cuma modal insting atau ngikutin kompetitor tanpa data yang jelas — akibatnya bisa kemahalan sampai kalah saing, atau kemurahan sampai untungnya tergerus. Price Optimizer hadir buat nutup gap itu: mengubah data harga, rating, dan tren pasar jadi rekomendasi harga yang gampang dimengerti dan langsung bisa diterapkan.
             </p>
           </div>
-          <div className="about-card">
-            <div className="about-card-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-            </div>
-            <h3>Cepat & Praktis</h3>
-            <p>
-              Hasil analisis disajikan ringkas dengan alasan yang mudah dipahami,
-              tinggal terapin ke toko.
-            </p>
-          </div>
-          <div className="about-card">
-            <div className="about-card-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </div>
-            <h3>Untuk UMKM</h3>
-            <p>
-              Dirancang khusus buat kebutuhan UMKM lokal — nggak perlu latar
-              belakang teknis buat pakai.
-            </p>
-          </div>
-        </div>
 
-        <div className="about-team">
-          <h2>Tim di balik proyek ini</h2>
-          <div className="team-row">
-            <div className="team-avatar">T</div>
-            <div>
-              <div className="team-name">Tio</div>
-              <div className="team-role">Frontend Developer</div>
+          {/* Card Row 2: 3-Column Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px', marginTop: '0px', marginBottom: '24px', marginLeft: '0px', marginRight: '0px' }}>
+            {/* Card: Berbasis Data */}
+            <div style={{ background: '#FFFFFF', paddingTop: '24px', paddingBottom: '24px', paddingLeft: '24px', paddingRight: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 16px rgba(0,0,0,0.03)', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: '#22C55E' }} />
+              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#DCFCE7', color: '#15803D', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '0px', marginBottom: '16px', marginLeft: '0px', marginRight: '0px' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10" />
+                  <line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+              </div>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '8px', marginLeft: '0px', marginRight: '0px' }}>
+                Berbasis Data
+              </h3>
+              <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
+                Rekomendasi ditarik dari data harga, rating, dan penjualan produk sejenis di marketplace, bukan tebakan.
+              </p>
             </div>
-            <div className="team-avatar">Z</div>
-            <div>
-              <div className="team-name">Zhafran</div>
-              <div className="team-role">Dokumentasi</div>
+
+            {/* Card: Cepat & Praktis */}
+            <div style={{ background: '#FFFFFF', paddingTop: '24px', paddingBottom: '24px', paddingLeft: '24px', paddingRight: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 16px rgba(0,0,0,0.03)', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: '#6366F1' }} />
+              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#EEF2FF', color: '#4338CA', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '0px', marginBottom: '16px', marginLeft: '0px', marginRight: '0px' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
+              </div>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '8px', marginLeft: '0px', marginRight: '0px' }}>
+                Cepat & Praktis
+              </h3>
+              <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
+                Hasil analisis disajikan ringkas dengan alasan yang mudah dipahami, tinggal terapin ke toko.
+              </p>
             </div>
-            <div className="team-avatar">F</div>
-            <div>
-              <div className="team-name">Ferry</div>
-              <div className="team-role">AI Developer</div>
-            </div>
-            <div className="team-avatar">A</div>
-            <div>
-              <div className="team-name">Azka</div>
-              <div className="team-role">Scraping</div>
-            </div>
-            <div className="team-avatar">J</div>
-            <div>
-              <div className="team-name">Joshua</div>
-              <div className="team-role">Backend Developer</div>
+
+            {/* Card: Untuk UMKM */}
+            <div style={{ background: '#FFFFFF', paddingTop: '24px', paddingBottom: '24px', paddingLeft: '24px', paddingRight: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 16px rgba(0,0,0,0.03)', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: '#F59E0B' }} />
+              <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#FEF3C7', color: '#B45309', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '0px', marginBottom: '16px', marginLeft: '0px', marginRight: '0px' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+              </div>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '8px', marginLeft: '0px', marginRight: '0px' }}>
+                Untuk UMKM
+              </h3>
+              <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
+                Dirancang khusus buat kebutuhan UMKM lokal — nggak perlu latar belakang teknis buat pakai.
+              </p>
             </div>
           </div>
-        </div>
-      </main>
 
-      <footer className="site-footer">
+          {/* Card 3: Tim di balik proyek ini */}
+          <div style={{ background: '#FFFFFF', paddingTop: '28px', paddingBottom: '28px', paddingLeft: '32px', paddingRight: '32px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginTop: '0px', marginBottom: '32px', marginLeft: '0px', marginRight: '0px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '20px', marginLeft: '0px', marginRight: '0px' }}>
+              Tim di balik proyek ini
+            </h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '28px', alignItems: 'center' }}>
+              {teamMembers.map((member, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '15px', border: '1px solid #CBD5E1' }}>
+                    {member.initial}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '2px', marginLeft: '0px', marginRight: '0px' }}>
+                      {member.name}
+                    </div>
+                    <div style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
+                      {member.role}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <footer className="site-footer" style={{ textAlign: 'center', fontSize: '13px', color: '#64748B', paddingTop: '20px', paddingBottom: '28px' }}>
         © 2026 Price Optimizer — Bantu UMKM naik kelas lewat harga yang tepat.
       </footer>
     </div>

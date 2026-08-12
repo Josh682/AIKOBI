@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Activity, Key, Zap, TrendingUp, RefreshCw, CheckCircle, XCircle, Clock } from 'lucide-react';
 import { statsApi } from '../../../lib/api-client';
+import { TokopediaAnalyzer } from '../../../components/tokopedia-analyzer';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
@@ -69,7 +70,7 @@ export default function OverviewPage() {
       setStats(data.data);
       setLastUpdated(new Date());
     } catch {
-      // handled silently — user sees skeleton
+      // handled silently
     } finally {
       setLoading(false);
     }
@@ -77,7 +78,6 @@ export default function OverviewPage() {
 
   useEffect(() => { fetchStats(); }, []);
 
-  // Build sparkline data from recentActivity (group by last 7 days)
   const sparkData = stats?.recentActivity.slice(0, 14).reverse().map((a, i) => ({
     name: i + 1,
     requests: 1,
@@ -97,13 +97,13 @@ export default function OverviewPage() {
   }
 
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div className="animate-fade-in space-y-8" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ fontSize: '22px', fontWeight: 700 }}>Overview</h1>
+          <h1 style={{ fontSize: '22px', fontWeight: 700 }}>AI Price Optimizer Dashboard</h1>
           <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-            Monitor penggunaan API Anda secara real-time
+            Kelola analisis harga marketplace & pantau performa API Anda secara real-time
           </p>
         </div>
         <button onClick={fetchStats} className="btn btn-ghost" style={{ fontSize: '13px', padding: '8px 14px' }}>
@@ -111,6 +111,12 @@ export default function OverviewPage() {
           {lastUpdated ? `${lastUpdated.toLocaleTimeString('id-ID')}` : 'Refresh'}
         </button>
       </div>
+
+      {/* Primary Feature: Interactive Tokopedia Analyzer */}
+      <TokopediaAnalyzer
+        title="Live Tokopedia Product & Price Analyzer"
+        subtitle="Analisis produk Anda langsung di dashboard untuk rekomendasi harga terbaik"
+      />
 
       {/* Plan badge */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -156,7 +162,6 @@ export default function OverviewPage() {
               : '—'}
           </div>
 
-          {/* Task summary */}
           <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '4px' }}>Status Tugas Scraping</div>
             {Object.entries(stats?.tasks ?? {}).map(([status, count]) => (

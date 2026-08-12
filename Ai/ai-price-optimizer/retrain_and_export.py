@@ -76,9 +76,12 @@ for name, pipe in models.items():
     ohe      = cat_pipe.named_steps["onehot"]
     ohe_categories = [list(c) for c in ohe.categories_]
 
-    # ── GBR init prediction (constant quantile of training target in log-space) ──
-    # init_ is a QuantileEstimator; fitted value stored in .quantile attribute
-    init_pred = float(gbr.init_.quantile) if hasattr(gbr.init_, "quantile") else float(getattr(gbr.init_, "constant_", 0.0))
+    # ── GBR init prediction (constant log-space quantile of training target) ──
+    # In sklearn 1.9.0, init_ is a DummyRegressor — use predict() to get the
+    # actual fitted constant (in log-space, since y_train was log-transformed).
+    # .quantile attribute only stores the alpha parameter, NOT the fitted value.
+    _dummy_X = np.zeros((1, 1))
+    init_pred = float(gbr.init_.predict(_dummy_X).ravel()[0])
 
     export[name] = {
         "alpha":          gbr.alpha,

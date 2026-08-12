@@ -214,11 +214,21 @@ export function predictFromModel(input: MLPredictInput): MLPredictResult {
   lower  = Math.min(lower,  median);
   upper  = Math.max(upper,  median);
 
+  // Clamp to realistic positive price range (minimum Rp 1.000)
+  lower  = Math.max(1000, lower);
+  median = Math.max(lower, median);
+  upper  = Math.max(median + 1, upper);
+
   // Round to nearest 500 (cleaner display for Indonesian Rupiah)
-  const round500 = (v: number) => Math.round(v / 500) * 500;
+  const round500 = (v: number) => Math.round(Math.max(1000, v) / 500) * 500;
   lower  = round500(lower);
   median = round500(median);
   upper  = round500(upper);
+
+  // Sanity check: throw so route.ts falls back to rule-based
+  if (upper <= lower || median < 1000 || upper < 1000) {
+    throw new Error(`ML prediction out of range: lower=${lower} median=${median} upper=${upper}`);
+  }
 
   const confidence = computeConfidence(lower, median, upper, input.competitor_prices.length);
   const faktor = computeFactorImportance(allParams.median);

@@ -60,3 +60,6 @@ test-results/
 playwright-report/
 
 
+__pycache__/
+*.pyc
+Ai/p

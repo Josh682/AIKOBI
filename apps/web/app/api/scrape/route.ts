@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import https from 'https';
 import http from 'http';
+import { predictFromModel } from './ml-inference';
 
 function fetchHtml(targetUrl: string): Promise<{ html: string; statusCode: number }> {
   return new Promise((resolve) => {
@@ -809,12 +810,43 @@ export async function POST(req: Request) {
       }
     };
 
-    const wajarMin = Math.max(minP, Math.round((meanP * 0.85) / 500) * 500);
-    const wajarMax = Math.min(maxP, Math.round((meanP * 1.15) / 500) * 500);
-    const isPriceInsideFairZone = price >= wajarMin && price <= wajarMax;
+    // ── ML Model Inference (embedded GBR, no separate process needed) ──────────
+    let mlWajarMin = Math.max(minP, Math.round((meanP * 0.85) / 500) * 500);
+    let mlWajarMax = Math.min(maxP, Math.round((meanP * 1.15) / 500) * 500);
+    let mlConfidence = 82;
+    let mlFaktor: { nama: string; pengaruh: number }[] = [
+      { nama: 'Harga kompetitor (Outliers Dieliminasi)', pengaruh: 52.0 },
+      { nama: 'Rating & ulasan pembeli', pengaruh: 22.5 },
+      { nama: 'Volume terjual & tren', pengaruh: 16.0 },
+      { nama: 'Momen / promosi', pengaruh: 9.5 },
+    ];
+    let mlSource = 'rule_based';
+
+    try {
+      const mlResult = predictFromModel({
+        category: categoryName,
+        rating: realRating,
+        total_reviews: realTotalReviews,
+        total_sold: 0,
+        discount_percent: 0,
+        is_official_store: false,
+        location: targetShopCity,
+        competitor_prices: compPrices,
+      });
+      // Use ML predictions for the fair price zone
+      mlWajarMin = Math.max(minP, mlResult.lower);
+      mlWajarMax = Math.min(maxP, mlResult.upper);
+      mlConfidence = mlResult.confidence;
+      mlFaktor = Object.entries(mlResult.faktor).map(([nama, pengaruh]) => ({ nama, pengaruh }));
+      mlSource = mlResult.source;
+    } catch (_mlErr) {
+      // Fallback to rule-based values silently — app stays fully functional
+    }
+
+    const isPriceInsideFairZone = price >= mlWajarMin && price <= mlWajarMax;
     const statusFairZone = isPriceInsideFairZone
       ? 'Ideal (Di dalam Zona Wajar)'
-      : price < wajarMin
+      : price < mlWajarMin
       ? 'Terlalu Hemat (Di bawah Zona Wajar)'
       : 'Di atas Zona Wajar (Sangat Premium)';
 
@@ -826,19 +858,20 @@ export async function POST(req: Request) {
         harga_toko: price,
         harga_pasar: meanP,
         status,
-        confidence: 98,
+        confidence: mlConfidence,
         rekomendasi: recommendation,
         rentang_harga_wajar: {
           min: minP,
           max: maxP,
           min_pasar: minP,
           max_pasar: maxP,
-          wajar_min: wajarMin,
-          wajar_max: wajarMax,
+          wajar_min: mlWajarMin,
+          wajar_max: mlWajarMax,
           harga_toko: price,
           harga_pasar: meanP,
           is_inside_zone: isPriceInsideFairZone,
           status_zone: statusFairZone,
+          ml_source: mlSource,
         },
         info_varian: hasMultipleVariants
           ? {
@@ -850,12 +883,7 @@ export async function POST(req: Request) {
               catatan: `Produk ini memiliki ${totalVariantsCount} opsi varian (Rp ${minVariantPrice.toLocaleString('id-ID')} - Rp ${maxVariantPrice.toLocaleString('id-ID')}). Harga Rp ${price.toLocaleString('id-ID')} dipilihkannya sebagai harga varian populer (ukuran S/M/L).`
             }
           : null,
-        faktor: [
-          { nama: 'Harga kompetitor (Outliers Dieliminasi)', pengaruh: 52.0 },
-          { nama: 'Rating & ulasan pembeli', pengaruh: 22.5 },
-          { nama: 'Volume terjual & tren', pengaruh: 16.0 },
-          { nama: 'Momen / promosi', pengaruh: 9.5 },
-        ],
+        faktor: mlFaktor,
         produk_serupa: topCleanCompetitors,
         kompetitor_lokal: kompetitorLokal,
         analisis_mendalam: analisisMendalam,

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AIMA — AI Market Analyzer',
+  title: 'AIMA | AI Market Analyzer',
   description: 'AIMA (AI Market Analyzer) platform riset pasar & strategi harga Tokopedia real-time berbasis AI untuk UMKM & Penjual Online.',
 };
 
@@ -80,7 +80,7 @@ export default function HomePage() {
       </section>
 
       <footer className="site-footer">
-        © 2026 AIMA (AI Market Analyzer) — Platform Riset & Strategi Harga Tokopedia Terdepan.
+        © 2026 AIMA (AI Market Analyzer) | Platform Riset & Strategi Harga Tokopedia Terdepan.
       </footer>
     </div>
   );

@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: { default: 'DataScrapper — BaaS E-commerce Scraping API', template: '%s | DataScrapper' },
-  description: 'API platform untuk ekstraksi data produk dari Tokopedia, Shopee, dan marketplace Indonesia lainnya.',
-  keywords: ['scraping', 'api', 'tokopedia', 'shopee', 'e-commerce', 'data', 'baas'],
+  title: { default: 'AIMA | AI Market Analyzer', template: '%s | AIMA' },
+  description: 'Platform riset pasar & strategi harga Tokopedia real-time berbasis AI untuk UMKM & Penjual Online.',
+  keywords: ['AIMA', 'AI Market Analyzer', 'tokopedia', 'harga', 'e-commerce', 'analisis pasar'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Tentang AIMA — AI Market Analyzer',
+  title: 'Tentang AIMA | AI Market Analyzer',
   description: 'Informasi tim & misi di balik pengembangan AIMA (AI Market Analyzer).',
 };
 
@@ -72,7 +72,7 @@ export default function TentangPage() {
               Misi kami
             </h2>
             <p style={{ fontSize: '14.5px', color: '#475569', lineHeight: 1.68, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px', textAlign: 'justify', fontWeight: 450 }}>
-              Banyak pelaku usaha e-commerce menentukan harga hanya berdasarkan insting atau mengikuti kompetitor tanpa data mendalam — akibatnya margin tergerus atau produk kalah saing. AIMA hadir menutup celah tersebut dengan mengubah data harga, rating, ulasan pembeli, dan lokasi seller menjadi rekomendasi penetapan harga yang presisi, mudah dipahami, dan langsung siap diterapkan.
+              Banyak pelaku usaha e-commerce menentukan harga hanya berdasarkan insting atau mengikuti kompetitor tanpa data mendalam, akibatnya margin tergerus atau produk kalah saing. AIMA hadir menutup celah tersebut dengan mengubah data harga, rating, ulasan pembeli, dan lokasi seller menjadi rekomendasi penetapan harga yang presisi, mudah dipahami, dan langsung siap diterapkan.
             </p>
           </div>
 
@@ -173,7 +173,7 @@ export default function TentangPage() {
       </div>
 
       <footer className="site-footer" style={{ textAlign: 'center', fontSize: '13px', color: '#64748B', paddingTop: '20px', paddingBottom: '28px' }}>
-        © 2026 AIMA (AI Market Analyzer) — Platform Riset & Strategi Harga Tokopedia Terdepan.
+        © 2026 AIMA (AI Market Analyzer) | Platform Riset & Strategi Harga Tokopedia Terdepan.
       </footer>
     </div>
   );

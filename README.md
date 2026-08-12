@@ -1,4 +1,4 @@
-# AIMA — AI Market Analyzer 🚀
+# AIMA | AI Market Analyzer 🚀
 
 **AIMA (AI Market Analyzer)** adalah platform riset pasar dan rekomendasi penetapan harga produk e-commerce (*price optimization & competitive intelligence*) khusus marketplace Tokopedia. Platform ini mengekstrak data persaingan etalase real-time, menganalisis ulasan pembeli, hingga menemukan kompetitor lokal sesama wilayah pengiriman untuk membantu penjual online (UMKM & Merchant) menentukan strategi harga terbaik.
 

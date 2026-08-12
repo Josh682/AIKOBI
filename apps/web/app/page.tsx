@@ -16,7 +16,7 @@ export default function HomePage() {
         </div>
         <nav>
           <Link href="/" className="active">Beranda</Link>
-          <Link href="/dashboard">Dashboard</Link>
+          <Link href="/ai">Analisis AI</Link>
           <Link href="/tentang">Tentang</Link>
         </nav>
       </header>

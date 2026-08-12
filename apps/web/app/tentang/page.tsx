@@ -16,9 +16,7 @@ export default function TentangPage() {
         </div>
         <nav>
           <Link href="/">Beranda</Link>
-          <Link href="/dashboard">Dashboard</Link>
           <Link href="/ai">Analisis AI</Link>
-          <Link href="/insight">Insight</Link>
           <Link href="/tentang" className="active">Tentang</Link>
         </nav>
       </header>

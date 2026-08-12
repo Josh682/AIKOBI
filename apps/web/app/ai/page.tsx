@@ -77,9 +77,7 @@ export default function AiPage() {
         </div>
         <nav>
           <Link href="/">Beranda</Link>
-          <Link href="/dashboard">Dashboard</Link>
           <Link href="/ai" className="active">Analisis AI</Link>
-          <Link href="/insight">Insight</Link>
           <Link href="/tentang">Tentang</Link>
         </nav>
       </header>

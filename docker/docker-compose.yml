@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: datascrapper123
       POSTGRES_DB: datascrapper
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
     command: redis-server --save 60 1 --loglevel warning
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -31,18 +31,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-  # Optional: Redis GUI
-  redis_commander:
-    image: rediscommander/redis-commander:latest
-    container_name: datascrapper_redis_gui
-    restart: unless-stopped
-    environment:
-      REDIS_HOSTS: local:redis:6379
-    ports:
-      - "8081:8081"
-    depends_on:
-      - redis
 
 volumes:
   postgres_data:

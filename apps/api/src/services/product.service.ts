@@ -25,14 +25,12 @@ export class ProductService {
   }
 
   async getDetails(url: string, marketplace: string, apiKeyId: string, userId: string, includeReviews = false): Promise<{ taskId: string; cached: boolean; data?: unknown }> {
-    // 1. Check Redis cache
     const cached = await this.cache.getProduct(url);
     if (cached) {
       logger.debug({ url }, 'Cache HIT for product');
       return { taskId: '', cached: true, data: cached };
     }
 
-    // 2. Check DB for existing product within cache window
     const existingProduct = await prisma.product.findUnique({
       where: { url },
       include: {
@@ -44,12 +42,10 @@ export class ProductService {
 
     const cacheWindow = new Date(Date.now() - 24 * 60 * 60 * 1000);
     if (existingProduct && existingProduct.lastScrapedAt > cacheWindow) {
-      // Re-populate Redis
       await this.cache.setProduct(url, existingProduct);
       return { taskId: '', cached: true, data: existingProduct };
     }
 
-    // 3. Cache miss — enqueue scraping job
     const taskId = uuidv4();
 
     await prisma.scrapeTask.create({
@@ -75,9 +71,49 @@ export class ProductService {
     };
 
     await this.queue.add(`product:${taskId}`, payload, { jobId: taskId });
-
     logger.info({ taskId, url }, 'Product detail job enqueued');
 
     return { taskId, cached: false };
+  }
+
+  async analyzeProduct(
+    url: string,
+    marketplace: string,
+    apiKeyId: string,
+    userId: string,
+    competitorKeyword?: string,
+    competitorUrls?: string[]
+  ): Promise<{ taskId: string }> {
+    const taskId = uuidv4();
+
+    await prisma.scrapeTask.create({
+      data: {
+        id: taskId,
+        type: 'PRODUCT_DETAIL',
+        status: 'PENDING',
+        marketplace: marketplace as Marketplace,
+        payload: { url, competitorKeyword, competitorUrls, isAnalyze: true },
+        apiKeyId,
+      },
+    });
+
+    const payload: ProductDetailJobPayload = {
+      taskId,
+      apiKeyId,
+      userId,
+      marketplace: marketplace as Marketplace,
+      requestedAt: new Date().toISOString(),
+      type: 'PRODUCT_DETAIL',
+      url,
+      includeReviews: false,
+      competitorKeyword,
+      competitorUrls,
+      isAnalyze: true,
+    };
+
+    await this.queue.add(`product:${taskId}`, payload, { jobId: taskId });
+    logger.info({ taskId, url, competitorKeyword }, 'Product analysis job enqueued');
+
+    return { taskId };
   }
 }

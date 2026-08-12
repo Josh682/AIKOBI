@@ -31,6 +31,9 @@ export interface ProductDetailJobPayload extends BaseJobPayload {
   type: 'PRODUCT_DETAIL';
   url: string;
   includeReviews: boolean;
+  competitorKeyword?: string;
+  competitorUrls?: string[];
+  isAnalyze?: boolean;
 }
 
 // Reviews job

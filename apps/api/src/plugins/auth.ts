@@ -28,6 +28,8 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
       '/api/v1/keys',      // managed via JWT Bearer token
       '/api/v1/stats',     // managed via JWT Bearer token
       '/api/v1/billing',   // managed via JWT Bearer token
+      '/api/v1/product/analyze', // public analysis endpoint
+      '/api/v1/task/status',      // public task status polling endpoint
     ];
     const isPublic = publicPaths.some(p => request.url.startsWith(p));
     if (isPublic) return;

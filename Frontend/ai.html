@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Analisis AI — AI Price Optimizer</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">Rp</div>
+      Price Optimizer
+    </div>
+    <nav>
+      <a href="index.html">Beranda</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="ai.html" class="active">Analisis AI</a>
+      <a href="insight.html">Insight</a>
+      <a href="tentang.html">Tentang</a>
+    </nav>
+    <div class="topbar-user">
+      <button class="topbar-user-btn" id="userMenuBtn" type="button" aria-haspopup="true" aria-expanded="false">
+        <div class="avatar">T</div>
+        Tio
+        <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="user-menu" id="userMenu">
+        <div class="user-menu-info">
+          <div class="user-menu-name">Tio</div>
+          <div class="user-menu-role">Pemilik UMKM</div>
+        </div>
+        <button type="button" id="logoutBtn" class="danger">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <section class="ai-hero">
+      <p class="eyebrow">Analisis AI</p>
+      <h1>Cek harga produkmu dibanding pasar</h1>
+      <form id="ai-form" class="ai-search">
+        <input id="ai-input" type="text" placeholder="Ketik nama produk, mis. Sepatu Lari Nike Air Zoom Pegasus 40" value="Sepatu Lari Nike Air Zoom Pegasus 40" />
+        <button type="submit">Analisis</button>
+      </form>
+    </section>
+
+    <div id="ai-empty" class="empty-state" style="display:none;">Menganalisis…</div>
+
+    <!-- Recommendation card -->
+    <section class="rec-card" id="rec-card" style="display:none;">
+      <div class="rec-top">
+        <div>
+          <div class="rec-title" id="rec-kategori">Kategori</div>
+          <h2 class="rec-product" id="rec-product">Nama Produk</h2>
+        </div>
+        <span class="badge" id="rec-status">Status</span>
+      </div>
+
+      <div class="rec-prices">
+        <div class="rec-price-block">
+          <div class="label">Harga Toko Kamu</div>
+          <div class="value tabular" id="rec-harga-toko">—</div>
+        </div>
+        <div class="rec-price-block">
+          <div class="label">Harga Rata-rata Pasar</div>
+          <div class="value market tabular" id="rec-harga-pasar">—</div>
+        </div>
+        <div class="confidence-wrap">
+          <div class="label">Confidence AI</div>
+          <div class="gauge-track"><div class="gauge-fill" id="gauge-fill" style="width:0%"></div></div>
+          <div class="gauge-pct" id="gauge-pct">—</div>
+        </div>
+      </div>
+
+      <div class="rec-note" id="rec-note">—</div>
+
+      <div class="range-bar">
+        <div class="label">Rentang Harga Wajar</div>
+        <div class="range-track">
+          <div class="range-fill" id="range-fill"></div>
+          <div class="range-marker" id="range-marker"></div>
+        </div>
+        <div class="range-labels">
+          <span id="range-min">—</span>
+          <span id="range-max">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Smart Downsize / Local Brand Alternative Engine -->
+    <section class="lokal-section" id="lokal-section" style="display:none;">
+      <div class="lokal-banner">
+        <div>
+          <p class="eyebrow lokal-eyebrow">Dukung Produk Lokal</p>
+          <h2>Alternatif Lokal / Versi Hemat</h2>
+          <p class="lokal-desc" id="lokal-desc">—</p>
+        </div>
+        <div class="lokal-banner-stat">
+          <div class="lokal-stat-num" id="lokal-count">0</div>
+          <div class="lokal-stat-label">UMKM cocok</div>
+        </div>
+      </div>
+      <div class="lokal-grid" id="lokal-grid"></div>
+    </section>
+
+    <section class="main-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Faktor yang Mempengaruhi</h2>
+          <span>bobot analisis AI</span>
+        </div>
+        <div id="factor-list"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Produk Serupa</h2>
+          <span>dari kompetitor</span>
+        </div>
+        <div id="similar-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/topbar.js"></script>
+  <script src="js/ai.js"></script>
+</body>
+</html>

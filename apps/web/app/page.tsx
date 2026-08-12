@@ -65,9 +65,9 @@ export default function HomePage() {
         </div>
         <div className="how-card">
           <div className="how-num">2</div>
-          <h3>Analisis Pasar 2-Pass & Filter Lokal</h3>
+          <h3>Analisis Pasar & Filter Lokal</h3>
           <p>
-            AIMA membandingkan harga produk Anda vs kompetitor sejenis dan kompetitor lokal sesama wilayah pengiriman (fcity) untuk optimasi ongkir.
+            AIMA membandingkan harga produk Anda vs kompetitor sejenis dan kompetitor lokal sesama wilayah pengiriman untuk optimasi ongkir.
           </p>
         </div>
         <div className="how-card">

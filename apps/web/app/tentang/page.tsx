@@ -108,7 +108,7 @@ export default function TentangPage() {
                 Analisis Wilayah & Lokal
               </h3>
               <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
-                AIMA membandingkan produk Anda dengan kompetitor lokal sesama wilayah pengiriman (fcity) untuk mengoptimalkan ongkir.
+                AIMA membandingkan produk Anda dengan kompetitor lokal sesama wilayah pengiriman untuk mengoptimalkan ongkir.
               </p>
             </div>
 

@@ -10,9 +10,9 @@
   - Ekstraksi otomatis data etalase Tokopedia (Judul Produk, Harga Toko, Kota Pengiriman/Asal Toko, Rating, Total Ulasan, Topik Ulasan Pembeli, dan Varian Produk).
   - Parser Multi-Varian pintar untuk mendeteksi ukuran standar (S/M/L) serta satuan transaksi eceran vs grosir.
 
-- **2. Sistem Pencarian 2-Pass & Filter Wilayah (`fcity`)**:
-  - **Pass 1**: Pencarian global produk kompetitor sejenis di Tokopedia.
-  - **Pass 2**: Filter wilayah pengiriman (*shipping origin location*) menggunakan parameter `fcity` Tokopedia GraphQL untuk menemukan kompetitor lokal sesama kota secara akurat.
+- **2. Sistem Pencarian & Filter Wilayah**:
+  - Pencarian produk kompetitor sejenis di Tokopedia.
+  - Filter wilayah pengiriman (*shipping origin location*) untuk menemukan kompetitor lokal sesama kota secara akurat.
 
 - **3. Visualizer Rentang Harga Wajar Pasar (Fair Price Zone)**:
   - Grafik skala interaktif yang menampilkan **Harga Terendah Pasar**, **Harga Rata-rata Pasar**, **Target Zona Wajar (Sweet-Spot Demand Zone)**, dan **Harga Toko Anda**.

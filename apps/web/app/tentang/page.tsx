@@ -2,8 +2,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Tentang — AI Price Optimizer',
-  description: 'Informasi tim & misi di balik pengembangan AI Price Optimizer.',
+  title: 'Tentang AIMA — AI Market Analyzer',
+  description: 'Informasi tim & misi di balik pengembangan AIMA (AI Market Analyzer).',
 };
 
 export default function TentangPage() {
@@ -22,8 +22,29 @@ export default function TentangPage() {
     <div style={{ background: '#F8FAFC', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <header className="topbar">
         <div className="brand">
-          <div className="brand-mark">Rp</div>
-          Price Optimizer
+          <div
+            className="brand-mark"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '13px',
+              fontWeight: 900,
+              letterSpacing: '0.5px',
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)'
+            }}
+          >
+            AI
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+            <span style={{ fontSize: '18px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.3px' }}>AIMA</span>
+            <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#64748B', letterSpacing: '0.6px', textTransform: 'uppercase' }}>AI Market Analyzer</span>
+          </div>
         </div>
         <nav>
           <Link href="/">Beranda</Link>
@@ -34,12 +55,12 @@ export default function TentangPage() {
 
       <div style={{ flex: 1, paddingTop: '40px', paddingBottom: '60px' }}>
         {/* Header Hero Section */}
-        <section style={{ textAlign: 'center', marginTop: '0px', marginBottom: '36px', marginLeft: 'auto', marginRight: 'auto', maxWidth: '680px', paddingLeft: '20px', paddingRight: '20px' }}>
+        <section style={{ textAlign: 'center', marginTop: '0px', marginBottom: '36px', marginLeft: 'auto', marginRight: 'auto', maxWidth: '720px', paddingLeft: '20px', paddingRight: '20px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '12px', marginLeft: '0px', marginRight: '0px', letterSpacing: '-0.5px' }}>
-            Tentang Price Optimizer
+            Tentang AIMA (AI Market Analyzer)
           </h1>
           <p style={{ fontSize: '15px', color: '#475569', lineHeight: 1.65, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px', fontWeight: 450 }}>
-            Kami bikin AI Price Optimizer supaya pelaku UMKM nggak lagi nebak-nebak harga jual. Cukup satu tempat buat lihat posisi harga produkmu di pasar, dan dapet rekomendasi yang jelas alasannya.
+            Kami menciptakan AIMA untuk membebaskan pelaku UMKM & penjual e-commerce Tokopedia dari tebak-menebak harga jual. Cukup satu tempat untuk menganalisis lanskap persaingan etalase, kompetitor lokal, ulasan pembeli, dan mendapatkan strategi penetapan harga berbasis AI.
           </p>
         </section>
 
@@ -51,13 +72,13 @@ export default function TentangPage() {
               Misi kami
             </h2>
             <p style={{ fontSize: '14.5px', color: '#475569', lineHeight: 1.68, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px', textAlign: 'justify', fontWeight: 450 }}>
-              Banyak UMKM nentuin harga cuma modal insting atau ngikutin kompetitor tanpa data yang jelas — akibatnya bisa kemahalan sampai kalah saing, atau kemurahan sampai untungnya tergerus. Price Optimizer hadir buat nutup gap itu: mengubah data harga, rating, dan tren pasar jadi rekomendasi harga yang gampang dimengerti dan langsung bisa diterapkan.
+              Banyak pelaku usaha e-commerce menentukan harga hanya berdasarkan insting atau mengikuti kompetitor tanpa data mendalam — akibatnya margin tergerus atau produk kalah saing. AIMA hadir menutup celah tersebut dengan mengubah data harga, rating, ulasan pembeli, dan lokasi seller menjadi rekomendasi penetapan harga yang presisi, mudah dipahami, dan langsung siap diterapkan.
             </p>
           </div>
 
           {/* Card Row 2: 3-Column Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px', marginTop: '0px', marginBottom: '24px', marginLeft: '0px', marginRight: '0px' }}>
-            {/* Card: Berbasis Data */}
+            {/* Card: Real-time Live Scraping */}
             <div style={{ background: '#FFFFFF', paddingTop: '24px', paddingBottom: '24px', paddingLeft: '24px', paddingRight: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 16px rgba(0,0,0,0.03)', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: '#22C55E' }} />
               <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#DCFCE7', color: '#15803D', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '0px', marginBottom: '16px', marginLeft: '0px', marginRight: '0px' }}>
@@ -68,14 +89,14 @@ export default function TentangPage() {
                 </svg>
               </div>
               <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '8px', marginLeft: '0px', marginRight: '0px' }}>
-                Berbasis Data
+                Real-time Live Scraping
               </h3>
               <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
-                Rekomendasi ditarik dari data harga, rating, dan penjualan produk sejenis di marketplace, bukan tebakan.
+                Rekomendasi ditarik langsung dari data persaingan etalase, varian produk, rating, dan ulasan pembeli Tokopedia secara real-time.
               </p>
             </div>
 
-            {/* Card: Cepat & Praktis */}
+            {/* Card: Analisis Wilayah & Lokal */}
             <div style={{ background: '#FFFFFF', paddingTop: '24px', paddingBottom: '24px', paddingLeft: '24px', paddingRight: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 16px rgba(0,0,0,0.03)', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: '#6366F1' }} />
               <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#EEF2FF', color: '#4338CA', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '0px', marginBottom: '16px', marginLeft: '0px', marginRight: '0px' }}>
@@ -84,14 +105,14 @@ export default function TentangPage() {
                 </svg>
               </div>
               <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '8px', marginLeft: '0px', marginRight: '0px' }}>
-                Cepat & Praktis
+                Analisis Wilayah & Lokal
               </h3>
               <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
-                Hasil analisis disajikan ringkas dengan alasan yang mudah dipahami, tinggal terapin ke toko.
+                AIMA membandingkan produk Anda dengan kompetitor lokal sesama wilayah pengiriman (fcity) untuk mengoptimalkan ongkir.
               </p>
             </div>
 
-            {/* Card: Untuk UMKM */}
+            {/* Card: Rekomendasi AI Konsultan */}
             <div style={{ background: '#FFFFFF', paddingTop: '24px', paddingBottom: '24px', paddingLeft: '24px', paddingRight: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 16px rgba(0,0,0,0.03)', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: '#F59E0B' }} />
               <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#FEF3C7', color: '#B45309', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '0px', marginBottom: '16px', marginLeft: '0px', marginRight: '0px' }}>
@@ -100,25 +121,25 @@ export default function TentangPage() {
                 </svg>
               </div>
               <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '8px', marginLeft: '0px', marginRight: '0px' }}>
-                Untuk UMKM
+                Rekomendasi AI Konsultan
               </h3>
               <p style={{ fontSize: '13.5px', color: '#475569', lineHeight: 1.6, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
-                Dirancang khusus buat kebutuhan UMKM lokal — nggak perlu latar belakang teknis buat pakai.
+                Menyajikan zona harga wajar (Sweet-Spot), sintetis ulasan pembeli, penyebab selisih harga, dan action plan toko.
               </p>
             </div>
           </div>
 
-          {/* Card 3: Tim di balik proyek ini (2-Tier Centered Grid) */}
+          {/* Card 3: Tim di balik AIMA */}
           <div style={{ background: '#FFFFFF', paddingTop: '32px', paddingBottom: '32px', paddingLeft: '32px', paddingRight: '32px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginTop: '0px', marginBottom: '32px', marginLeft: '0px', marginRight: '0px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '28px', marginLeft: '0px', marginRight: '0px', textAlign: 'center' }}>
-              Tim di balik proyek ini
+              Tim di balik AIMA
             </h2>
 
             {/* Top Row: 3 Members */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginTop: '0px', marginBottom: '32px', marginLeft: '0px', marginRight: '0px' }}>
               {topTeam.map((member, idx) => (
                 <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '16px', border: '1px.5 solid #CBD5E1', marginTop: '0px', marginBottom: '10px', marginLeft: '0px', marginRight: '0px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '16px', border: '1.5px solid #CBD5E1', marginTop: '0px', marginBottom: '10px', marginLeft: '0px', marginRight: '0px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                     {member.initial}
                   </div>
                   <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '3px', marginLeft: '0px', marginRight: '0px' }}>
@@ -135,7 +156,7 @@ export default function TentangPage() {
             <div style={{ display: 'flex', justifyContent: 'center', gap: '64px', marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px', flexWrap: 'wrap' }}>
               {bottomTeam.map((member, idx) => (
                 <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', minWidth: '150px' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '16px', border: '1px.5 solid #CBD5E1', marginTop: '0px', marginBottom: '10px', marginLeft: '0px', marginRight: '0px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '16px', border: '1.5px solid #CBD5E1', marginTop: '0px', marginBottom: '10px', marginLeft: '0px', marginRight: '0px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
                     {member.initial}
                   </div>
                   <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '3px', marginLeft: '0px', marginRight: '0px' }}>
@@ -152,7 +173,7 @@ export default function TentangPage() {
       </div>
 
       <footer className="site-footer" style={{ textAlign: 'center', fontSize: '13px', color: '#64748B', paddingTop: '20px', paddingBottom: '28px' }}>
-        © 2026 Price Optimizer — Bantu UMKM naik kelas lewat harga yang tepat.
+        © 2026 AIMA (AI Market Analyzer) — Platform Riset & Strategi Harga Tokopedia Terdepan.
       </footer>
     </div>
   );

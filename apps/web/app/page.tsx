@@ -2,8 +2,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Price Optimizer',
-  description: 'AI Price Optimizer bantu UMKM ngecek harga jual dibanding kompetitor di marketplace, terus kasih rekomendasi harga yang paling untung tanpa bikin produk kalah saing.',
+  title: 'AIMA — AI Market Analyzer',
+  description: 'AIMA (AI Market Analyzer) platform riset pasar & strategi harga Tokopedia real-time berbasis AI untuk UMKM & Penjual Online.',
 };
 
 export default function HomePage() {
@@ -11,8 +11,29 @@ export default function HomePage() {
     <div>
       <header className="topbar">
         <div className="brand">
-          <div className="brand-mark">Rp</div>
-          Price Optimizer
+          <div
+            className="brand-mark"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '13px',
+              fontWeight: 900,
+              letterSpacing: '0.5px',
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)'
+            }}
+          >
+            AI
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+            <span style={{ fontSize: '18px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.3px' }}>AIMA</span>
+            <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#64748B', letterSpacing: '0.6px', textTransform: 'uppercase' }}>AI Market Analyzer</span>
+          </div>
         </div>
         <nav>
           <Link href="/" className="active">Beranda</Link>
@@ -23,49 +44,43 @@ export default function HomePage() {
 
       <section className="hero">
         <div className="hero-badge">
-          <span className="dot"></span> Dipakai UMKM di seluruh Indonesia
+          <span className="dot"></span> Platform Riset & Analisis Pasar Tokopedia Real-time
         </div>
-        <h1>Harga produkmu udah <span>tepat</span> belum?</h1>
+        <h1>Optimalkan Harga & Kuasai Pasar Tokopedia dengan <span>AIMA</span></h1>
         <p>
-          AI Price Optimizer bantu UMKM ngecek harga jual dibanding kompetitor
-          di marketplace, terus kasih rekomendasi harga yang paling untung
-          tanpa bikin produk kalah saing.
+          AIMA (AI Market Analyzer) mengekstrak data persaingan etalase, menganalisis harga pasar real-time, ulasan pembeli, hingga kompetitor lokal sesama wilayah pengiriman untuk memberikan strategi penetapan harga paling menguntungkan bagi toko Anda.
         </p>
         <Link className="btn-primary" href="/ai">
-          Mulai Analisis
+          Mulai Analisis Pasar
         </Link>
       </section>
 
       <section className="how-it-works" id="cara-kerja">
         <div className="how-card">
           <div className="how-num">1</div>
-          <h3>Ambil Data</h3>
+          <h3>Real-time Live Scraping</h3>
           <p>
-            Sistem ngambil data harga, rating, dan penjualan produk sejenis
-            langsung dari marketplace.
+            Tempel link produk Tokopedia untuk mengekstrak data etalase, varian produk, harga toko, rating, dan ulasan pembeli secara instan.
           </p>
         </div>
         <div className="how-card">
           <div className="how-num">2</div>
-          <h3>Analisis AI</h3>
+          <h3>Analisis Pasar 2-Pass & Filter Lokal</h3>
           <p>
-            AI bandingin harga toko kamu sama harga pasar, rating, dan tren
-            penjualan buat cari titik harga paling optimal.
+            AIMA membandingkan harga produk Anda vs kompetitor sejenis dan kompetitor lokal sesama wilayah pengiriman (fcity) untuk optimasi ongkir.
           </p>
         </div>
         <div className="how-card">
           <div className="how-num">3</div>
-          <h3>Hasil Rekomendasi</h3>
+          <h3>Rekomendasi AI Konsultan</h3>
           <p>
-            Kamu dapet rekomendasi harga lengkap sama alasannya, tinggal
-            terapin ke toko.
+            Dapatkan zona harga wajar pasar (Sweet-Spot), sintetis ulasan pembeli, penyebab selisih harga, dan action plan operasional toko.
           </p>
         </div>
       </section>
 
       <footer className="site-footer">
-        © 2026 Price Optimizer — Bantu UMKM naik kelas lewat harga yang tepat. ·{' '}
-        <Link href="/tentang">Tentang kami</Link>
+        © 2026 AIMA (AI Market Analyzer) — Platform Riset & Strategi Harga Tokopedia Terdepan.
       </footer>
     </div>
   );

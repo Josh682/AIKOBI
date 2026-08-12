@@ -56,7 +56,7 @@ export default function AiPage() {
         return;
       }
 
-      setStatusStep('Menjalankan Inferensi Model AI Price Optimizer...');
+      setStatusStep('Menjalankan Inferensi Model AIMA (AI Market Analyzer)...');
       setProgressPct(90);
       setData(json.data);
 
@@ -72,8 +72,29 @@ export default function AiPage() {
     <div>
       <header className="topbar">
         <div className="brand">
-          <div className="brand-mark">Rp</div>
-          Price Optimizer
+          <div
+            className="brand-mark"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '13px',
+              fontWeight: 900,
+              letterSpacing: '0.5px',
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.3)'
+            }}
+          >
+            AI
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+            <span style={{ fontSize: '18px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.3px' }}>AIMA</span>
+            <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#64748B', letterSpacing: '0.6px', textTransform: 'uppercase' }}>AI Market Analyzer</span>
+          </div>
         </div>
         <nav>
           <Link href="/">Beranda</Link>
@@ -85,9 +106,9 @@ export default function AiPage() {
       <main className="page" style={{ paddingTop: '0px', paddingBottom: '60px', paddingLeft: '0px', paddingRight: '0px' }}>
         <section className="ai-hero" style={{ marginTop: '0px', marginBottom: '36px', marginLeft: '0px', marginRight: '0px' }}>
           <p className="eyebrow" style={{ fontSize: '13px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-            Analisis Pasar Tokopedia Real-time
+            Riset Pasar Tokopedia Real-time
           </p>
-          <h1>Tempel link produk Tokopedia untuk analisis AI</h1>
+          <h1>Tempel link produk Tokopedia untuk analisis AIMA</h1>
 
           <form
             className="ai-search"

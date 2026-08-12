@@ -7,11 +7,14 @@ export const metadata: Metadata = {
 };
 
 export default function TentangPage() {
-  const teamMembers = [
+  const leftTeam = [
     { name: 'Tio', role: 'Frontend Developer', initial: 'T' },
-    { name: 'Zhafran', role: 'Dokumentasi', initial: 'Z' },
+    { name: 'Zhafran', role: 'Project Manager', initial: 'Z' },
     { name: 'Ferry', role: 'AI Developer', initial: 'F' },
-    { name: 'Azka', role: 'Scraping', initial: 'A' },
+  ];
+
+  const rightTeam = [
+    { name: 'Azka', role: 'Scraping Engineer', initial: 'A' },
     { name: 'Joshua', role: 'Backend Developer', initial: 'J' },
   ];
 
@@ -107,25 +110,49 @@ export default function TentangPage() {
 
           {/* Card 3: Tim di balik proyek ini */}
           <div style={{ background: '#FFFFFF', paddingTop: '28px', paddingBottom: '28px', paddingLeft: '32px', paddingRight: '32px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginTop: '0px', marginBottom: '32px', marginLeft: '0px', marginRight: '0px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '20px', marginLeft: '0px', marginRight: '0px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '24px', marginLeft: '0px', marginRight: '0px' }}>
               Tim di balik proyek ini
             </h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '28px', alignItems: 'center' }}>
-              {teamMembers.map((member, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '15px', border: '1px solid #CBD5E1' }}>
-                    {member.initial}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '14.5px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '2px', marginLeft: '0px', marginRight: '0px' }}>
-                      {member.name}
+            
+            {/* 2-Column Grid Layout: 3 Members Left, 2 Members Right */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px 40px' }}>
+              {/* Left Column (3 Members) */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {leftTeam.map((member, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '15px', border: '1px solid #CBD5E1', flexShrink: 0 }}>
+                      {member.initial}
                     </div>
-                    <div style={{ fontSize: '12.5px', color: '#64748B', fontWeight: 500, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
-                      {member.role}
+                    <div>
+                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '2px', marginLeft: '0px', marginRight: '0px' }}>
+                        {member.name}
+                      </div>
+                      <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 500, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
+                        {member.role}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              {/* Right Column (2 Members) */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {rightTeam.map((member, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#F1F5F9', color: '#334155', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '15px', border: '1px solid #CBD5E1', flexShrink: 0 }}>
+                      {member.initial}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '15px', fontWeight: 800, color: '#0F172A', marginTop: '0px', marginBottom: '2px', marginLeft: '0px', marginRight: '0px' }}>
+                        {member.name}
+                      </div>
+                      <div style={{ fontSize: '13px', color: '#64748B', fontWeight: 500, marginTop: '0px', marginBottom: '0px', marginLeft: '0px', marginRight: '0px' }}>
+                        {member.role}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </main>

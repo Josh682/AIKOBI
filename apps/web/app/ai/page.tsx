@@ -502,18 +502,6 @@ export default function AiPage() {
                       </div>
                     ))}
                   </div>
-
-                  <div style={{ background: '#EEF2FF', paddingTop: '24px', paddingBottom: '24px', paddingLeft: '28px', paddingRight: '28px', borderRadius: '14px', border: '1.5px solid #C7D2FE' }}>
-                    <div style={{ fontSize: '16px', fontWeight: 800, color: '#3730A3', marginTop: '0px', marginBottom: '14px', marginLeft: '0px', marginRight: '0px' }}>📋 Rekomendasi Tindakan Operasional Toko:</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                      {data.analisis_mendalam.rekomendasi_penjual.tindakan_operasional.map((act: string, idx: number) => (
-                        <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', fontSize: '14.5px', color: '#1E1B4B', lineHeight: 1.65, fontWeight: 500 }}>
-                          <span style={{ fontSize: '16px' }}>🚀</span>
-                          <span style={{ textAlign: 'justify' }}>{act}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               </section>
             )}

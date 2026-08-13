@@ -522,100 +522,37 @@ export async function POST(req: Request) {
       ? `Harga produk (Rp ${price.toLocaleString('id-ID')}) berada Rp ${Math.abs(diffFromMean).toLocaleString('id-ID')} (-${pctFromMean}%) di bawah rata-rata pasar (Rp ${meanP.toLocaleString('id-ID')}). Memiliki potensi kenaikan margin dengan tetap sangat kompetitif!`
       : `Harga produk (Rp ${price.toLocaleString('id-ID')}) berada Rp ${diffFromMean.toLocaleString('id-ID')} (+${pctFromMean}%) di atas rata-rata pasar (Rp ${meanP.toLocaleString('id-ID')}). Diperlukan penyesuaian harga ke Rp ${meanP.toLocaleString('id-ID')} atau peningkatan nilai tambah etalase toko.`;
 
-    // Expert E-Commerce Consultant Synthesis for Scraped Topics
-    const isKaos = title.toLowerCase().includes('kaos') || title.toLowerCase().includes('baju') || title.toLowerCase().includes('shirt');
-    const isKopi = title.toLowerCase().includes('v60') || title.toLowerCase().includes('dripper') || title.toLowerCase().includes('kopi');
-    const isSepatu = title.toLowerCase().includes('sepatu') || title.toLowerCase().includes('sneakers');
+    // ── Review Topic Keyword Extraction (from actual Tokopedia scraped topics) ──
+    // Filter out generic praise words, display actual topic names with real counts
+    const GENERIC_TOPIC_WORDS = ['bagus','mantap','oke','ok','baik','memuaskan','puas',
+      'recommended','rekomen','good','nice','suka','bintang','senang','puas','cocok'];
 
-    function formatExpertPraise(topicName: string, count: number): string {
-      const name = topicName.toLowerCase();
+    const filteredTopics = [...scrapedTopics]
+      .filter(t => {
+        const lower = t.name.toLowerCase().trim();
+        return !GENERIC_TOPIC_WORDS.some(w => lower === w || lower === w + '!' || lower === w + '.');
+      })
+      .sort((a, b) => b.count - a.count);
 
-      if (name.includes('kualitas')) {
-        if (isKaos) return `Daya Tahan & Kenyamanan Bahan (${count.toLocaleString('id-ID')} ulasan): Konsumen mengonfirmasi bahwa ketebalan, kelembutan katun, dan kerapian jahitan produk ini menjadi driver utama kepuasan dan retensi pembeli.`;
-        if (isKopi) return `Presisi Ekstraksi & Ketahanan Material (${count.toLocaleString('id-ID')} ulasan): Pembeli memuji presisi lekukan dripper dan ketahanan bahan food-grade yang menghasilkan ekstraksi kopi konsisten.`;
-        if (isSepatu) return `Kekuatan Bahan & Sol Sepatu (${count.toLocaleString('id-ID')} ulasan): Konsumen menilai konstruksi sepatu, keempukan insole, dan ketahanan jahitan sangat kokoh untuk penggunaan harian.`;
-        return `Keunggulan Mutu & Material Produk (${count.toLocaleString('id-ID')} ulasan): Konsumen mengonfirmasi bahwa mutu fisik dan keandalan produk ini sangat memenuhi ekspektasi penggunaan.`;
-      }
+    // Top 3 most-reviewed topics = things buyers praised most
+    const topicPraised = filteredTopics.slice(0, 3);
+    // Next 3 lower-reviewed topics = areas with fewer positive mentions = improvement areas
+    const topicImprove = filteredTopics.slice(3, 6);
 
-      if (name.includes('sesuai deskripsi')) {
-        return `Tingkat Akurasi Etalase 98% (${count.toLocaleString('id-ID')} ulasan): Ekspektasi visual konsumen (warna, bentuk fisik, dan rincian spesifikasi) terbukti 100% sesuai dengan fisik barang yang diterima.`;
-      }
+    const halDipuji: string[] = topicPraised.length > 0
+      ? topicPraised.map(t => `${t.name} (${t.count.toLocaleString('id-ID')} ulasan)`)
+      : ['Data ulasan tidak tersedia untuk produk ini'];
 
-      if (name.includes('harga')) {
-        return `Persepsi Value-for-Money Tinggi (${count.toLocaleString('id-ID')} ulasan): Konsumen menilai penetapan harga toko Anda (Rp ${price.toLocaleString('id-ID')}) sangat sepadan (worth it) dibanding manfaat & kualitas produk.`;
-      }
-
-      if (name.includes('pengiriman')) {
-        return `Efisiensi Pemrosesan Logistik (${count.toLocaleString('id-ID')} ulasan): Kecepatan pemrosesan pesanan (dispatch toko) dan ketepatan kurir menjadi pendorong utama kepuasan pembeli.`;
-      }
-
-      if (name.includes('pelayanan')) {
-        return `Responsivitas Customer Service (${count.toLocaleString('id-ID')} ulasan): Admin toko dinilai sangat responsif, ramah, dan solutif dalam menjawab pertanyaan varian stok maupun ukuran.`;
-      }
-
-      if (name.includes('kemasan')) {
-        return `Standar Safe Packaging (${count.toLocaleString('id-ID')} ulasan): Konsumen mengapresiasi perlindungan fisik barang yang dibalut kardus tebal dan pelindung anti-basah.`;
-      }
-
-      return `Apresiasi Konsisten Topik "${topicName}" (${count.toLocaleString('id-ID')} ulasan): Pembeli merasa sangat puas terhadap aspek ${topicName.toLowerCase()} yang dijaga oleh toko Anda.`;
-    }
-
-    function formatExpertImprovement(topicName: string, count: number, topTopicName: string): string {
-      const name = topicName.toLowerCase();
-
-      if (name.includes('pengiriman')) {
-        return `Optimalisasi Opsi Sameday/Instan (${count.toLocaleString('id-ID')} ulasan): Aktifkan layanan kurir Sameday/Instan (Gojek/Grab) guna menggaet calon pembeli area lokal yang membutuhkan produk secara cepat.`;
-      }
-
-      if (name.includes('pelayanan')) {
-        return `Otomatisasi Chat & Tabel Size Chart (${count.toLocaleString('id-ID')} ulasan): Sediakan auto-reply panduan ukuran/spesifikasi di chat toko untuk mempercepat conversion rate tanpa pembeli menunggu balasan manual.`;
-      }
-
-      if (name.includes('kemasan')) {
-        return `Upgrade Proteksi & Branding Unboxing (${count.toLocaleString('id-ID')} ulasan): Gunakan kemasan polymailer branded/kardus bermerek untuk meningkatkan impresi profesionalisme saat pembeli membuka paket.`;
-      }
-
-      if (name.includes('harga')) {
-        return `Infografis Value Proposition Etalase (${count.toLocaleString('id-ID')} ulasan): Sertakan infografis keunggulan produk pada foto ke-2 etalase agar pembeli paham mengapa harga toko Anda sepadan dengan mutunya.`;
-      }
-
-      if (name.includes('sesuai deskripsi')) {
-        return `Penyempurnaan Visual Varian Warna: Lengkapi foto etalase dengan rincian perbandingan warna berdampingan untuk menekan risiko komplain salah pilih varian.`;
-      }
-
-      return `Evaluasi Konsistensi Aspek ${topicName} (${count.toLocaleString('id-ID')} ulasan): Pemantauan berkala diperlukan agar standar kepuasan aspek ${topicName.toLowerCase()} sejajar dengan topik utama (${topTopicName}).`;
-    }
-
-    let halDipuji: string[] = [];
-    let saranaPerbaikan: string[] = [];
-
-    if (scrapedTopics.length > 0) {
-      const sortedTopics = [...scrapedTopics].sort((a, b) => b.count - a.count);
-      halDipuji = sortedTopics.slice(0, 3).map((t) => formatExpertPraise(t.name, t.count));
-
-      const lowerTopics = sortedTopics.slice(3);
-      if (lowerTopics.length > 0) {
-        saranaPerbaikan = lowerTopics.map((t) => formatExpertImprovement(t.name, t.count, sortedTopics[0].name));
-      } else {
-        saranaPerbaikan = [
-          `Strategi Komunikasi Fitur Utama — Karena harga toko Anda (Rp ${price.toLocaleString('id-ID')}) berjarak ${labelSelisih}, pertahankan kualitas ${sortedTopics[0]?.name || 'produk'} agar rating konsumen tetap tinggi.`,
-          'Optimalisasi Deskripsi & Visual Etalase — Sertakan panduan spesifikasi visual pada foto etalase toko untuk menekan risiko komplain.'
-        ];
-      }
-    } else {
-      halDipuji = [
-        `Daya Tahan & Mutu Fisik (Ulasan Konsumen) — Konsumen mengonfirmasi bahwa keandalan fisik barang dan kerapian pengerjaan menjadi pendorong utama kepuasan pembeli.`,
-        `Tingkat Akurasi Deskripsi 98% — Ekspektasi visual konsumen (warna, bentuk fisik, dan rincian spesifikasi) terbukti sesuai dengan barang yang diterima.`,
-        `Kecepatan Logistik & Dispatch Toko — Durasi pemrosesan cepat menjadi pendorong ulasan bintang 5 pembeli.`
-      ];
-      saranaPerbaikan = [
-        `Penegasan Value Proposition — Dengan posisi harga (${labelSelisih}), sertakan petunjuk panduan dan jaminan toko di deskripsi untuk meningkatkan rasa percaya pembeli.`,
-        'Otomatisasi Chat & Panduan Ukuran — Sediakan fitur auto-reply tabel spesifikasi di chat toko untuk mempercepat keputusan beli konsumen.'
-      ];
-    }
+    const saranaPerbaikan: string[] = topicImprove.length > 0
+      ? topicImprove.map(t => `${t.name} (${t.count.toLocaleString('id-ID')} ulasan)`)
+      : ['Data topik perbaikan tidak cukup — pertahankan standar yang sudah ada'];
 
     // Senior Business Consultant Pricing Difference Analysis Synthesis
     const topCompetitorName = topCleanCompetitors[0]?.toko || 'Top Competitor Market Leader';
+
+    const isKaos = title.toLowerCase().includes('kaos') || title.toLowerCase().includes('baju') || title.toLowerCase().includes('shirt');
+    const isKopi = title.toLowerCase().includes('v60') || title.toLowerCase().includes('dripper') || title.toLowerCase().includes('kopi');
+    const isSepatu = title.toLowerCase().includes('sepatu') || title.toLowerCase().includes('sneakers');
 
     let consultantCauses: string[] = [];
 

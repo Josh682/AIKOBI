@@ -1,0 +1,25 @@
+{
+  "summary": {
+    "total_produk": 1235,
+    "total_umkm": 245,
+    "harga_rata_rata": 43000,
+    "delta_produk_pct": 4.2,
+    "delta_umkm_pct": 1.8,
+    "delta_harga_pct": -2.1
+  },
+  "harga_per_kategori": [
+    { "kategori": "Makanan", "harga_rata_rata": 38000 },
+    { "kategori": "Fashion", "harga_rata_rata": 95000 },
+    { "kategori": "Elektronik", "harga_rata_rata": 410000 },
+    { "kategori": "Kecantikan", "harga_rata_rata": 62000 },
+    { "kategori": "Rumah Tangga", "harga_rata_rata": 71000 },
+    { "kategori": "Kerajinan", "harga_rata_rata": 54000 }
+  ],
+  "distribusi_umkm": [
+    { "kategori": "Makanan", "persen": 34 },
+    { "kategori": "Fashion", "persen": 26 },
+    { "kategori": "Kecantikan", "persen": 18 },
+    { "kategori": "Kerajinan", "persen": 14 },
+    { "kategori": "Lainnya", "persen": 8 }
+  ]
+}

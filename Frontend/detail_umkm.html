@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Detail UMKM — AI Price Optimizer</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">Rp</div>
+      Price Optimizer
+    </div>
+    <nav>
+      <a href="index.html">Beranda</a>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="ai.html">Analisis AI</a>
+      <a href="insight.html">Insight</a>
+      <a href="tentang.html">Tentang</a>
+    </nav>
+    <div class="topbar-user">
+      <button class="topbar-user-btn" id="userMenuBtn" type="button" aria-haspopup="true" aria-expanded="false">
+        <div class="avatar">T</div>
+        Tio
+        <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="user-menu" id="userMenu">
+        <div class="user-menu-info">
+          <div class="user-menu-name">Tio</div>
+          <div class="user-menu-role">Pemilik UMKM</div>
+        </div>
+        <button type="button" id="logoutBtn" class="danger">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <a href="dashboard.html" class="back-link">← Kembali ke Dashboard</a>
+
+    <div class="detail-head">
+      <div>
+        <p class="eyebrow" id="u-kategori">Kategori</p>
+        <h1 id="u-nama">Nama UMKM</h1>
+        <div class="detail-meta">
+          <span id="u-alamat">—</span>
+          <span id="u-jumlah">—</span>
+          <span id="u-harga">—</span>
+          <span id="u-rating">—</span>
+          <span id="u-sejak">—</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="main-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Tren Penjualan</h2>
+          <span>5 bulan terakhir</span>
+        </div>
+        <div class="bars" id="u-tren"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Produk dari Toko Ini</h2>
+        </div>
+        <table class="products">
+          <thead>
+            <tr><th>Produk</th><th>Harga</th><th>Rating</th><th>Terjual</th></tr>
+          </thead>
+          <tbody id="u-produk"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/topbar.js"></script>
+  <script src="js/detail_umkm.js"></script>
+</body>
+</html>

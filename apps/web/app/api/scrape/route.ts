@@ -293,6 +293,16 @@ export async function POST(req: Request) {
       );
     }
 
+    const rawSlug = (parts[1] || '').replace(/\?.*$/, '');
+    const cleanSlugTitle = rawSlug
+      .replace(/-\d+$/, '')
+      .replace(/-\s*cc\w+$/i, '')
+      .replace(/-/g, ' ')
+      .split(' ')
+      .filter((w) => w.length > 0)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+
     const { html, statusCode } = await fetchHtml(url);
 
     const is404 =
@@ -302,15 +312,6 @@ export async function POST(req: Request) {
       html.includes('Halaman Tidak Ditemukan') ||
       html.includes('halaman tidak ditemukan') ||
       html.includes('Oops, halaman ini tidak ditemukan');
-
-    const slug = parts[1] || '';
-
-    if (is404) {
-      return NextResponse.json(
-        { error: `⚠️ Link produk Tokopedia tidak ditemukan atau produk sudah tidak aktif (${url}). Harap periksa kembali dan masukkan link produk yang valid.` },
-        { status: 404 }
-      );
-    }
 
     // Extract Title
     let title = '';
@@ -328,13 +329,7 @@ export async function POST(req: Request) {
     }
 
     if (!title || title.includes('Tokopedia') || title.length < 5) {
-      title = slug
-        .replace(/-\d+$/, '')
-        .replace(/-/g, ' ')
-        .split(' ')
-        .filter((w) => w.length > 0)
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
+      title = cleanSlugTitle;
     }
 
     // Multi-Tier Scrape Target Shop City / Shipping Origin Region
@@ -450,7 +445,7 @@ export async function POST(req: Request) {
     // query Tokopedia GraphQL Search for exact product price & details.
     if (!price || isNaN(price) || price <= 0) {
       try {
-        const cleanSearchQuery = (title || slug).replace(/-/g, ' ');
+        const cleanSearchQuery = (title || cleanSlugTitle || rawSlug).replace(/-/g, ' ');
         const paramsStr = `device=desktop&navsource=home&ob=23&page=1&q=${encodeURIComponent(cleanSearchQuery)}&rows=10&source=search`;
 
         const gqlRes = await fetch('https://gql.tokopedia.com/graphql/SearchProductQueryV4', {
@@ -493,7 +488,7 @@ export async function POST(req: Request) {
 
         const shopDomain = parts[0]?.toLowerCase() || '';
         const matched =
-          gqlProds.find((p: any) => p.url && (p.url.includes(slug) || (shopDomain && p.url.includes(shopDomain)))) ||
+          gqlProds.find((p: any) => p.url && (p.url.includes(rawSlug) || (shopDomain && p.url.includes(shopDomain)))) ||
           gqlProds[0];
 
         if (matched && matched.priceInt > 0) {

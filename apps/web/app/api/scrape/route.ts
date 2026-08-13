@@ -8,32 +8,28 @@ import { predictFromModel } from './ml-inference';
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
-function fetchHtml(targetUrl: string): Promise<{ html: string; statusCode: number }> {
-  return new Promise((resolve) => {
-    const client = targetUrl.startsWith('https') ? https : http;
-    const req = client.get(
-      targetUrl,
-      {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
-        },
-      },
-      (res) => {
-        let data = '';
-        res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => resolve({ html: data, statusCode: res.statusCode || 200 }));
-      }
-    );
+async function fetchHtml(targetUrl: string): Promise<{ html: string; statusCode: number }> {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-    req.on('error', () => resolve({ html: '', statusCode: 500 }));
-    req.setTimeout(6000, () => {
-      req.destroy();
-      resolve({ html: '', statusCode: 408 });
+    const res = await fetch(targetUrl, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+        'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
+      },
+      signal: controller.signal,
+      cache: 'no-store',
     });
-  });
+
+    clearTimeout(timeoutId);
+    const html = await res.text();
+    return { html, statusCode: res.status };
+  } catch {
+    return { html: '', statusCode: 500 };
+  }
 }
 
 function detectPackQuantity(title: string): number {
@@ -447,6 +443,66 @@ export async function POST(req: Request) {
           }
         }
         if (topPrice > 0) price = topPrice;
+      }
+    }
+
+    // High-Res Fallback: If direct PDP HTML price parsing was blocked by anti-bot/datacenter IP,
+    // query Tokopedia GraphQL Search for exact product price & details.
+    if (!price || isNaN(price) || price <= 0) {
+      try {
+        const cleanSearchQuery = (title || slug).replace(/-/g, ' ');
+        const paramsStr = `device=desktop&navsource=home&ob=23&page=1&q=${encodeURIComponent(cleanSearchQuery)}&rows=10&source=search`;
+
+        const gqlRes = await fetch('https://gql.tokopedia.com/graphql/SearchProductQueryV4', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'X-Source': 'tokopedia-lite',
+            'X-Device': 'desktop',
+          },
+          body: JSON.stringify([
+            {
+              operationName: 'SearchProductQueryV4',
+              variables: { params: paramsStr },
+              query: `query SearchProductQueryV4($params: String!) {
+                ace_search_product_v4(params: $params) {
+                  data {
+                    products {
+                      id
+                      name
+                      priceInt
+                      url
+                      ratingAverage
+                      shop {
+                        name
+                        city
+                      }
+                    }
+                  }
+                }
+              }`,
+            },
+          ]),
+          cache: 'no-store',
+        });
+
+        const json = await gqlRes.json();
+        const gqlProds = json[0]?.data?.ace_search_product_v4?.data?.products || [];
+
+        const shopDomain = parts[0]?.toLowerCase() || '';
+        const matched =
+          gqlProds.find((p: any) => p.url && (p.url.includes(slug) || (shopDomain && p.url.includes(shopDomain)))) ||
+          gqlProds[0];
+
+        if (matched && matched.priceInt > 0) {
+          price = matched.priceInt;
+          if (matched.name && (!title || title.length < 5)) title = matched.name;
+          if (matched.shop?.city) targetShopCity = matched.shop.city;
+        }
+      } catch (_gqlFallbackErr) {
+        // Fallthrough to strict error check
       }
     }
 

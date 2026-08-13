@@ -9,8 +9,7 @@
  *   NUMERIC (12) + BOOLEAN (2) + CATEGORICAL (1, one-hot encoded)
  */
 
-import fs from 'fs';
-import path from 'path';
+import mlModelParams from './ml_model_params.json';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -77,17 +76,12 @@ const FACTOR_FEATURE_INDICES: Record<string, number[]> = {
   'Musim / momen':    [11, 13],            // month, is_seasonal_month (after scaling)
 };
 
-// ── Model loader (cached singleton) ───────────────────────────────────────
-
-let _cachedParams: AllModelParams | null = null;
+// ── Model loader ──────────────────────────────────────────────────────────
+// Uses static import so Next.js/webpack bundles it automatically —
+// works on Vercel, Railway, Render, and any platform without fs access.
 
 function loadParams(): AllModelParams {
-  if (_cachedParams) return _cachedParams;
-
-  const jsonPath = path.join(process.cwd(), 'app/api/scrape/ml_model_params.json');
-  const raw = fs.readFileSync(jsonPath, 'utf-8');
-  _cachedParams = JSON.parse(raw) as AllModelParams;
-  return _cachedParams;
+  return mlModelParams as unknown as AllModelParams;
 }
 
 // ── Feature engineering (mirrors inference.py _build_feature_row) ─────────

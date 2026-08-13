@@ -3,6 +3,11 @@ import https from 'https';
 import http from 'http';
 import { predictFromModel } from './ml-inference';
 
+// Tell Vercel to allow up to 60 seconds for this route (Pro plan)
+// Free/Hobby plan is capped at 10s regardless of this setting
+export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
+
 function fetchHtml(targetUrl: string): Promise<{ html: string; statusCode: number }> {
   return new Promise((resolve) => {
     const client = targetUrl.startsWith('https') ? https : http;

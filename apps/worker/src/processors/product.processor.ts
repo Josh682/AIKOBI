@@ -47,8 +47,8 @@ export async function processProductJob(
         logger.info({ taskId, searchKeyword }, 'Step 2: Gathering competitor price snapshot');
         const searchResults = await scraper.searchProducts(searchKeyword, { perPage: 15 });
         competitorPrices = searchResults.items
-          .map(item => item.price)
-          .filter(price => price > 0);
+          .map((item: { price: number }) => item.price)
+          .filter((price: number) => price > 0);
       } catch (err) {
         logger.warn({ taskId, err }, 'Failed to scrape competitor search, falling back to simulated snapshot');
       }
@@ -131,7 +131,7 @@ export async function processProductJob(
     if (detail.variants.length > 0) {
       await prisma.productVariant.deleteMany({ where: { productId: product.id } });
       await prisma.productVariant.createMany({
-        data: detail.variants.map(v => ({
+        data: detail.variants.map((v: { name: string; price: number; originalPrice?: number | null; discountPercent?: number | null; stock?: number | null; sku?: string | null; imageUrl?: string | null }) => ({
           productId: product.id,
           name: v.name,
           price: new Decimal(v.price),

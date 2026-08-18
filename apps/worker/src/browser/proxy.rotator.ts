@@ -19,7 +19,7 @@ export class ProxyRotator {
 
   constructor(proxyListEnv?: string) {
     const rawProxies = parseProxyList(proxyListEnv);
-    this.proxies = rawProxies.map(raw => this.parseProxy(raw));
+    this.proxies = rawProxies.map((raw: string) => this.parseProxy(raw));
 
     if (this.proxies.length > 0) {
       logger.info({ count: this.proxies.length }, '🔄 Proxy pool initialized');

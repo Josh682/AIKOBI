@@ -84,7 +84,7 @@ export class CollectionScheduler {
       where: { isActive: true },
     });
 
-    const activePlanIds = new Set(activePlans.map((p) => p.id));
+    const activePlanIds = new Set(activePlans.map((p: { id: string }) => p.id));
 
     // Stop tasks untuk plans yang sudah tidak aktif
     for (const [planId, task] of this.tasks.entries()) {

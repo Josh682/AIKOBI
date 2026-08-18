@@ -1,7 +1,7 @@
 import { logger } from '../utils/logger.js';
 
 export interface AIAnalysisRequest {
-  product_name: str;
+  product_name: string;
   category?: string;
   user_price: number;
   rating?: number;

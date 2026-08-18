@@ -85,7 +85,7 @@ export async function processCollectionProductJob(
     if (detail.variants.length > 0) {
       await prisma.productVariant.deleteMany({ where: { productId: product.id } });
       await prisma.productVariant.createMany({
-        data: detail.variants.map((v) => ({
+        data: detail.variants.map((v: { name: string; price: number; originalPrice?: number | null; discountPercent?: number | null; stock?: number | null; sku?: string | null; imageUrl?: string | null }) => ({
           productId: product.id,
           name: v.name,
           price: new Decimal(v.price),

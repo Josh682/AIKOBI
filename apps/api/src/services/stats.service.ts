@@ -49,13 +49,13 @@ export async function getUserStats(userId: string) {
     by: ['status'],
     where: {
       apiKeyId: {
-        in: (await prisma.apiKey.findMany({ where: { userId }, select: { id: true } })).map(k => k.id),
+        in: (await prisma.apiKey.findMany({ where: { userId }, select: { id: true } })).map((k: { id: string }) => k.id),
       },
     },
     _count: { id: true },
   });
 
-  const taskSummary = taskStats.reduce((acc, s) => {
+  const taskSummary = taskStats.reduce((acc: Record<string, number>, s) => {
     acc[s.status] = s._count.id;
     return acc;
   }, {} as Record<string, number>);

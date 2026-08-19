@@ -55,7 +55,7 @@ export async function getUserStats(userId: string) {
     _count: { id: true },
   });
 
-  const taskSummary = taskStats.reduce((acc: Record<string, number>, s) => {
+  const taskSummary = taskStats.reduce((acc: Record<string, number>, s: { status: string; _count: { id: number } }) => {
     acc[s.status] = s._count.id;
     return acc;
   }, {} as Record<string, number>);

@@ -1,0 +1,32 @@
+FROM mcr.microsoft.com/playwright/python:v1.48.0-noble AS playwright-base
+
+# Install Node.js 20
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g pnpm@9.15.0 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy workspace manifests first (for better layer caching)
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.base.json ./
+COPY packages/config/package.json ./packages/config/
+COPY packages/db/package.json ./packages/db/
+COPY packages/shared-types/package.json ./packages/shared-types/
+COPY apps/worker/package.json ./apps/worker/
+
+# Install all dependencies
+RUN pnpm install --frozen-lockfile
+
+# Install Playwright browsers (chromium only to save space)
+RUN npx playwright install chromium
+
+# Copy source code
+COPY packages/ ./packages/
+COPY apps/worker/ ./apps/worker/
+
+# Build using turbo (builds config, db, shared-types first, then worker)
+RUN pnpm run build --filter=@datascrapper/worker
+
+CMD ["node", "apps/worker/dist/index.js"]

@@ -30,4 +30,4 @@ COPY apps/worker/ ./apps/worker/
 # Build using turbo
 RUN pnpm run build --filter=@datascrapper/worker
 
-CMD ["sh", "-c", "npx prisma db push --schema=packages/db/prisma/schema.prisma && node apps/worker/dist/index.js"]
+CMD ["sh", "-c", "pnpm --filter @datascrapper/db exec prisma db push --schema=packages/db/prisma/schema.prisma && node apps/worker/dist/index.js"]

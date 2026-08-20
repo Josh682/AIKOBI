@@ -23,9 +23,6 @@ RUN pnpm install --frozen-lockfile
 # Generate Prisma client
 RUN pnpm --filter @datascrapper/db db:generate
 
-# Install Playwright browsers (chromium only to save space)
-RUN npx playwright install chromium
-
 # Copy all source code
 COPY packages/ ./packages/
 COPY apps/worker/ ./apps/worker/

@@ -4,13 +4,13 @@
 
 ---
 
-## 🌐 Live Demo
+## 🌐 LINK WEB AIMA
 
-> **Coba langsung tanpa instalasi!**
+> **Coba Langsung dibawah ini:**
 >
 > 🔗 **[https://datascrapperweb-production.up.railway.app/](https://datascrapperweb-production.up.railway.app/)**
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Railway-6C63FF?style=for-the-badge&logo=railway&logoColor=white)](https://datascrapperweb-production.up.railway.app/)
+[![Link web AIMA](https://img.shields.io/badge/🚀_Live_Demo-Railway-6C63FF?style=for-the-badge&logo=railway&logoColor=white)](https://datascrapperweb-production.up.railway.app/)
 
 ---
 

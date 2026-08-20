@@ -19,6 +19,9 @@ COPY apps/worker/package.json ./apps/worker/
 # Install all dependencies
 RUN pnpm install --frozen-lockfile
 
+# Generate Prisma client (MUST run before build)
+RUN pnpm --filter @datascrapper/db db:generate
+
 # Install Playwright browsers (chromium only to save space)
 RUN npx playwright install chromium
 

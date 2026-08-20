@@ -91,9 +91,9 @@ export async function processCollectionProductJob(
           price: new Decimal(v.price),
           originalPrice: v.originalPrice != null ? new Decimal(v.originalPrice) : null,
           discountPercent: v.discountPercent ?? null,
-          stock: v.stock,
-          sku: v.sku,
-          imageUrl: v.imageUrl,
+          stock: v.stock ?? undefined,
+          sku: v.sku ?? undefined,
+          imageUrl: v.imageUrl ?? undefined,
         })),
       });
     }

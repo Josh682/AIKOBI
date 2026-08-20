@@ -11,16 +11,18 @@ COPY packages/config/package.json ./packages/config/
 COPY packages/db/package.json ./packages/db/
 COPY packages/shared-types/package.json ./packages/shared-types/
 COPY apps/api/package.json ./apps/api/
+# Copy prisma schema early so postinstall hook can find it
+COPY packages/db/prisma ./packages/db/prisma
 
-# Install all dependencies
+# Install all dependencies (prisma postinstall will auto-generate client)
 RUN pnpm install --frozen-lockfile
 
-# Generate Prisma client (MUST run before build)
-RUN pnpm --filter @datascrapper/db db:generate
-
-# Copy source code
+# Copy rest of source code
 COPY packages/ ./packages/
 COPY apps/api/ ./apps/api/
+
+# Run generate again after full source is available (ensures schema is found)
+RUN pnpm --filter @datascrapper/db db:generate
 
 # Build using turbo (builds config, db, shared-types first, then api)
 RUN pnpm run build --filter=@datascrapper/api

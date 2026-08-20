@@ -4,6 +4,16 @@
 
 ---
 
+## 🌐 Live Demo
+
+> **Coba langsung tanpa instalasi!**
+>
+> 🔗 **[https://datascrapperweb-production.up.railway.app/](https://datascrapperweb-production.up.railway.app/)**
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Railway-6C63FF?style=for-the-badge&logo=railway&logoColor=white)](https://datascrapperweb-production.up.railway.app/)
+
+---
+
 ## 🌟 Fitur Utama AIMA
 
 - **1. Real-time Tokopedia Live Scraper**:

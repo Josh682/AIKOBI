@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/python:v1.48.0-noble AS playwright-base
+FROM mcr.microsoft.com/playwright/python:v1.48.0-noble
 
 # Install Node.js 20
 RUN apt-get update && apt-get install -y curl && \
@@ -9,29 +9,28 @@ RUN apt-get update && apt-get install -y curl && \
 
 WORKDIR /app
 
-# Copy workspace manifests first (for better layer caching)
+# Copy workspace manifests + prisma schema first
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.base.json ./
 COPY packages/config/package.json ./packages/config/
 COPY packages/db/package.json ./packages/db/
+COPY packages/db/prisma ./packages/db/prisma
 COPY packages/shared-types/package.json ./packages/shared-types/
 COPY apps/worker/package.json ./apps/worker/
-# Copy prisma schema early so postinstall hook can find it
-COPY packages/db/prisma ./packages/db/prisma
 
-# Install all dependencies (prisma postinstall will auto-generate client)
+# Install all dependencies
 RUN pnpm install --frozen-lockfile
+
+# Generate Prisma client
+RUN pnpm --filter @datascrapper/db db:generate
 
 # Install Playwright browsers (chromium only to save space)
 RUN npx playwright install chromium
 
-# Copy rest of source code
+# Copy all source code
 COPY packages/ ./packages/
 COPY apps/worker/ ./apps/worker/
 
-# Run generate again after full source is available (ensures schema is found)
-RUN pnpm --filter @datascrapper/db db:generate
-
-# Build using turbo (builds config, db, shared-types first, then worker)
+# Build using turbo
 RUN pnpm run build --filter=@datascrapper/worker
 
 CMD ["node", "apps/worker/dist/index.js"]

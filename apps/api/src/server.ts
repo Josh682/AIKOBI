@@ -6,8 +6,10 @@ async function start() {
   const app = await buildApp();
 
   try {
+    // Railway injects PORT automatically; fall back to configured API_PORT
+    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : env.API_PORT;
     const address = await app.listen({
-      port: env.API_PORT,
+      port,
       host: env.API_HOST,
     });
 

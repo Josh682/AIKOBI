@@ -1,11 +1,8 @@
-FROM mcr.microsoft.com/playwright/python:v1.59.1-noble
+FROM node:20
 
-# Install Node.js 20
-RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g pnpm@9.15.0 && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install pnpm and Playwright system dependencies
+RUN npm install -g pnpm@9.15.0
+RUN npx -y playwright install-deps chromium
 
 WORKDIR /app
 
@@ -19,6 +16,9 @@ COPY apps/worker/package.json ./apps/worker/
 
 # Install all dependencies
 RUN pnpm install --frozen-lockfile
+
+# Install Chromium browser for Playwright
+RUN npx playwright install chromium
 
 # Generate Prisma client
 RUN pnpm --filter @datascrapper/db db:generate

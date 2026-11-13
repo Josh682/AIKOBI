@@ -55,8 +55,8 @@ export default function HomePage() {
 
         {/* Center Stage: Mascot Standing Seamlessly on 3D Pedestal Cap with Floating Action Buttons */}
         <div className="relative mt-2 sm:mt-4 pt-2 sm:pt-4 flex flex-col items-center justify-center">
-          {/* Mascot Figure with Wings Open & Floating Buttons on Each Wing (z-20: feet firmly on top of disc) */}
-          <div className="relative z-20 w-80 sm:w-[440px] md:w-[500px] flex items-end justify-center">
+          {/* Mascot Figure with Wings Open & Floating Buttons on Each Wing (Lowered slightly onto disc) */}
+          <div className="relative z-20 w-80 sm:w-[440px] md:w-[500px] flex items-end justify-center translate-y-2 sm:translate-y-3">
             {/* Floating Action Button: Over Left Wing (Mulai Konsultasi Bisnis) */}
             <Link
               href="/konsultasi"
@@ -73,7 +73,7 @@ export default function HomePage() {
               width={560}
               height={463}
               priority
-              className="w-full h-auto max-h-[280px] sm:max-h-[360px] md:max-h-[420px] object-contain select-none pointer-events-none drop-shadow-[0_15px_30px_rgba(15,23,42,0.18)] dark:drop-shadow-[0_20px_35px_rgba(0,0,0,0.65)]"
+              className="w-full h-auto max-h-[280px] sm:max-h-[360px] md:max-h-[420px] object-contain select-none pointer-events-none"
             />
 
             {/* Floating Action Button: Over Right Wing (Tanya KOBI) */}
@@ -86,17 +86,6 @@ export default function HomePage() {
               </div>
               <span>Tanya KOBI</span>
             </Link>
-          </div>
-
-          {/* Ambient Contact Shadows for Both Claws (Realistic Grounding) */}
-          <div
-            aria-hidden="true"
-            className="relative z-20 -mt-2 sm:-mt-3 flex items-center justify-center gap-14 sm:gap-20 md:gap-24 pointer-events-none"
-          >
-            {/* Left Foot Contact Shadow */}
-            <div className="w-16 sm:w-22 md:w-26 h-3 sm:h-4 rounded-[100%] bg-slate-950/40 dark:bg-black/80 blur-[2.5px]" />
-            {/* Right Foot Contact Shadow */}
-            <div className="w-16 sm:w-22 md:w-26 h-3 sm:h-4 rounded-[100%] bg-slate-950/40 dark:bg-black/80 blur-[2.5px]" />
           </div>
 
           {/* 3D Fluted Circular Pedestal Disc Cap (z-10, sits cleanly beneath the claws) */}

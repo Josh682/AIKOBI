@@ -18,28 +18,18 @@ import {
 export default function HomePage() {
 
   return (
-    <div className="py-4 sm:py-8 overflow-hidden relative">
+    <div className="py-4 sm:py-8 relative">
       {/* ============================================================
           SECTION 1: HERO SECTION (PRECEDENT: PEDESTAL & KOBI MASCOT)
           ============================================================ */}
       <section className="relative z-10 text-center max-w-6xl mx-auto pt-6 sm:pt-10">
-        {/* Smooth Seamless Brand Aura on Left (Matching Official Logo Colors: Royal Blue & Emerald Green) */}
+        {/* Smooth Seamless Brand Backlight (Centered, fades smoothly to 100% transparent, zero boundary seams) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -left-12 sm:-left-4 top-8 sm:top-14 -z-10 w-[380px] sm:w-[580px] lg:w-[680px] h-[380px] sm:h-[580px] lg:h-[680px] rounded-full blur-3xl opacity-70 dark:opacity-45"
+          className="pointer-events-none absolute left-1/2 top-6 -translate-x-1/2 -z-10 w-[420px] sm:w-[720px] lg:w-[920px] h-[360px] sm:h-[560px] rounded-full blur-3xl opacity-60 dark:opacity-35"
           style={{
             background:
-              'radial-gradient(circle at 40% 45%, rgba(37, 99, 235, 0.22) 0%, rgba(6, 182, 212, 0.18) 28%, rgba(16, 185, 129, 0.15) 50%, rgba(5, 150, 105, 0.06) 65%, transparent 75%)',
-          }}
-        />
-
-        {/* Soft Ambient Light Glow Behind Mascot (Royal Blue to Emerald Cyan) */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 -z-10 w-[360px] sm:w-[680px] h-[360px] sm:h-[680px] rounded-full blur-3xl opacity-75 dark:opacity-45"
-          style={{
-            background:
-              'radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.18) 0%, rgba(6, 182, 212, 0.10) 40%, transparent 70%)',
+              'radial-gradient(ellipse at 50% 50%, rgba(37, 99, 235, 0.16) 0%, rgba(6, 182, 212, 0.11) 32%, rgba(16, 185, 129, 0.07) 50%, transparent 70%)',
           }}
         />
 
@@ -105,24 +95,59 @@ export default function HomePage() {
           className="pointer-events-none absolute left-1/2 -top-6 sm:-top-8 bottom-0 -translate-x-1/2 w-56 sm:w-72 md:w-84 fluted-pedestal rounded-t-3xl rounded-b-3xl border-x border-slate-300/80 dark:border-slate-700 opacity-90 dark:opacity-85 -z-10 shadow-lg"
         />
 
-        {/* Section Heading Centered Across the Fluted Column */}
-        <div className="relative text-center max-w-xl mx-auto mb-16 sm:mb-24 space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold border border-slate-200/80 dark:border-slate-700 mb-2 shadow-xs">
-            <Layers className="w-3.5 h-3.5 text-blue-600" />
-            Arsitektur Solusi Terpadu
+        {/* ============================================================
+            3D CYLINDRICAL ROTATING RING TEXT (MATCHES GAMBAR 3)
+            "Solusi konsultasi cerdas yang membedah tuntas kebutuhan etalase Anda"
+            ============================================================ */}
+        <div className="relative text-center max-w-4xl mx-auto mb-16 sm:mb-24">
+          <h2 className="sr-only">
+            Solusi konsultasi cerdas yang membedah tuntas kebutuhan etalase Anda
+          </h2>
+          <div className="relative h-28 sm:h-36 md:h-44 flex items-center justify-center [perspective:1000px] select-none pointer-events-auto">
+            <div
+              className="relative w-full h-full flex items-center justify-center [transform-style:preserve-3d] animate-cylinder-spin hover:[animation-play-state:paused] [--cylinder-radius:155px] xs:[--cylinder-radius:185px] sm:[--cylinder-radius:240px] md:[--cylinder-radius:290px] lg:[--cylinder-radius:320px]"
+            >
+              {[
+                { text: 'Solusi', style: 'font-extrabold text-slate-900 dark:text-white' },
+                { text: 'Konsultasi', style: 'font-extrabold text-slate-900 dark:text-white' },
+                { text: 'Cerdas', style: 'font-extrabold text-slate-900 dark:text-white' },
+                { text: 'yang', style: 'font-editorial italic text-blue-600 dark:text-blue-400' },
+                { text: '✦', style: 'text-blue-500 font-bold' },
+                { text: 'membedah', style: 'font-editorial italic text-blue-600 dark:text-blue-400' },
+                { text: 'tuntas', style: 'font-editorial italic text-blue-600 dark:text-blue-400' },
+                { text: '✦', style: 'text-emerald-500 font-bold' },
+                { text: 'kebutuhan', style: 'font-extrabold text-slate-900 dark:text-white' },
+                { text: 'etalase', style: 'font-extrabold text-slate-900 dark:text-white' },
+                { text: 'Anda', style: 'font-extrabold text-slate-900 dark:text-white' },
+                { text: '✦', style: 'text-blue-500 font-bold' },
+              ].map((item, idx) => {
+                const angle = idx * 30;
+                return (
+                  <div
+                    key={idx}
+                    className="absolute flex items-center justify-center [transform-style:preserve-3d]"
+                    style={{
+                      transform: `rotateY(${angle}deg) translateZ(var(--cylinder-radius))`,
+                    }}
+                  >
+                    {/* Front Face: Crisp & Bold (visible when facing viewer) */}
+                    <span
+                      className={`text-lg sm:text-2xl md:text-3xl tracking-tight [backface-visibility:hidden] drop-shadow-xs whitespace-nowrap ${item.style}`}
+                    >
+                      {item.text}
+                    </span>
+                    {/* Back Face: Mirrored & Blurred (visible when facing away at rear of cylinder) */}
+                    <span
+                      aria-hidden="true"
+                      className={`absolute text-lg sm:text-2xl md:text-3xl tracking-tight [transform:rotateY(180deg)] [backface-visibility:hidden] blur-[1.5px] opacity-25 dark:opacity-20 whitespace-nowrap select-none ${item.style}`}
+                    >
+                      {item.text}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-            Solusi konsultasi cerdas yang
-          </h2>
-          <p className="font-editorial text-2xl sm:text-4xl text-blue-600 dark:text-blue-400 leading-tight">
-            membedah tuntas
-          </p>
-          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-            kebutuhan etalase Anda
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 pt-2 max-w-md mx-auto">
-            Dari ekstraksi data kompetitor hingga strategi penetapan harga dan mitigasi komplain ulasan pembeli.
-          </p>
         </div>
 
         {/* 4 Staggered Milestone Feature Cards (Matches Precedent 001 - 004) */}

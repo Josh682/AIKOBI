@@ -89,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body
         suppressHydrationWarning
-        className="min-h-[100dvh] flex flex-col bg-aikobi-bg text-aikobi-text-primary antialiased"
+        className="min-h-[100dvh] flex flex-col bg-aikobi-bg text-aikobi-text-primary antialiased overflow-x-clip"
       >
         <AikobiTopbar />
         <main className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">

@@ -497,6 +497,20 @@ a { color: inherit; }
   animation: float-reverse 5.2s ease-in-out infinite;
 }
 
+/* 3D Cylindrical Text Ring Rotation (Matches Precedent Gambar 3) */
+@keyframes cylinder-spin {
+  0% {
+    transform: rotateX(-12deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(-12deg) rotateY(-360deg);
+  }
+}
+
+.animate-cylinder-spin {
+  animation: cylinder-spin 22s linear infinite;
+}
+
 /* 3D Fluted Pedestal Column Texture */
 .fluted-pedestal {
   background: repeating-linear-gradient(

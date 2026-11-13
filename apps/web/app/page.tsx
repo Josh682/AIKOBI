@@ -22,24 +22,15 @@ export default function HomePage() {
       {/* ============================================================
           SECTION 1: HERO SECTION (PRECEDENT: PEDESTAL & KOBI MASCOT)
           ============================================================ */}
-      <section className="relative text-center max-w-6xl mx-auto pt-4 sm:pt-10">
+      <section className="relative text-center max-w-6xl mx-auto pt-6 sm:pt-12">
         {/* Soft Ambient Light Glow Behind Mascot */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-12 -translate-x-1/2 -z-10 w-[340px] sm:w-[620px] h-[340px] sm:h-[620px] rounded-full bg-radial from-blue-400/20 via-indigo-500/10 to-transparent blur-3xl opacity-80"
+          className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 -z-10 w-[360px] sm:w-[680px] h-[360px] sm:h-[680px] rounded-full bg-radial from-blue-400/20 via-indigo-500/10 to-transparent blur-3xl opacity-80"
         />
 
-        {/* Operational Beacon Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-semibold mb-6 shadow-xs">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span>Platform Riset Pasar & Konsultan Harga Tokopedia Real-Time</span>
-        </div>
-
         {/* Precedent Editorial Typography: Sans-serif + Italic Serif */}
-        <div className="space-y-1 sm:space-y-2 max-w-4xl mx-auto px-2">
+        <div className="space-y-1 sm:space-y-2 max-w-4xl mx-auto px-4">
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
             Kuasai Strategi & Margin
           </h1>
@@ -48,78 +39,44 @@ export default function HomePage() {
           </p>
         </div>
 
-        {/* Subtitle Description */}
-        <p className="mt-5 text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed px-4">
-          AIKOBI bertindak layaknya konsultan bisnis profesional bagi UMKM Indonesia—mengungkap posisi harga pasar ideal (*Sweet-Spot*), membongkar sentimen ulasan pembeli, hingga memenangkan ongkir logistik lokal.
-        </p>
+        {/* Center Stage: Mascot Standing on 3D Pedestal Cap with Floating Action Buttons Over Wings */}
+        <div className="relative mt-2 sm:mt-4 pt-4 flex flex-col items-center justify-center">
+          {/* Mascot Figure with Wings Open & Floating Buttons on Each Wing */}
+          <div className="relative z-10 w-72 sm:w-96 md:w-[440px] flex items-end justify-center">
+            {/* Floating Action Button: Over Left Wing (Mulai Konsultasi Bisnis) */}
+            <Link
+              href="/konsultasi"
+              className="absolute -left-3 sm:-left-16 md:-left-28 lg:-left-36 top-6 sm:top-10 md:top-14 z-30 group inline-flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-5 py-2 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xl shadow-blue-500/30 border border-blue-400/40 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 animate-float-slow whitespace-nowrap"
+            >
+              <span>Mulai Konsultasi Bisnis</span>
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
 
-        {/* Action Buttons */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5 px-4">
-          <Link
-            href="/konsultasi"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 active:scale-95 transition-all"
-          >
-            <span>Mulai Konsultasi Bisnis</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link
-            href="/tanya"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl border border-slate-300/80 dark:border-slate-700 hover:bg-slate-100/80 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold text-sm precedent-pill transition-all"
-          >
-            <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span>Tanya KOBI (Chatbot AI)</span>
-          </Link>
-        </div>
-
-        {/* Center Stage: 3D Fluted Pedestal + Mascot & Floating Glass Pills */}
-        <div className="relative mt-12 sm:mt-16 pt-6 flex flex-col items-center justify-center">
-          {/* Left Floating Glass Pill (Matches Precedent) */}
-          <div className="hidden lg:flex absolute left-4 xl:left-8 top-16 z-20 w-72 p-4 rounded-2xl precedent-pill text-left space-y-2 animate-float-slow transition-all duration-300 hover:scale-105">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/30">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="text-xs font-bold text-slate-900 dark:text-white">Sensor Tokopedia</h2>
-                <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400">Live Ingestion Engine</span>
-              </div>
-            </div>
-            <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-              Ekstraksi otomatis etalase kompetitor, varian multi-ukuran (S/M/L), serta pemisahan eceran vs grosir tanpa login.
-            </p>
-          </div>
-
-          {/* Right Floating Glass Pill (Matches Precedent) */}
-          <div className="hidden lg:flex absolute right-4 xl:right-8 top-16 z-20 w-72 p-4 rounded-2xl precedent-pill text-left space-y-2 animate-float-reverse transition-all duration-300 hover:scale-105">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/30">
-                <TrendingUp className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="text-xs font-bold text-slate-900 dark:text-white">Model Kuantil</h2>
-                <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Sweet-Spot Pricing</span>
-              </div>
-            </div>
-            <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-              Penentuan zona harga wajar konsensus pasar untuk memaksimalkan omzet toko dan mencegah perang harga rugi.
-            </p>
-          </div>
-
-          {/* Mascot Figure Sitting/Standing on Pedestal */}
-          <div className="relative z-10 w-64 sm:w-80 h-72 sm:h-96 flex items-end justify-center">
+            {/* Mascot Open Wings Illustration */}
             <Image
-              src="/brand/mascot/mascot-greeting.png"
+              src="/brand/mascot/mascot-wings-open.png"
               alt="KOBI Maskot Konsultan Bisnis"
-              width={420}
-              height={420}
+              width={500}
+              height={422}
               priority
-              className="w-auto h-full object-contain filter drop-shadow-[0_20px_30px_rgba(15,23,42,0.18)] dark:drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)] animate-float-slow"
+              className="w-auto h-auto max-h-[260px] sm:max-h-[340px] md:max-h-[400px] object-contain filter drop-shadow-[0_20px_35px_rgba(15,23,42,0.18)] dark:drop-shadow-[0_25px_40px_rgba(0,0,0,0.65)] select-none pointer-events-none"
             />
+
+            {/* Floating Action Button: Over Right Wing (Tanya KOBI) */}
+            <Link
+              href="/tanya"
+              className="absolute -right-3 sm:-right-12 md:-right-20 lg:-right-28 top-12 sm:top-16 md:top-20 z-30 group inline-flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-5 py-2 sm:py-3 rounded-full precedent-pill hover:bg-white/95 dark:hover:bg-slate-900/95 text-slate-800 dark:text-slate-100 font-semibold text-xs sm:text-sm shadow-xl shadow-slate-900/10 dark:shadow-black/50 border border-slate-200/90 dark:border-slate-700/80 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 animate-float-reverse whitespace-nowrap"
+            >
+              <div className="w-5 h-5 rounded-full bg-blue-500/15 dark:bg-blue-400/20 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-transform group-hover:rotate-12">
+                <Sparkles className="w-3.5 h-3.5" />
+              </div>
+              <span>Tanya KOBI</span>
+            </Link>
           </div>
 
           {/* 3D Fluted Circular Pedestal Disc Cap */}
-          <div className="relative -mt-6 sm:-mt-8 z-20 w-72 sm:w-96 h-14 sm:h-16 rounded-[100%] pedestal-cap flex items-center justify-center shadow-lg">
-            <div className="w-56 sm:w-72 h-8 sm:h-10 rounded-[100%] bg-slate-200/50 dark:bg-slate-700/40 blur-xs" />
+          <div className="relative -mt-6 sm:-mt-8 z-20 w-72 sm:w-96 md:w-[440px] h-14 sm:h-16 rounded-[100%] pedestal-cap flex items-center justify-center shadow-lg">
+            <div className="w-56 sm:w-72 md:w-80 h-8 sm:h-10 rounded-[100%] bg-slate-200/50 dark:bg-slate-700/40 blur-xs" />
           </div>
         </div>
       </section>

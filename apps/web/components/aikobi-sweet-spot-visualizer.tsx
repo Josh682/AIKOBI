@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import {
   Scale,
   Sparkles,
@@ -97,18 +98,29 @@ export function AikobiSweetSpotVisualizer({ data, className = '' }: SweetSpotVis
 
   return (
     <section className={`flat-surface p-6 sm:p-8 lg:p-10 space-y-8 shadow-sm ${className}`}>
-      {/* 1. Header: Category, Title & Status Badge */}
+      {/* 1. Header: Category, Title & Status Badge with Mascot Pointing */}
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-slate-200/80 dark:border-slate-800 pb-6">
-        <div className="space-y-1.5 flex-1 min-w-0">
-          <div className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-            {data.kategori || 'Katalog Tokopedia'}
+        <div className="flex items-start gap-4 flex-1 min-w-0">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 relative flex-shrink-0 bg-amber-50/80 dark:bg-amber-950/30 rounded-2xl p-1 border border-amber-200/60 dark:border-amber-900/40">
+            <Image
+              src="/brand/mascot/mascot-pointing.png"
+              alt="KOBI Menunjukkan Arah"
+              width={64}
+              height={64}
+              className="w-full h-full object-contain filter drop-shadow-sm"
+            />
           </div>
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-snug">
-            {data.produk}
-          </h2>
+          <div className="space-y-1.5 flex-1 min-w-0">
+            <div className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              {data.kategori || 'Katalog Tokopedia'}
+            </div>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-snug">
+              {data.produk}
+            </h2>
+          </div>
         </div>
 
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 self-start md:self-auto">
           <span
             className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold border ${statusBadge.bg} ${statusBadge.text} ${statusBadge.border}`}
           >

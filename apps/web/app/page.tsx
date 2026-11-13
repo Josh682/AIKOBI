@@ -10,7 +10,6 @@ import {
   Truck,
   ShieldCheck,
   MessageSquare,
-  ChevronRight,
   Layers,
   CheckCircle2,
 } from 'lucide-react';
@@ -231,145 +230,9 @@ export default function HomePage() {
       </section>
 
       {/* ============================================================
-          SECTION 3: MASCOT PERSONA & CONSULTANT ROLES (4 POSES)
+          SECTION 3: FINAL CTA BANNER (WITH APPROVE MASCOT)
           ============================================================ */}
-      <section className="mt-24 sm:mt-32 max-w-6xl mx-auto px-4 space-y-10">
-        <div className="text-center space-y-2 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            Persona Asisten Konsultan
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            KOBI Hadir di Setiap Langkah Bisnis Anda
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-            Dari input tautan awal hingga implementasi strategi harga terbaik di etalase toko online.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {/* Persona 1: Greeting */}
-          <div className="flat-surface p-5 space-y-4 hover:shadow-lg transition-all text-center flex flex-col justify-between group">
-            <div className="space-y-3">
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-mono text-[11px] font-bold">
-                01 / Onboarding
-              </span>
-              <div className="w-36 h-36 mx-auto relative group-hover:scale-105 transition-transform duration-200">
-                <Image
-                  src="/brand/mascot/mascot-greeting.png"
-                  alt="KOBI Menyapa"
-                  width={200}
-                  height={200}
-                  className="w-full h-full object-contain filter drop-shadow-sm"
-                />
-              </div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-white">KOBI Menyapa</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Menyambut pedagang, memvalidasi URL Tokopedia, dan menginisiasi live scraping pipeline.
-              </p>
-            </div>
-            <Link
-              href="/konsultasi"
-              className="inline-flex items-center justify-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 pt-2 hover:underline"
-            >
-              <span>Mulai Deteksi</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          {/* Persona 2: Thinking */}
-          <div className="flat-surface p-5 space-y-4 hover:shadow-lg transition-all text-center flex flex-col justify-between group">
-            <div className="space-y-3">
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 font-mono text-[11px] font-bold">
-                02 / Analisis
-              </span>
-              <div className="w-36 h-36 mx-auto relative group-hover:scale-105 transition-transform duration-200">
-                <Image
-                  src="/brand/mascot/mascot-thinking.png"
-                  alt="KOBI Menganalisis"
-                  width={200}
-                  height={200}
-                  className="w-full h-full object-contain filter drop-shadow-sm"
-                />
-              </div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-white">KOBI Menganalisis</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Membedah disparitas harga 20 kompetitor aktif, rating bintang, dan topik ulasan kepuasan.
-              </p>
-            </div>
-            <Link
-              href="/tanya"
-              className="inline-flex items-center justify-center gap-1 text-xs font-semibold text-purple-600 dark:text-purple-400 pt-2 hover:underline"
-            >
-              <span>Tanya KOBI</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          {/* Persona 3: Pointing */}
-          <div className="flat-surface p-5 space-y-4 hover:shadow-lg transition-all text-center flex flex-col justify-between group">
-            <div className="space-y-3">
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 font-mono text-[11px] font-bold">
-                03 / Rekomendasi
-              </span>
-              <div className="w-36 h-36 mx-auto relative group-hover:scale-105 transition-transform duration-200">
-                <Image
-                  src="/brand/mascot/mascot-pointing.png"
-                  alt="KOBI Menunjukkan Arah"
-                  width={200}
-                  height={200}
-                  className="w-full h-full object-contain filter drop-shadow-sm"
-                />
-              </div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-white">KOBI Menunjukkan Arah</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Menemukan titik sweet-spot wajar dan mengarahkan strategi bundling penaik average order value.
-              </p>
-            </div>
-            <Link
-              href="/konsultasi"
-              className="inline-flex items-center justify-center gap-1 text-xs font-semibold text-amber-600 dark:text-amber-400 pt-2 hover:underline"
-            >
-              <span>Lihat Spektrum</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          {/* Persona 4: Approve */}
-          <div className="flat-surface p-5 space-y-4 hover:shadow-lg transition-all text-center flex flex-col justify-between group">
-            <div className="space-y-3">
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-mono text-[11px] font-bold">
-                04 / Validasi
-              </span>
-              <div className="w-36 h-36 mx-auto relative group-hover:scale-105 transition-transform duration-200">
-                <Image
-                  src="/brand/mascot/mascot-approve.png"
-                  alt="KOBI Menyetujui"
-                  width={200}
-                  height={200}
-                  className="w-full h-full object-contain filter drop-shadow-sm"
-                />
-              </div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-white">KOBI Menyetujui</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Memvalidasi margin yang menguntungkan dan mengunci keunggulan bersaing toko Anda.
-              </p>
-            </div>
-            <Link
-              href="/konsultasi"
-              className="inline-flex items-center justify-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 pt-2 hover:underline"
-            >
-              <span>Terapkan Action Plan</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-          SECTION 4: FINAL CTA BANNER (WITH APPROVE MASCOT)
-          ============================================================ */}
-      <section className="mt-24 sm:mt-32 max-w-5xl mx-auto px-4 pb-8">
+      <section className="mt-20 sm:mt-28 max-w-5xl mx-auto px-4 pb-8">
         <div className="relative overflow-hidden rounded-3xl precedent-pill p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
           <div
             aria-hidden="true"

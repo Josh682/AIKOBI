@@ -9,6 +9,7 @@ import { AikobiEmptyState } from '@/components/aikobi-empty-state';
 import { AikobiSweetSpotVisualizer } from '@/components/aikobi-sweet-spot-visualizer';
 import { AikobiAdvisoryCards } from '@/components/aikobi-advisory-cards';
 import { AikobiCompetitorMatrix } from '@/components/aikobi-competitor-matrix';
+import { AikobiAuditPersonas } from '@/components/aikobi-audit-personas';
 
 export default function AiPage() {
   const [urlInput, setUrlInput] = useState('');
@@ -144,9 +145,12 @@ export default function AiPage() {
         <AikobiEmptyState />
       )}
 
-      {/* Results View: Sweet-Spot Visualizer, Advisory Cards, Competitor Matrix */}
+      {/* Results View: Persona Overview, Sweet-Spot Visualizer, Advisory Cards, Competitor Matrix */}
       {data && !loading && (
-        <div className="space-y-10 pt-2 animate-fade-in">
+        <div className="space-y-12 pt-2 animate-fade-in">
+          {/* 0. Mascot Persona 4-Step Synthesis Overview */}
+          <AikobiAuditPersonas data={data} />
+
           {/* 1. Fair Price Sweet-Spot Range Spectrum */}
           <AikobiSweetSpotVisualizer data={data} />
 

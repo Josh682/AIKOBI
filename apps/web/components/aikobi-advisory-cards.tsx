@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import {
   TrendingUp,
   Target,
@@ -88,17 +89,28 @@ export function AikobiAdvisoryCards({ data, className = '' }: AdvisoryCardsProps
         {/* Focus on Financial Position, Strategic Options, Action Plan*/}
         {/* ========================================================= */}
         <div className="lg:col-span-7 space-y-6 sm:space-y-8">
-          {/* Card 1: Market Price Position Analysis */}
+          {/* Card 1: Market Price Position Analysis with Mascot Thinking */}
           {ah && (
             <div className="flat-surface p-6 sm:p-8 space-y-6 shadow-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 dark:border-slate-800 pb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                    <TrendingUp className="w-4 h-4" />
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 relative flex-shrink-0 bg-purple-50/80 dark:bg-purple-950/30 rounded-xl p-0.5 border border-purple-200/60 dark:border-purple-900/40">
+                    <Image
+                      src="/brand/mascot/mascot-thinking.png"
+                      alt="KOBI Menganalisis"
+                      width={44}
+                      height={44}
+                      className="w-full h-full object-contain filter drop-shadow-xs"
+                    />
                   </div>
-                  <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white">
-                    Posisi Harga Pasar
-                  </h3>
+                  <div>
+                    <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white leading-tight">
+                      Posisi Harga Pasar
+                    </h3>
+                    <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400">
+                      Analisis Disparitas Kompetitor
+                    </span>
+                  </div>
                 </div>
 
                 <span
@@ -155,19 +167,25 @@ export function AikobiAdvisoryCards({ data, className = '' }: AdvisoryCardsProps
             </div>
           )}
 
-          {/* Card 2: Strategic Pricing Options & Operational Action Plan */}
+          {/* Card 2: Strategic Pricing Options & Operational Action Plan with Mascot Approve */}
           {rp && (
             <div className="flat-surface p-6 sm:p-8 space-y-6 shadow-sm">
-              <div className="flex items-center gap-2 border-b border-slate-200/80 dark:border-slate-800 pb-4">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                  <Target className="w-4 h-4" />
+              <div className="flex items-center gap-3 border-b border-slate-200/80 dark:border-slate-800 pb-4">
+                <div className="w-10 h-10 relative flex-shrink-0 bg-emerald-50/80 dark:bg-emerald-950/30 rounded-xl p-0.5 border border-emerald-200/60 dark:border-emerald-900/40">
+                  <Image
+                    src="/brand/mascot/mascot-approve.png"
+                    alt="KOBI Menyetujui"
+                    width={44}
+                    height={44}
+                    className="w-full h-full object-contain filter drop-shadow-xs"
+                  />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white">
+                  <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white leading-tight">
                     Rekomendasi Strategis & Action Plan Penjual
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Skenario optimasi harga kuantil untuk meningkatkan laba bersih atau volume transaksi
+                    Validasi skenario optimasi harga & tindakan taktis yang disetujui konsultan KOBI
                   </p>
                 </div>
               </div>

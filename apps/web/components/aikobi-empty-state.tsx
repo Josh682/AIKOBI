@@ -26,26 +26,19 @@ export function AikobiEmptyState() {
 
   return (
     <div className="w-full max-w-4xl mx-auto flat-surface p-8 sm:p-10 space-y-8 text-center">
-      {/* Emblem */}
+      {/* KOBI Menyapa Emblem */}
       <div className="space-y-3">
-        <div className="w-16 h-16 rounded-2xl bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200/90 dark:border-slate-700/80 p-2 flex items-center justify-center mx-auto shadow-md shadow-blue-500/10">
+        <div className="w-24 h-24 mx-auto relative">
           <Image
-            src="/brand/logo-mark.png"
-            alt="AIKOBI Mark"
-            width={52}
-            height={52}
-            className="w-full h-full object-contain dark:hidden"
-          />
-          <Image
-            src="/brand/logo-mark-dark.png"
-            alt="AIKOBI Mark"
-            width={52}
-            height={52}
-            className="w-full h-full object-contain hidden dark:block"
+            src="/brand/mascot/mascot-greeting.png"
+            alt="KOBI Menyapa"
+            width={96}
+            height={96}
+            className="w-full h-full object-contain filter drop-shadow-md"
           />
         </div>
         <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          Siap Mengaudit Produk Tokopedia Anda
+          KOBI Menyapa: Siap Mengaudit Produk Tokopedia Anda
         </h2>
         <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
           Tempel tautan produk Tokopedia atau klik salah satu sampel cepat di atas. AIKOBI akan mengekstrak etalase, varian, dan ulasan secara real-time.

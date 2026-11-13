@@ -23,23 +23,23 @@ export default function HomePage() {
           SECTION 1: HERO SECTION (PRECEDENT: PEDESTAL & KOBI MASCOT)
           ============================================================ */}
       <section className="relative text-center max-w-6xl mx-auto pt-6 sm:pt-10">
-        {/* Smooth Seamless Iridescent Arc on Left (Fades smoothly to 100% transparent, no harsh lines) */}
+        {/* Smooth Seamless Brand Aura on Left (Matching Official Logo Colors: Royal Blue & Emerald Green) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -left-12 sm:-left-4 top-8 sm:top-14 -z-10 w-[380px] sm:w-[580px] lg:w-[680px] h-[380px] sm:h-[580px] lg:h-[680px] rounded-full blur-3xl opacity-65 dark:opacity-40"
+          className="pointer-events-none absolute -left-12 sm:-left-4 top-8 sm:top-14 -z-10 w-[380px] sm:w-[580px] lg:w-[680px] h-[380px] sm:h-[580px] lg:h-[680px] rounded-full blur-3xl opacity-70 dark:opacity-45"
           style={{
             background:
-              'radial-gradient(circle at 40% 45%, rgba(56, 189, 248, 0.22) 0%, rgba(99, 102, 241, 0.16) 28%, rgba(168, 85, 247, 0.10) 48%, rgba(244, 114, 182, 0.05) 62%, transparent 75%)',
+              'radial-gradient(circle at 40% 45%, rgba(37, 99, 235, 0.22) 0%, rgba(6, 182, 212, 0.18) 28%, rgba(16, 185, 129, 0.15) 50%, rgba(5, 150, 105, 0.06) 65%, transparent 75%)',
           }}
         />
 
-        {/* Soft Ambient Light Glow Behind Mascot */}
+        {/* Soft Ambient Light Glow Behind Mascot (Royal Blue to Emerald Cyan) */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 -z-10 w-[360px] sm:w-[680px] h-[360px] sm:h-[680px] rounded-full blur-3xl opacity-75 dark:opacity-45"
           style={{
             background:
-              'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.18) 0%, rgba(99, 102, 241, 0.10) 40%, transparent 70%)',
+              'radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.18) 0%, rgba(6, 182, 212, 0.10) 40%, transparent 70%)',
           }}
         />
 

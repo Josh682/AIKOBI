@@ -72,7 +72,7 @@ Antarmuka AIKOBI dirancang menggunakan formula **Modern Flat (80%) x Liquid Glas
 | :--- | :--- | :--- |
 | `/` | **Beranda** | Showcase proposisi nilai AIKOBI, ringkasan alur kerja 3 langkah, dan navigasi cepat. |
 | `/konsultasi` | **Konsultasi Bisnis AI** | Ruang audit utama: hero capsule input Tokopedia, sampel cepat 1-klik, live HUD, visualizer sweet-spot, dan kartu advisory. |
-| `/pasar` | **Radar Dinamika Pasar** | Monitoring agregat harga komoditas UMKM, sebaran kota seller, dan filter kategori pasar. |
+| `/tanya` | **Tanya KOBI (Chatbot AI)** | Kolom chat interaktif konsultasi strategi harga, audit etalase Tokopedia, mitigasi ulasan, dan rencana aksi toko siap-LLM. |
 | `/tentang` | **Tentang Platform & Misi** | Misi AIKOBI, komitmen bagi UMKM Indonesia, dan 3 pilar teknologi inti. |
 | `/tokens-test`| **Sandbox Sistem Desain** | Arena verifikasi token desain, palet semantik bisnis, kelengkungan squircle, dan showcase konfigurasi logo resmi. |
 
@@ -97,7 +97,8 @@ AIKOBI/
 │       │   ├── ai/                         # Komponen ruang konsultasi (kompatibilitas rute)
 │       │   ├── api/scrape/                 # Endpoint scraping Tokopedia & kalkulasi kuantil
 │       │   ├── konsultasi/                 # Rute resmi Konsultasi Bisnis AI
-│       │   ├── pasar/                      # Rute Radar Dinamika Pasar UMKM
+│       │   ├── pasar/                      # Rute redirect ke Tanya KOBI
+│       │   ├── tanya/                      # Rute resmi Tanya KOBI (Chatbot Konsultan AI)
 │       │   ├── tentang/                    # Halaman Misi & Transparansi Platform
 │       │   ├── tokens-test/                # Sandbox pengujian token desain & aset logo
 │       │   ├── favicon.ico                 # Favicon resmi AIKOBI
@@ -105,6 +106,7 @@ AIKOBI/
 │       │   └── layout.tsx                  # Root shell layout, anti-FOUC script, & metadata SEO
 │       ├── components/
 │       │   ├── aikobi-advisory-cards.tsx    # Kartu evaluasi asimetris 60/40
+│       │   ├── aikobi-chat.tsx              # Asisten chatbot Tanya KOBI (empty state & chat flow)
 │       │   ├── aikobi-competitor-matrix.tsx # Matriks kompetitor & ongkir lokal
 │       │   ├── aikobi-empty-state.tsx      # Tampilan awal ramah dengan logo mark
 │       │   ├── aikobi-error-alert.tsx      # Alert kesalahan berbahasa manusia

@@ -14,7 +14,7 @@ export function AikobiTopbar() {
   const navLinks = [
     { label: 'Beranda', href: '/' },
     { label: 'Konsultasi Bisnis', href: '/konsultasi' },
-    { label: 'Radar Pasar', href: '/pasar' },
+    { label: 'Tanya KOBI', href: '/tanya' },
     { label: 'Tentang', href: '/tentang' },
     { label: 'Sandbox', href: '/tokens-test' },
   ];
@@ -60,7 +60,8 @@ export function AikobiTopbar() {
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||
-              (link.href === '/konsultasi' && pathname === '/ai');
+              (link.href === '/konsultasi' && pathname === '/ai') ||
+              (link.href === '/tanya' && pathname === '/pasar');
 
             return (
               <Link
@@ -121,7 +122,8 @@ export function AikobiTopbar() {
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||
-              (link.href === '/konsultasi' && pathname === '/ai');
+              (link.href === '/konsultasi' && pathname === '/ai') ||
+              (link.href === '/tanya' && pathname === '/pasar');
 
             return (
               <Link

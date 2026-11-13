@@ -103,8 +103,8 @@ Tantangan utama antarmuka berbasis web modern adalah dilema antara **estetika vi
    Perkenalan AIKOBI, demonstrasi interaktif perbandingan harga, dan pintu masuk cepat (*instant URL submission*).
 2. `/konsultasi` (sebelumnya `/ai`) — **Ruang Konsultasi Bisnis AI**:
    Pusat analisis utama: input link produk Tokopedia/Shopee, visualisasi live pipeline data, visualizer spektrum harga wajar, kartu sintesis konsultan, evaluasi ulasan, dan matriks kompetitor lokal.
-3. `/pasar` (sebelumnya `/dashboard`) — **Radar Dinamika Pasar UMKM**:
-   Monitoring agregat tren harga, kategori terlaris, sebaran lokasi seller, dan filter produk serupa.
+3. `/tanya` (menggantikan `/pasar`) — **Tanya KOBI (Chatbot Konsultan AI)**:
+   Antarmuka kolom chat interaktif untuk konsultasi strategi harga produk, audit etalase Tokopedia, mitigasi ulasan bintang 1, dan rencana aksi toko berbasis dialog, siap dihubungkan ke LLM.
 4. `/insight` — **Kecerdasan Kategori & Wilayah**:
    Grafik perbandingan harga rata-rata antar kota logistik dan tren pergeseran preferensi konsumen.
 5. `/tentang` — **Transparansi Metodologi & Filosofi**:
@@ -470,7 +470,7 @@ Untuk mewujudkan pengalaman antarmuka yang cepat (*fast-performance*) dan luwes 
 | :--- | :--- | :--- | :--- |
 | **Nama Brand** | AIMA (AI Market Analyzer) | **AIKOBI (Akal Imitasi Konsultan Bisnis)** | Menegaskan persona sebagai asisten konsultan bisnis UMKM terpercaya. |
 | **Domain Rute Utama** | `/ai` | `/konsultasi` | Istilah lebih fungsional dan berorientasi pada nilai solusi pengguna. |
-| **Domain Rute Dashboard** | `/dashboard` | `/pasar` | Merefleksikan eksplorasi radar dinamika pasar Tokopedia. |
+| **Domain Rute Interaktif** | `/dashboard` / `/pasar` | `/tanya` | Tanya KOBI: Kolom chat interaktif konsultasi strategi harga & etalase Tokopedia (siap integrasi LLM). |
 | **Judul Halaman (SEO)** | "AIMA \| AI Market Analyzer" | **"AIKOBI \| Akal Imitasi Konsultan Bisnis"** | Rebranding menyeluruh pada metadata browser & OpenGraph. |
 | **Komponen Engine** | `tokopedia-analyzer.tsx` | `aikobi-consultant-suite.tsx` | Menyatukan scraper, visualizer sweet-spot, dan kartu advisory. |
 | **Identitas Simbol / Logo** | Monogram "AI" acak | **Monogram "A" (Neural Nodes + Growth Arrow) + Wordmark AIKOBI** | Konstruksi presisi dengan rasio proporsi 55%–60%, clear space $1X$, dan varian Horizontal Compact (36–40 px). |
@@ -510,7 +510,7 @@ gantt
 #### Fase 2: Pembaruan Layout Shell & Topbar
 1. Ubah komponen `Header` di `apps/web/app/layout.tsx` menjadi kapsul mengambang `aikobi-topbar`.
 2. Perbarui logo brand dari `AIMA` menjadi `AIKOBI` dengan slogan *"Akal Imitasi Konsultan Bisnis"*.
-3. Perbarui link navigasi: Beranda (`/`), Konsultasi AI (`/konsultasi`), Radar Pasar (`/pasar`), dan Tentang (`/tentang`).
+3. Perbarui link navigasi: Beranda (`/`), Konsultasi Bisnis (`/konsultasi`), Tanya KOBI (`/tanya`), dan Tentang (`/tentang`).
 
 #### Fase 3: Rekayasa Ulang Ruang Konsultasi (`/konsultasi`)
 1. Buat rute baru `apps/web/app/konsultasi/page.tsx` (dengan redirect dari rute lama `/ai`).

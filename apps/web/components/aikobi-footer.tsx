@@ -63,8 +63,8 @@ export function AikobiFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/pasar" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                  Radar Pasar UMKM
+                <Link href="/tanya" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
+                  Tanya KOBI (Chatbot AI)
                 </Link>
               </li>
               <li>

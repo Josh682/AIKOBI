@@ -34,9 +34,9 @@ export default function HomePage() {
           </Link>
           <Link
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold text-sm transition-all"
-            href="/pasar"
+            href="/tanya"
           >
-            Jelajahi Radar Pasar
+            Tanya KOBI (Chatbot AI)
           </Link>
         </div>
       </section>

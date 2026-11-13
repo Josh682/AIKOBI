@@ -18,15 +18,31 @@ import {
 export default function HomePage() {
 
   return (
-    <div className="py-4 sm:py-8 overflow-hidden">
+    <div className="py-4 sm:py-8 overflow-hidden relative">
+      {/* Subtle Decorative Left Dot Guide (Matches Mockup) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none hidden xl:flex fixed left-3 top-0 bottom-0 flex-col justify-between py-10 z-20 opacity-30 select-none"
+      >
+        {Array.from({ length: 24 }).map((_, i) => (
+          <div key={i} className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-600" />
+        ))}
+      </div>
+
       {/* ============================================================
           SECTION 1: HERO SECTION (PRECEDENT: PEDESTAL & KOBI MASCOT)
           ============================================================ */}
-      <section className="relative text-center max-w-6xl mx-auto pt-6 sm:pt-12">
+      <section className="relative text-center max-w-6xl mx-auto pt-6 sm:pt-10">
+        {/* Iridescent Rainbow Arc on Left (Matches Mockup) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-32 sm:-left-20 top-12 sm:top-20 -z-10 w-[420px] sm:w-[620px] lg:w-[720px] h-[420px] sm:h-[620px] lg:h-[720px] rounded-full bg-gradient-to-tr from-cyan-400/25 via-indigo-400/20 to-purple-400/20 blur-3xl opacity-80"
+        />
+
         {/* Soft Ambient Light Glow Behind Mascot */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 -z-10 w-[360px] sm:w-[680px] h-[360px] sm:h-[680px] rounded-full bg-radial from-blue-400/20 via-indigo-500/10 to-transparent blur-3xl opacity-80"
+          className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 -z-10 w-[360px] sm:w-[680px] h-[360px] sm:h-[680px] rounded-full bg-radial from-blue-400/15 via-indigo-500/10 to-transparent blur-3xl opacity-75"
         />
 
         {/* Precedent Editorial Typography: Sans-serif + Italic Serif */}
@@ -40,32 +56,32 @@ export default function HomePage() {
         </div>
 
         {/* Center Stage: Mascot Standing on 3D Pedestal Cap with Floating Action Buttons Over Wings */}
-        <div className="relative mt-2 sm:mt-4 pt-4 flex flex-col items-center justify-center">
+        <div className="relative mt-2 sm:mt-4 pt-2 sm:pt-4 flex flex-col items-center justify-center">
           {/* Mascot Figure with Wings Open & Floating Buttons on Each Wing */}
-          <div className="relative z-10 w-72 sm:w-96 md:w-[440px] flex items-end justify-center">
+          <div className="relative z-10 w-80 sm:w-[440px] md:w-[500px] flex items-end justify-center">
             {/* Floating Action Button: Over Left Wing (Mulai Konsultasi Bisnis) */}
             <Link
               href="/konsultasi"
-              className="absolute -left-3 sm:-left-16 md:-left-28 lg:-left-36 top-6 sm:top-10 md:top-14 z-30 group inline-flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-5 py-2 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xl shadow-blue-500/30 border border-blue-400/40 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 animate-float-slow whitespace-nowrap"
+              className="absolute -left-4 sm:-left-16 md:-left-24 lg:-left-28 top-16 sm:top-20 md:top-24 z-30 group inline-flex items-center gap-2 sm:gap-2.5 px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-xl shadow-blue-500/40 border border-blue-400/40 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 animate-float-slow whitespace-nowrap"
             >
               <span>Mulai Konsultasi Bisnis</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
             </Link>
 
-            {/* Mascot Open Wings Illustration */}
+            {/* Mascot Open Wings Illustration from Assets/Mascot_openwing.jpg */}
             <Image
-              src="/brand/mascot/mascot-wings-open.png"
-              alt="KOBI Maskot Konsultan Bisnis"
-              width={500}
-              height={422}
+              src="/brand/mascot/mascot-openwing.png"
+              alt="KOBI Maskot Konsultan Bisnis Sayap Terbuka"
+              width={560}
+              height={463}
               priority
-              className="w-auto h-auto max-h-[260px] sm:max-h-[340px] md:max-h-[400px] object-contain filter drop-shadow-[0_20px_35px_rgba(15,23,42,0.18)] dark:drop-shadow-[0_25px_40px_rgba(0,0,0,0.65)] select-none pointer-events-none"
+              className="w-full h-auto max-h-[280px] sm:max-h-[360px] md:max-h-[420px] object-contain filter drop-shadow-[0_20px_35px_rgba(15,23,42,0.18)] dark:drop-shadow-[0_25px_40px_rgba(0,0,0,0.65)] select-none pointer-events-none"
             />
 
             {/* Floating Action Button: Over Right Wing (Tanya KOBI) */}
             <Link
               href="/tanya"
-              className="absolute -right-3 sm:-right-12 md:-right-20 lg:-right-28 top-12 sm:top-16 md:top-20 z-30 group inline-flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-5 py-2 sm:py-3 rounded-full precedent-pill hover:bg-white/95 dark:hover:bg-slate-900/95 text-slate-800 dark:text-slate-100 font-semibold text-xs sm:text-sm shadow-xl shadow-slate-900/10 dark:shadow-black/50 border border-slate-200/90 dark:border-slate-700/80 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 animate-float-reverse whitespace-nowrap"
+              className="absolute -right-4 sm:-right-12 md:-right-16 lg:-right-20 top-16 sm:top-20 md:top-24 z-30 group inline-flex items-center gap-2 sm:gap-2.5 px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-full precedent-pill hover:bg-white/95 dark:hover:bg-slate-900/95 text-slate-800 dark:text-slate-100 font-semibold text-xs sm:text-sm shadow-xl shadow-slate-900/10 dark:shadow-black/50 border border-slate-200/90 dark:border-slate-700/80 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 animate-float-reverse whitespace-nowrap"
             >
               <div className="w-5 h-5 rounded-full bg-blue-500/15 dark:bg-blue-400/20 text-blue-600 dark:text-blue-400 flex items-center justify-center transition-transform group-hover:rotate-12">
                 <Sparkles className="w-3.5 h-3.5" />
@@ -75,7 +91,7 @@ export default function HomePage() {
           </div>
 
           {/* 3D Fluted Circular Pedestal Disc Cap */}
-          <div className="relative -mt-6 sm:-mt-8 z-20 w-72 sm:w-96 md:w-[440px] h-14 sm:h-16 rounded-[100%] pedestal-cap flex items-center justify-center shadow-lg">
+          <div className="relative -mt-5 sm:-mt-7 z-20 w-72 sm:w-96 md:w-[460px] h-14 sm:h-16 rounded-[100%] pedestal-cap flex items-center justify-center shadow-lg">
             <div className="w-56 sm:w-72 md:w-80 h-8 sm:h-10 rounded-[100%] bg-slate-200/50 dark:bg-slate-700/40 blur-xs" />
           </div>
         </div>
@@ -84,7 +100,7 @@ export default function HomePage() {
       {/* ============================================================
           SECTION 2: FLUTED ARCHITECTURAL PEDESTAL SPINE (UNBROKEN CONTINUOUS)
           ============================================================ */}
-      <section className="relative max-w-5xl mx-auto px-4 pt-20 sm:pt-28 pb-12 sm:pb-20">
+      <section className="relative max-w-5xl mx-auto px-4 pt-8 sm:pt-12 pb-12 sm:pb-20">
         {/* Central Vertical Fluted Spine Column (Flows continuously without interruption from under the Disc Cap) */}
         <div
           aria-hidden="true"
@@ -93,7 +109,7 @@ export default function HomePage() {
 
         {/* Section Heading Centered Across the Fluted Column */}
         <div className="relative text-center max-w-xl mx-auto mb-16 sm:mb-24 space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold border border-slate-200/80 dark:border-slate-700 mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold border border-slate-200/80 dark:border-slate-700 mb-2 shadow-xs">
             <Layers className="w-3.5 h-3.5 text-blue-600" />
             Arsitektur Solusi Terpadu
           </div>

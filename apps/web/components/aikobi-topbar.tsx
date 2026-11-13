@@ -21,7 +21,7 @@ export function AikobiTopbar() {
 
   return (
     <header className="sticky top-3 sm:top-4 z-50 w-full px-3 sm:px-6 max-w-7xl mx-auto transition-transform duration-200">
-      <div className="liquid-glass-nav px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div className="liquid-glass-nav px-4 sm:px-6 h-14 sm:h-16 rounded-full flex items-center justify-between">
         {/* Brand Monogram & Title (Horizontal Compact Lockup) */}
         <Link
           href="/"

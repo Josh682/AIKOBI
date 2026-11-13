@@ -97,28 +97,28 @@ export default function HomePage() {
 
         {/* ============================================================
             3D CYLINDRICAL ROTATING RING TEXT (MATCHES GAMBAR 3)
-            "Solusi konsultasi cerdas yang membedah tuntas kebutuhan etalase Anda"
+            All-caps, rotating around pillar, back-face hidden behind pillar
             ============================================================ */}
         <div className="relative text-center max-w-4xl mx-auto mb-16 sm:mb-24">
           <h2 className="sr-only">
-            Solusi konsultasi cerdas yang membedah tuntas kebutuhan etalase Anda
+            SOLUSI KONSULTASI CERDAS YANG MEMBEDAH TUNTAS KEBUTUHAN ETALASE ANDA
           </h2>
           <div className="relative h-28 sm:h-36 md:h-44 flex items-center justify-center [perspective:1000px] select-none pointer-events-auto">
             <div
-              className="relative w-full h-full flex items-center justify-center [transform-style:preserve-3d] animate-cylinder-spin hover:[animation-play-state:paused] [--cylinder-radius:155px] xs:[--cylinder-radius:185px] sm:[--cylinder-radius:240px] md:[--cylinder-radius:290px] lg:[--cylinder-radius:320px]"
+              className="relative w-full h-full flex items-center justify-center [transform-style:preserve-3d] animate-cylinder-spin hover:[animation-play-state:paused] [--cylinder-radius:140px] xs:[--cylinder-radius:165px] sm:[--cylinder-radius:195px] md:[--cylinder-radius:230px] lg:[--cylinder-radius:255px]"
             >
               {[
-                { text: 'Solusi', style: 'font-extrabold text-slate-900 dark:text-white' },
-                { text: 'Konsultasi', style: 'font-extrabold text-slate-900 dark:text-white' },
-                { text: 'Cerdas', style: 'font-extrabold text-slate-900 dark:text-white' },
-                { text: 'yang', style: 'font-editorial italic text-blue-600 dark:text-blue-400' },
+                { text: 'SOLUSI', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
+                { text: 'KONSULTASI', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
+                { text: 'CERDAS', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
+                { text: 'YANG', style: 'font-editorial italic font-bold tracking-wider text-blue-600 dark:text-blue-400' },
                 { text: '✦', style: 'text-blue-500 font-bold' },
-                { text: 'membedah', style: 'font-editorial italic text-blue-600 dark:text-blue-400' },
-                { text: 'tuntas', style: 'font-editorial italic text-blue-600 dark:text-blue-400' },
+                { text: 'MEMBEDAH', style: 'font-editorial italic font-bold tracking-wider text-blue-600 dark:text-blue-400' },
+                { text: 'TUNTAS', style: 'font-editorial italic font-bold tracking-wider text-blue-600 dark:text-blue-400' },
                 { text: '✦', style: 'text-emerald-500 font-bold' },
-                { text: 'kebutuhan', style: 'font-extrabold text-slate-900 dark:text-white' },
-                { text: 'etalase', style: 'font-extrabold text-slate-900 dark:text-white' },
-                { text: 'Anda', style: 'font-extrabold text-slate-900 dark:text-white' },
+                { text: 'KEBUTUHAN', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
+                { text: 'ETALASE', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
+                { text: 'ANDA', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
                 { text: '✦', style: 'text-blue-500 font-bold' },
               ].map((item, idx) => {
                 const angle = idx * 30;
@@ -128,18 +128,17 @@ export default function HomePage() {
                     className="absolute flex items-center justify-center [transform-style:preserve-3d]"
                     style={{
                       transform: `rotateY(${angle}deg) translateZ(var(--cylinder-radius))`,
+                      backfaceVisibility: 'hidden',
+                      WebkitBackfaceVisibility: 'hidden',
                     }}
                   >
-                    {/* Front Face: Crisp & Bold (visible when facing viewer) */}
+                    {/* Front Face: Crisp & Bold uppercase text (visible only in front hemisphere; hidden when behind pillar) */}
                     <span
-                      className={`text-lg sm:text-2xl md:text-3xl tracking-tight [backface-visibility:hidden] drop-shadow-xs whitespace-nowrap ${item.style}`}
-                    >
-                      {item.text}
-                    </span>
-                    {/* Back Face: Mirrored & Blurred (visible when facing away at rear of cylinder) */}
-                    <span
-                      aria-hidden="true"
-                      className={`absolute text-lg sm:text-2xl md:text-3xl tracking-tight [transform:rotateY(180deg)] [backface-visibility:hidden] blur-[1.5px] opacity-25 dark:opacity-20 whitespace-nowrap select-none ${item.style}`}
+                      style={{
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden',
+                      }}
+                      className={`text-base sm:text-xl md:text-2xl lg:text-3xl uppercase tracking-wider whitespace-nowrap select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.10)] dark:drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] ${item.style}`}
                     >
                       {item.text}
                     </span>

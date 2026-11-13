@@ -96,35 +96,32 @@ export default function HomePage() {
         />
 
         {/* ============================================================
-            3D CYLINDRICAL ROTATING RING TEXT (MATCHES GAMBAR 3)
-            All-caps, rotating around pillar, back-face hidden behind pillar
+            3D CYLINDRICAL ROTATING RING TEXT
+            8 Distinct Pillars of Advisory: Akurat, Objektif, Analitis, Rasional, Terukur, Adaptif, Efisien, Strategis
+            Each segment contains strictly 1 word, orbiting around the pillar with zero collisions.
             ============================================================ */}
-        <div className="relative text-center max-w-4xl mx-auto mb-16 sm:mb-24">
+        <div className="relative text-center max-w-4xl mx-auto mb-14 sm:mb-20">
           <h2 className="sr-only">
-            SOLUSI KONSULTASI CERDAS YANG MEMBEDAH TUNTAS KEBUTUHAN ETALASE ANDA
+            Akurat, Objektif, Analitis, Rasional, Terukur, Adaptif, Efisien, Strategis
           </h2>
-          <div className="relative h-28 sm:h-36 md:h-44 flex items-center justify-center [perspective:1000px] select-none pointer-events-auto">
+          <div className="relative h-20 sm:h-24 md:h-28 flex items-center justify-center [perspective:1000px] select-none pointer-events-auto">
             <div
-              className="relative w-full h-full flex items-center justify-center [transform-style:preserve-3d] animate-cylinder-spin hover:[animation-play-state:paused] [--cylinder-radius:140px] xs:[--cylinder-radius:165px] sm:[--cylinder-radius:195px] md:[--cylinder-radius:230px] lg:[--cylinder-radius:255px]"
+              className="relative w-full h-full flex items-center justify-center [transform-style:preserve-3d] animate-cylinder-spin hover:[animation-play-state:paused] [--cylinder-radius:155px] xs:[--cylinder-radius:180px] sm:[--cylinder-radius:220px] md:[--cylinder-radius:260px] lg:[--cylinder-radius:285px]"
             >
               {[
-                { text: 'SOLUSI', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
-                { text: 'KONSULTASI', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
-                { text: 'CERDAS', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
-                { text: 'YANG', style: 'font-editorial italic font-bold tracking-wider text-blue-600 dark:text-blue-400' },
-                { text: '✦', style: 'text-blue-500 font-bold' },
-                { text: 'MEMBEDAH', style: 'font-editorial italic font-bold tracking-wider text-blue-600 dark:text-blue-400' },
-                { text: 'TUNTAS', style: 'font-editorial italic font-bold tracking-wider text-blue-600 dark:text-blue-400' },
-                { text: '✦', style: 'text-emerald-500 font-bold' },
-                { text: 'KEBUTUHAN', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
-                { text: 'ETALASE', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
-                { text: 'ANDA', style: 'font-black tracking-wider text-slate-900 dark:text-white' },
-                { text: '✦', style: 'text-blue-500 font-bold' },
+                { text: 'AKURAT', color: 'text-blue-600 dark:text-blue-400' },
+                { text: 'OBJEKTIF', color: 'text-slate-900 dark:text-white' },
+                { text: 'ANALITIS', color: 'text-blue-600 dark:text-blue-400' },
+                { text: 'RASIONAL', color: 'text-slate-900 dark:text-white' },
+                { text: 'TERUKUR', color: 'text-emerald-600 dark:text-emerald-400' },
+                { text: 'ADAPTIF', color: 'text-slate-900 dark:text-white' },
+                { text: 'EFISIEN', color: 'text-cyan-600 dark:text-cyan-400' },
+                { text: 'STRATEGIS', color: 'text-slate-900 dark:text-white' },
               ].map((item, idx) => {
-                const angle = idx * 30;
+                const angle = idx * 45; // Exactly 8 words: 360 / 8 = 45 deg per segment
                 return (
                   <div
-                    key={idx}
+                    key={item.text}
                     className="absolute flex items-center justify-center [transform-style:preserve-3d]"
                     style={{
                       transform: `rotateY(${angle}deg) translateZ(var(--cylinder-radius))`,
@@ -132,13 +129,13 @@ export default function HomePage() {
                       WebkitBackfaceVisibility: 'hidden',
                     }}
                   >
-                    {/* Front Face: Crisp & Bold uppercase text (visible only in front hemisphere; hidden when behind pillar) */}
+                    {/* Front Face: Exactly 1 word per segment, crisp, uppercase, ample spacing */}
                     <span
                       style={{
                         backfaceVisibility: 'hidden',
                         WebkitBackfaceVisibility: 'hidden',
                       }}
-                      className={`text-base sm:text-xl md:text-2xl lg:text-3xl uppercase tracking-wider whitespace-nowrap select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.10)] dark:drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] ${item.style}`}
+                      className={`text-xs xs:text-sm sm:text-base md:text-lg font-black uppercase tracking-widest whitespace-nowrap select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.10)] dark:drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] ${item.color}`}
                     >
                       {item.text}
                     </span>

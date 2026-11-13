@@ -1,58 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import {
   Sparkles,
   ArrowRight,
   TrendingUp,
   Truck,
   ShieldCheck,
-  Search,
   MessageSquare,
   ChevronRight,
   Layers,
-  BarChart3,
   CheckCircle2,
-  ExternalLink,
 } from 'lucide-react';
 
 export default function HomePage() {
-  const router = useRouter();
-  const [quickUrl, setQuickUrl] = useState('');
-
-  const handleQuickSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (quickUrl.trim()) {
-      router.push(`/konsultasi?url=${encodeURIComponent(quickUrl.trim())}`);
-    } else {
-      router.push('/konsultasi');
-    }
-  };
-
-  const handleSampleClick = (url: string) => {
-    router.push(`/konsultasi?url=${encodeURIComponent(url)}`);
-  };
-
-  const sampleProducts = [
-    {
-      name: 'Kemeja Batik Solo Premium',
-      url: 'https://www.tokopedia.com/batiksolo/kemeja-batik-pria-premium-slimfit',
-    },
-    {
-      name: 'TWS Bluetooth 5.3 Bass',
-      url: 'https://www.tokopedia.com/audioofficial/tws-bluetooth-53-earphone-hifi-bass',
-    },
-    {
-      name: 'Kopi Arabika Gayo 250g',
-      url: 'https://www.tokopedia.com/gayocoffee/kopi-arabika-gayo-specialty-250g',
-    },
-  ];
 
   return (
-    <div className="space-y-24 sm:space-y-32 py-4 sm:py-8 overflow-hidden">
+    <div className="py-4 sm:py-8 overflow-hidden">
       {/* ============================================================
           SECTION 1: HERO SECTION (PRECEDENT: PEDESTAL & KOBI MASCOT)
           ============================================================ */}
@@ -152,63 +118,20 @@ export default function HomePage() {
           </div>
 
           {/* 3D Fluted Circular Pedestal Disc Cap */}
-          <div className="relative -mt-6 sm:-mt-8 z-0 w-72 sm:w-96 h-14 sm:h-16 rounded-[100%] pedestal-cap flex items-center justify-center">
+          <div className="relative -mt-6 sm:-mt-8 z-20 w-72 sm:w-96 h-14 sm:h-16 rounded-[100%] pedestal-cap flex items-center justify-center shadow-lg">
             <div className="w-56 sm:w-72 h-8 sm:h-10 rounded-[100%] bg-slate-200/50 dark:bg-slate-700/40 blur-xs" />
-          </div>
-
-          {/* Pedestal Top Neck */}
-          <div className="w-60 sm:w-80 h-10 fluted-pedestal rounded-b-xl border-x border-slate-300/80 dark:border-slate-700" />
-        </div>
-
-        {/* Quick URL Input Capsule (Right Below the Pedestal) */}
-        <div className="mt-8 max-w-2xl mx-auto px-4">
-          <form
-            onSubmit={handleQuickSubmit}
-            className="p-2 sm:p-2.5 rounded-2xl liquid-glass-hero flex flex-col sm:flex-row items-center gap-2 shadow-xl shadow-blue-500/10"
-          >
-            <div className="relative flex-1 w-full flex items-center">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5" />
-              <input
-                type="url"
-                value={quickUrl}
-                onChange={(e) => setQuickUrl(e.target.value)}
-                placeholder="Tempel link produk Tokopedia Anda di sini..."
-                className="w-full pl-10 pr-3 py-2.5 bg-transparent text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-500/20 active:scale-95 transition-all whitespace-nowrap"
-            >
-              Audit Sekarang
-            </button>
-          </form>
-
-          {/* Quick Sample Chips */}
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs">
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Sampel Cepat:</span>
-            {sampleProducts.map((p, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleSampleClick(p.url)}
-                className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-700 text-[11px] font-medium transition"
-              >
-                {p.name}
-              </button>
-            ))}
           </div>
         </div>
       </section>
 
       {/* ============================================================
-          SECTION 2: FLUTED ARCHITECTURAL PEDESTAL SPINE (PRECEDENT)
+          SECTION 2: FLUTED ARCHITECTURAL PEDESTAL SPINE (UNBROKEN CONTINUOUS)
           ============================================================ */}
-      <section className="relative max-w-5xl mx-auto px-4 py-8">
-        {/* Central Vertical Fluted Spine Column */}
+      <section className="relative max-w-5xl mx-auto px-4 pt-20 sm:pt-28 pb-12 sm:pb-20">
+        {/* Central Vertical Fluted Spine Column (Flows continuously without interruption from under the Disc Cap) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-48 sm:w-64 fluted-pedestal rounded-3xl border-x border-slate-200/90 dark:border-slate-800 opacity-60 dark:opacity-40 -z-10"
+          className="pointer-events-none absolute left-1/2 -top-12 sm:-top-16 bottom-0 -translate-x-1/2 w-64 sm:w-80 md:w-96 fluted-pedestal rounded-b-3xl border-x border-slate-300/80 dark:border-slate-700 opacity-90 dark:opacity-85 -z-10 shadow-lg"
         />
 
         {/* Section Heading Centered Across the Fluted Column */}
@@ -318,7 +241,7 @@ export default function HomePage() {
       {/* ============================================================
           SECTION 3: MASCOT PERSONA & CONSULTANT ROLES (4 POSES)
           ============================================================ */}
-      <section className="max-w-6xl mx-auto px-4 space-y-10">
+      <section className="mt-24 sm:mt-32 max-w-6xl mx-auto px-4 space-y-10">
         <div className="text-center space-y-2 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" />
@@ -454,7 +377,7 @@ export default function HomePage() {
       {/* ============================================================
           SECTION 4: FINAL CTA BANNER (WITH APPROVE MASCOT)
           ============================================================ */}
-      <section className="max-w-5xl mx-auto px-4">
+      <section className="mt-24 sm:mt-32 max-w-5xl mx-auto px-4 pb-8">
         <div className="relative overflow-hidden rounded-3xl precedent-pill p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
           <div
             aria-hidden="true"

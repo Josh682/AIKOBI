@@ -19,30 +19,28 @@ export default function HomePage() {
 
   return (
     <div className="py-4 sm:py-8 overflow-hidden relative">
-      {/* Subtle Decorative Left Dot Guide (Matches Mockup) */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none hidden xl:flex fixed left-3 top-0 bottom-0 flex-col justify-between py-10 z-20 opacity-30 select-none"
-      >
-        {Array.from({ length: 24 }).map((_, i) => (
-          <div key={i} className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-600" />
-        ))}
-      </div>
-
       {/* ============================================================
           SECTION 1: HERO SECTION (PRECEDENT: PEDESTAL & KOBI MASCOT)
           ============================================================ */}
       <section className="relative text-center max-w-6xl mx-auto pt-6 sm:pt-10">
-        {/* Iridescent Rainbow Arc on Left (Matches Mockup) */}
+        {/* Smooth Seamless Iridescent Arc on Left (Fades smoothly to 100% transparent, no harsh lines) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -left-32 sm:-left-20 top-12 sm:top-20 -z-10 w-[420px] sm:w-[620px] lg:w-[720px] h-[420px] sm:h-[620px] lg:h-[720px] rounded-full bg-gradient-to-tr from-cyan-400/25 via-indigo-400/20 to-purple-400/20 blur-3xl opacity-80"
+          className="pointer-events-none absolute -left-12 sm:-left-4 top-8 sm:top-14 -z-10 w-[380px] sm:w-[580px] lg:w-[680px] h-[380px] sm:h-[580px] lg:h-[680px] rounded-full blur-3xl opacity-65 dark:opacity-40"
+          style={{
+            background:
+              'radial-gradient(circle at 40% 45%, rgba(56, 189, 248, 0.22) 0%, rgba(99, 102, 241, 0.16) 28%, rgba(168, 85, 247, 0.10) 48%, rgba(244, 114, 182, 0.05) 62%, transparent 75%)',
+          }}
         />
 
         {/* Soft Ambient Light Glow Behind Mascot */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 -z-10 w-[360px] sm:w-[680px] h-[360px] sm:h-[680px] rounded-full bg-radial from-blue-400/15 via-indigo-500/10 to-transparent blur-3xl opacity-75"
+          className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 -z-10 w-[360px] sm:w-[680px] h-[360px] sm:h-[680px] rounded-full blur-3xl opacity-75 dark:opacity-45"
+          style={{
+            background:
+              'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.18) 0%, rgba(99, 102, 241, 0.10) 40%, transparent 70%)',
+          }}
         />
 
         {/* Precedent Editorial Typography: Sans-serif + Italic Serif */}

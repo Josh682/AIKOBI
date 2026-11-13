@@ -22,7 +22,7 @@ export default function HomePage() {
       {/* ============================================================
           SECTION 1: HERO SECTION (PRECEDENT: PEDESTAL & KOBI MASCOT)
           ============================================================ */}
-      <section className="relative text-center max-w-6xl mx-auto pt-6 sm:pt-10">
+      <section className="relative z-10 text-center max-w-6xl mx-auto pt-6 sm:pt-10">
         {/* Smooth Seamless Brand Aura on Left (Matching Official Logo Colors: Royal Blue & Emerald Green) */}
         <div
           aria-hidden="true"
@@ -53,10 +53,10 @@ export default function HomePage() {
           </p>
         </div>
 
-        {/* Center Stage: Mascot Standing on 3D Pedestal Cap with Floating Action Buttons Over Wings */}
+        {/* Center Stage: Mascot Standing Seamlessly on 3D Pedestal Cap with Floating Action Buttons */}
         <div className="relative mt-2 sm:mt-4 pt-2 sm:pt-4 flex flex-col items-center justify-center">
-          {/* Mascot Figure with Wings Open & Floating Buttons on Each Wing */}
-          <div className="relative z-10 w-80 sm:w-[440px] md:w-[500px] flex items-end justify-center">
+          {/* Mascot Figure with Wings Open & Floating Buttons on Each Wing (z-20: feet firmly on top of disc) */}
+          <div className="relative z-20 w-80 sm:w-[440px] md:w-[500px] flex items-end justify-center">
             {/* Floating Action Button: Over Left Wing (Mulai Konsultasi Bisnis) */}
             <Link
               href="/konsultasi"
@@ -73,7 +73,7 @@ export default function HomePage() {
               width={560}
               height={463}
               priority
-              className="w-full h-auto max-h-[280px] sm:max-h-[360px] md:max-h-[420px] object-contain filter drop-shadow-[0_20px_35px_rgba(15,23,42,0.18)] dark:drop-shadow-[0_25px_40px_rgba(0,0,0,0.65)] select-none pointer-events-none"
+              className="w-full h-auto max-h-[280px] sm:max-h-[360px] md:max-h-[420px] object-contain select-none pointer-events-none drop-shadow-[0_15px_30px_rgba(15,23,42,0.18)] dark:drop-shadow-[0_20px_35px_rgba(0,0,0,0.65)]"
             />
 
             {/* Floating Action Button: Over Right Wing (Tanya KOBI) */}
@@ -88,9 +88,20 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* 3D Fluted Circular Pedestal Disc Cap */}
-          <div className="relative -mt-5 sm:-mt-7 z-20 w-72 sm:w-96 md:w-[460px] h-14 sm:h-16 rounded-[100%] pedestal-cap flex items-center justify-center shadow-lg">
-            <div className="w-56 sm:w-72 md:w-80 h-8 sm:h-10 rounded-[100%] bg-slate-200/50 dark:bg-slate-700/40 blur-xs" />
+          {/* Ambient Contact Shadows for Both Claws (Realistic Grounding) */}
+          <div
+            aria-hidden="true"
+            className="relative z-20 -mt-2 sm:-mt-3 flex items-center justify-center gap-14 sm:gap-20 md:gap-24 pointer-events-none"
+          >
+            {/* Left Foot Contact Shadow */}
+            <div className="w-16 sm:w-22 md:w-26 h-3 sm:h-4 rounded-[100%] bg-slate-950/40 dark:bg-black/80 blur-[2.5px]" />
+            {/* Right Foot Contact Shadow */}
+            <div className="w-16 sm:w-22 md:w-26 h-3 sm:h-4 rounded-[100%] bg-slate-950/40 dark:bg-black/80 blur-[2.5px]" />
+          </div>
+
+          {/* 3D Fluted Circular Pedestal Disc Cap (z-10, sits cleanly beneath the claws) */}
+          <div className="relative -mt-4 sm:-mt-6 z-10 w-72 sm:w-96 md:w-[460px] h-14 sm:h-18 rounded-[100%] pedestal-cap flex items-center justify-center shadow-xl border border-slate-200/60 dark:border-slate-700/50">
+            <div className="w-[85%] h-[60%] rounded-[100%] bg-gradient-to-b from-white/90 to-slate-100/40 dark:from-slate-700/30 dark:to-slate-800/20 blur-[1px]" />
           </div>
         </div>
       </section>
@@ -98,11 +109,11 @@ export default function HomePage() {
       {/* ============================================================
           SECTION 2: FLUTED ARCHITECTURAL PEDESTAL SPINE (UNBROKEN CONTINUOUS)
           ============================================================ */}
-      <section className="relative max-w-5xl mx-auto px-4 pt-8 sm:pt-12 pb-12 sm:pb-20">
-        {/* Central Vertical Fluted Spine Column (Flows continuously without interruption from under the Disc Cap) */}
+      <section className="relative z-0 max-w-5xl mx-auto px-4 pt-8 sm:pt-12 pb-12 sm:pb-20">
+        {/* Central Vertical Fluted Spine Column (Tucked cleanly under the Disc Cap, never poking out) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 -top-12 sm:-top-16 bottom-0 -translate-x-1/2 w-64 sm:w-80 md:w-96 fluted-pedestal rounded-b-3xl border-x border-slate-300/80 dark:border-slate-700 opacity-90 dark:opacity-85 -z-10 shadow-lg"
+          className="pointer-events-none absolute left-1/2 -top-6 sm:-top-8 bottom-0 -translate-x-1/2 w-56 sm:w-72 md:w-84 fluted-pedestal rounded-t-3xl rounded-b-3xl border-x border-slate-300/80 dark:border-slate-700 opacity-90 dark:opacity-85 -z-10 shadow-lg"
         />
 
         {/* Section Heading Centered Across the Fluted Column */}

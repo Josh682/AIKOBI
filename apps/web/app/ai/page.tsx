@@ -14,7 +14,7 @@ import { AikobiAuditPersonas } from '@/components/aikobi-audit-personas';
 export default function AiPage() {
   const [urlInput, setUrlInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [statusStep, setStatusStep] = useState<string>('Memulai live scraping link Tokopedia...');
+  const [statusStep, setStatusStep] = useState<string>('Memulai pembacaan link produk Tokopedia...');
   const [progressPct, setProgressPct] = useState<number>(15);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [data, setData] = useState<any>(null);
@@ -44,16 +44,16 @@ export default function AiPage() {
 
     setLoading(true);
     setData(null);
-    setStatusStep('Menghubungkan ke Tokopedia Live Engine & Parsing Metadata Etalase...');
+    setStatusStep('Menghubungkan ke Tokopedia & membaca detail produk...');
     setProgressPct(25);
 
     const timer1 = setTimeout(() => {
-      setStatusStep('Menambang Varian Produk & Distribusi Harga Kompetitor...');
+      setStatusStep('Mengumpulkan harga variasi produk & membandingkan toko pesaing...');
       setProgressPct(50);
     }, 700);
 
     const timer2 = setTimeout(() => {
-      setStatusStep('Mengekstrak Topik Ulasan Pembeli & Klaster Wilayah Pengiriman...');
+      setStatusStep('Membaca ulasan pembeli & mengelompokkan jarak ongkir pesaing...');
       setProgressPct(75);
     }, 1600);
 
@@ -78,7 +78,7 @@ export default function AiPage() {
         return;
       }
 
-      setStatusStep('Model Kuantil Selesai: Menyusun Sintesis Strategi Konsultan AIKOBI...');
+      setStatusStep('Perhitungan Selesai: Menyiapkan Rangkuman Saran Harga AIKOBI...');
       setProgressPct(100);
       setData(json.data);
     } catch (err: any) {
@@ -97,15 +97,15 @@ export default function AiPage() {
       <section className="text-center space-y-4 max-w-3xl mx-auto pt-2">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-semibold">
           <Sparkles className="w-3.5 h-3.5" />
-          Sensor Pasar & Konsultan Bisnis Tokopedia Real-Time
+          Pantau Harga Pasar &amp; Pendamping Toko Tokopedia
         </div>
 
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-          Audit Strategi Harga & Etalase Marketplace
+          Cek Harga Paling Pas untuk Etalase Toko Anda
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          Tempel tautan produk Tokopedia Anda untuk mengungkap posisi harga pasar, potensi kenaikan margin laba, sentimen ulasan pembeli, dan keunggulan kompetitor logistik lokal.
+          Tempel tautan produk Tokopedia Anda untuk melihat perbandingan harga pasar, peluang menaikkan untung, isi ulasan pembeli, dan keunggulan ongkir wilayah Anda.
         </p>
 
         {/* Hero Search Capsule + Contextual Sample Chips */}

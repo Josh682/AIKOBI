@@ -56,12 +56,12 @@ const STARTER_PROMPTS: PromptStarter[] = [
     iconName: 'tag',
     summary: 'Taktik penetrasi harga bersaing tanpa merusak persepsi mutu produk di Tokopedia.',
     prompt: 'Bagaimana cara menentukan harga produk baru agar bersaing dengan Official Store di Tokopedia?',
-    dummyAnswer: `Menembus pasar Tokopedia melawan Official Store yang sudah mengantongi ribuan ulasan membutuhkan strategi **Penetration-to-Sweetspot Scaling**, bukan sekadar perang harga banting murah.
+    dummyAnswer: `Menembus pasar Tokopedia melawan Official Store yang sudah mengantongi ribuan ulasan membutuhkan strategi **Naik Harga Bertahap ke Harga Paling Pas**, bukan sekadar perang harga banting murah.
 
 Berikut 3 langkah operasional taktis rekomendasi KOBI:
 
-### 1. Fase Penetrasi Awal (1 - 20 Transaksi Pertama)
-* **Pasang Harga P10 (-10% s/d -15% di bawah Official Store)**: Jangan memberi diskon terlalu ekstrem (>25%) karena konsumen Indonesia justru mencurigai barang cacat, rekondisi, atau tiruan (*fake product*).
+### 1. Fase Awal Menarik Pembeli (1 - 20 Transaksi Pertama)
+* **Pasang Harga Lebih Hemat (-10% s/d -15% di bawah Official Store)**: Jangan memberi diskon terlalu ekstrem (>25%) karena konsumen Indonesia justru mencurigai barang cacat, rekondisi, atau tiruan (*fake product*).
 * **Manfaatkan Fitur 'Harga Coret' Tokopedia**: Tampilkan harga normal misal **Rp 135.000** dicoret menjadi **Rp 109.000**. Algoritma pencarian Tokopedia memprioritaskan etalase yang memiliki diskon aktif.
 
 ### 2. Diferensiasi Layanan yang Tidak Bisa Diberikan Official Store
@@ -69,9 +69,9 @@ Official Store biasanya memiliki respon chat yang lambat (rata-rata 15-30 menit)
 * **Kecepatan Balas Chat**: Jaga waktu respons di bawah 3 menit. Pembeli e-commerce yang bertanya ketersediaan stok akan langsung beralih jika chat tidak segera dibalas.
 * **Proteksi Ekstra Gratis**: Tonjolkan di foto kedua: *"Free Box Kardus + 3 Lapis Bubble Wrap Tebal"*. Ini meniadakan kekhawatiran terbesar pembeli barang rusak di perjalanan.
 
-### 3. Evaluasi Kenaikan Bertahap Menuju Zona Sweet-Spot
+### 3. Kenaikan Harga Bertahap ke Titik Harga Paling Pas
 Setelah produk Anda mengumpulkan **15-20 ulasan bintang 5 dengan foto asli**:
-* Naikkan harga secara bertahap **+4% hingga +6% per minggu** menuju rata-rata konsensus pasar (*Sweet-Spot*).
+* Naikkan harga secara bertahap **+4% hingga +6% per minggu** menuju harga wajar rata-rata pasar yang laris.
 * Konsumen yang datang setelah ada ulasan sosial tidak lagi terlalu sensitif terhadap selisih harga Rp 5.000 - Rp 10.000.`,
     followUps: [
       'Bagaimana draf deskripsi produk untuk menonjolkan garansi?',
@@ -289,16 +289,16 @@ export function AikobiChat() {
 
 Berikut tinjauan strategis dan rekomendasi operasional dari KOBI untuk toko Anda di Tokopedia:
 
-### 1. Evaluasi & Diagnosa Masalah Toko
-Pertanyaan Anda menyentuh aspek krusial dalam pertumbuhan etalase marketplace. Berdasarkan data persaingan pedagang Tokopedia, performa produk ditentukan oleh tiga faktor utama: **Daya Tarik Harga (Price Sweet-Spot)**, **Kecepatan Layanan & Ongkos Kirim**, serta **Rasio Ulasan Positif Pembeli**.
+### 1. Evaluasi & Cek Masalah Toko
+Pertanyaan Anda menyentuh aspek penting dalam pertumbuhan penjualan etalase toko online. Berdasarkan data persaingan pedagang Tokopedia, performa produk ditentukan oleh tiga faktor utama: **Harga yang Pas bagi Pembeli**, **Kecepatan Layanan & Ongkos Kirim**, serta **Rasio Ulasan Positif Pembeli**.
 
-### 2. Rekomendasi Rencana Aksi (Action Plan)
-* **Analisis Posisi Pasar**: Bandingkan harga toko Anda dengan rata-rata 20 kompetitor aktif terdekat. Jangan mematok harga di batas paling atas tanpa dukungan ulasan bintang 4.8+.
-* **Tingkatkan Daya Konversi Visual**: Pastikan foto produk memperlihatkan detail kemasan kardus protektif dan kelengkapan varian untuk membedakan toko Anda dari kompetitor dropshipper.
-* **Gunakan Fitur Promosi Tokopedia**: Aktifkan fitur *Bebas Ongkir* dan buat voucher toko minimal belanja untuk memicu pembeli menambah jumlah produk di keranjang (*upselling*).
+### 2. Rencana Langkah Praktis
+* **Bandingkan Harga Pesaing**: Bandingkan harga toko Anda dengan rata-rata 20 pesaing aktif terdekat. Jangan mematok harga terlalu mahal tanpa dukungan ulasan bintang 4.8+.
+* **Tingkatkan Daya Tarik Foto**: Pastikan foto produk memperlihatkan detail kemasan kardus pelindung dan kelengkapan isi untuk membedakan toko Anda dari penjual lain.
+* **Gunakan Fitur Promosi Tokopedia**: Aktifkan fitur *Bebas Ongkir* dan buat voucher toko minimal belanja untuk mendorong pembeli menambah jumlah produk di keranjang.
 
-### 3. Validasi dengan Data Nyata
-Untuk mendapatkan simulasi harga wajar kuantil yang akurat dan audit ulasan pembeli otomatis, Anda dapat mengaudit produk Tokopedia Anda secara langsung di menu **Konsultasi Bisnis**.`;
+### 3. Cek dengan Data Nyata
+Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembeli otomatis, Anda dapat mengecek produk Tokopedia Anda secara langsung di menu **Konsultasi Bisnis**.`;
           followUps = [
             'Bagaimana cara menghitung margin laba bersih setelah potongan fee Tokopedia?',
             'Cara membuat foto produk menarik dengan modal smartphone',
@@ -794,10 +794,10 @@ Untuk mendapatkan simulasi harga wajar kuantil yang akurat dan audit ulasan pemb
             </button>
             <button
               type="button"
-              onClick={() => handleSendPrompt('Apa tanda-tanda produk saya terkena status Overpriced di pasar?')}
+              onClick={() => handleSendPrompt('Apa tanda-tanda produk saya dipasang terlalu mahal dibanding toko lain?')}
               className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500 whitespace-nowrap transition"
             >
-              Deteksi Overpriced
+              Cek Harga Kemahalan
             </button>
             <button
               type="button"

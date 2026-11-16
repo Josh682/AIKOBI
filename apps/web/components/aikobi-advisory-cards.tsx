@@ -105,10 +105,10 @@ export function AikobiAdvisoryCards({ data, className = '' }: AdvisoryCardsProps
                   </div>
                   <div>
                     <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white leading-tight">
-                      Posisi Harga Pasar
+                      Posisi Harga Toko Anda
                     </h3>
                     <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400">
-                      Analisis Disparitas Kompetitor
+                      Perbandingan Harga vs Pesaing
                     </span>
                   </div>
                 </div>
@@ -182,10 +182,10 @@ export function AikobiAdvisoryCards({ data, className = '' }: AdvisoryCardsProps
                 </div>
                 <div>
                   <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white leading-tight">
-                    Rekomendasi Strategis & Action Plan Penjual
+                    Rekomendasi Harga &amp; Langkah Praktis
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Validasi skenario optimasi harga & tindakan taktis yang disetujui konsultan KOBI
+                    Pilihan atur harga dan tindakan yang disetujui konsultan KOBI
                   </p>
                 </div>
               </div>

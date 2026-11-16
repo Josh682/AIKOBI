@@ -13,25 +13,25 @@ interface StageInfo {
 const STAGES: StageInfo[] = [
   {
     step: 1,
-    label: 'Koneksi ke Tokopedia Live Engine & Parsing Metadata Etalase',
+    label: 'Menghubungkan ke Tokopedia & membaca detail produk',
     icon: Search,
     percentage: 25,
   },
   {
     step: 2,
-    label: 'Menambang Varian Produk & Distribusi Harga Kompetitor',
+    label: 'Mengumpulkan variasi harga & toko pesaing sejenis',
     icon: Database,
     percentage: 50,
   },
   {
     step: 3,
-    label: 'Mengekstrak Topik Ulasan Pembeli & Klaster Wilayah Pengiriman',
+    label: 'Membaca isi ulasan pembeli & mengelompokkan kota pengirim',
     icon: Layers,
     percentage: 75,
   },
   {
     step: 4,
-    label: 'Model Kuantil Selesai: Menyusun Sintesis Strategi Konsultan',
+    label: 'Perhitungan Selesai: Menyiapkan Saran Harga & Langkah Jualan',
     icon: Cpu,
     percentage: 100,
   },
@@ -77,10 +77,10 @@ export function AikobiPipelineHud({
           </div>
           <div>
             <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white">
-              AIKOBI Live Pipeline Ingestion
+              AIKOBI Sedang Mengecek Etalase Anda
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Mengekstrak etalase Tokopedia & menjalankan model inferensi bisnis
+              Membaca halaman produk Tokopedia &amp; menyiapkan hitungan harga pasar
             </p>
           </div>
         </div>
@@ -107,10 +107,10 @@ export function AikobiPipelineHud({
           </div>
         </div>
         <div className="flex justify-between items-center text-[11px] text-slate-500 dark:text-slate-400 font-medium px-1">
-          <span>Koneksi Scraper</span>
-          <span>Mining Varian</span>
-          <span>Sintesis Ulasan</span>
-          <span>Inferensi Kuantil</span>
+          <span>Baca Etalase</span>
+          <span>Cek Variasi</span>
+          <span>Ringkas Ulasan</span>
+          <span>Hitung Harga Pas</span>
         </div>
       </div>
 

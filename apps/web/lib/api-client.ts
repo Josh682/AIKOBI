@@ -34,7 +34,7 @@ apiClient.interceptors.response.use(
         originalReq.headers.Authorization = `Bearer ${accessToken}`;
         return apiClient(originalReq);
       } catch {
-        // Refresh failed — clear tokens and redirect to login
+        // Refresh failed - clear tokens and redirect to login
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         window.location.href = '/login';

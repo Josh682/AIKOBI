@@ -552,22 +552,22 @@ export async function POST(req: Request) {
     const gapPctVsMin = Math.round(((price - minP) / minP) * 100);
     const maxVsMinPct = Math.round(((maxP - minP) / minP) * 100);
 
-    let statusPosisi = 'Optimal Market Equilibrium';
+    let statusPosisi = 'Harga Sudah Seimbang & Pas';
     let labelSelisih = '';
     let penjelasanPosisi = '';
     let isCheaperThanMean = false;
 
     if (price > meanP) {
-      statusPosisi = 'Di Atas Rata-rata Pasar (+Premium)';
+      statusPosisi = 'Di Atas Rata-rata Pasar (Lebih Mahal)';
       labelSelisih = `+Rp ${diffFromMean.toLocaleString('id-ID')} (+${pctFromMean}%) di atas Rata-rata`;
       penjelasanPosisi = `Harga toko Anda (Rp ${price.toLocaleString('id-ID')}) berada Rp ${diffFromMean.toLocaleString('id-ID')} (+${pctFromMean}%) di atas rata-rata pasar (Rp ${meanP.toLocaleString('id-ID')}). Berjarak +Rp ${diffFromMin.toLocaleString('id-ID')} dari harga terendah (Rp ${minP.toLocaleString('id-ID')}) dan -Rp ${diffFromMax.toLocaleString('id-ID')} di bawah harga tertinggi (Rp ${maxP.toLocaleString('id-ID')}).`;
     } else if (price < meanP) {
       isCheaperThanMean = true;
-      statusPosisi = 'Competitive Advantage (Lebih Hemat)';
+      statusPosisi = 'Lebih Terjangkau (Hemat)';
       labelSelisih = `-Rp ${Math.abs(diffFromMean).toLocaleString('id-ID')} (-${pctFromMean}%) Lebih Hemat`;
       penjelasanPosisi = `Harga toko Anda (Rp ${price.toLocaleString('id-ID')}) saat ini Rp ${Math.abs(diffFromMean).toLocaleString('id-ID')} (-${pctFromMean}%) lebih hemat dibanding rata-rata pasar (Rp ${meanP.toLocaleString('id-ID')}). Berjarak +Rp ${diffFromMin.toLocaleString('id-ID')} dari harga terendah (Rp ${minP.toLocaleString('id-ID')}) dan -Rp ${diffFromMax.toLocaleString('id-ID')} di bawah harga tertinggi (Rp ${maxP.toLocaleString('id-ID')}).`;
     } else {
-      statusPosisi = 'Optimal Market Equilibrium';
+      statusPosisi = 'Harga Sudah Seimbang & Pas';
       labelSelisih = `Setara dengan Rata-rata Pasar`;
       penjelasanPosisi = `Harga toko Anda (Rp ${price.toLocaleString('id-ID')}) tepat berada di posisi ideal rata-rata pasar (Rp ${meanP.toLocaleString('id-ID')}).`;
     }
@@ -601,7 +601,7 @@ export async function POST(req: Request) {
 
     const saranaPerbaikan: string[] = topicImprove.length > 0
       ? topicImprove.map(t => `${t.name} (${t.count.toLocaleString('id-ID')} ulasan)`)
-      : ['Data topik perbaikan tidak cukup — pertahankan standar yang sudah ada'];
+      : ['Data topik perbaikan tidak cukup, pertahankan standar yang sudah ada'];
 
     // Senior Business Consultant Pricing Difference Analysis Synthesis
     const topCompetitorName = topCleanCompetitors[0]?.toko || 'Top Competitor Market Leader';
@@ -652,8 +652,8 @@ export async function POST(req: Request) {
     }
 
     const consultantSalesCorrelation = {
-      kesimpulan: 'Kurva Permintaan Terpusat di Rata-rata Pasar (The Sweet-Spot Demand Zone)',
-      analisis: `Audit konsultan terhadap 20 kompetitor Tokopedia real-time menunjukkan bahwa produk dengan volume transaksi tertinggi (Top Volume Sellers) tidak berada di posisi paling murah (Rp ${minP.toLocaleString('id-ID')}), melainkan berkumpul pada titik sweet-spot rata-rata pasar (Rp ${meanP.toLocaleString('id-ID')} ± 10%) yang didukung rating ★ 4.8+. Konsumen Indonesia cenderung menghindari produk yang terlalu murah karena kekhawatiran barang palsu/cacat, namun juga enggan membeli di batas tertinggi (Rp ${maxP.toLocaleString('id-ID')}) kecuali ditopang brand nasional.`
+      kesimpulan: 'Pembeli Paling Banyak Beli di Harga Rata-rata Pasar (Zona Harga Pas)',
+      analisis: `Pengecekan terhadap 20 toko pesaing Tokopedia saat ini menunjukkan bahwa produk yang paling banyak terjual tidak selalu berada di harga paling murah (Rp ${minP.toLocaleString('id-ID')}), melainkan berkumpul di titik harga paling pas sekitar rata-rata pasar (Rp ${meanP.toLocaleString('id-ID')} ± 10%) dengan rating bintang ★ 4.8+. Pembeli di Indonesia cenderung curiga jika barang terlalu murah takut palsu atau cacat, namun juga jarang membeli yang paling mahal (Rp ${maxP.toLocaleString('id-ID')}) kecuali merek terkenal.`
     };
 
     const analisisRentangHarga = {
@@ -808,9 +808,9 @@ export async function POST(req: Request) {
     let mlWajarMax = Math.min(maxP, Math.round((meanP * 1.15) / 500) * 500);
     let mlConfidence = 82;
     let mlFaktor: { nama: string; pengaruh: number }[] = [
-      { nama: 'Harga kompetitor (Outliers Dieliminasi)', pengaruh: 52.0 },
+      { nama: 'Harga toko pesaing (harga aneh disaring)', pengaruh: 52.0 },
       { nama: 'Rating & ulasan pembeli', pengaruh: 22.5 },
-      { nama: 'Volume terjual & tren', pengaruh: 16.0 },
+      { nama: 'Jumlah terjual & tren', pengaruh: 16.0 },
       { nama: 'Momen / promosi', pengaruh: 9.5 },
     ];
     let mlSource = 'rule_based';
@@ -833,7 +833,7 @@ export async function POST(req: Request) {
       mlFaktor = Object.entries(mlResult.faktor).map(([nama, pengaruh]) => ({ nama, pengaruh }));
       mlSource = mlResult.source;
     } catch (_mlErr) {
-      // Fallback to rule-based values silently — app stays fully functional
+      // Fallback to rule-based values silently, app stays fully functional
     }
 
     const isPriceInsideFairZone = price >= mlWajarMin && price <= mlWajarMax;

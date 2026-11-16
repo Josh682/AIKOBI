@@ -72,7 +72,7 @@ export function AikobiSweetSpotVisualizer({ data, className = '' }: SweetSpotVis
 
   const statusBadge = isMurah
     ? {
-        label: 'Harga Kompetitif (Hemat)',
+        label: 'Harga Lebih Murah (Hemat)',
         bg: 'bg-emerald-500/10 dark:bg-emerald-500/20',
         text: 'text-emerald-700 dark:text-emerald-300',
         border: 'border-emerald-500/30',
@@ -80,14 +80,14 @@ export function AikobiSweetSpotVisualizer({ data, className = '' }: SweetSpotVis
       }
     : isMahal
     ? {
-        label: 'Harga Premium',
+        label: 'Harga Lebih Mahal',
         bg: 'bg-amber-500/10 dark:bg-amber-500/20',
         text: 'text-amber-700 dark:text-amber-300',
         border: 'border-amber-500/30',
         icon: AlertTriangle,
       }
     : {
-        label: 'Sweet-Spot (Ideal)',
+        label: 'Harga Paling Pas',
         bg: 'bg-blue-500/10 dark:bg-blue-500/20',
         text: 'text-blue-700 dark:text-blue-300',
         border: 'border-blue-500/30',
@@ -163,10 +163,10 @@ export function AikobiSweetSpotVisualizer({ data, className = '' }: SweetSpotVis
           </p>
         </div>
 
-        {/* Metric 3: AI Confidence */}
+        {/* Metric 3: Keyakinan Saran */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-            <span>Confidence AI</span>
+            <span>Tingkat Kecocokan Data</span>
             <span className="text-slate-900 dark:text-white font-extrabold">{data.confidence || 82}%</span>
           </div>
           <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
@@ -176,7 +176,7 @@ export function AikobiSweetSpotVisualizer({ data, className = '' }: SweetSpotVis
             />
           </div>
           <p className="text-[11px] text-slate-500 dark:text-slate-400">
-            Model inferensi kuantil gradient boosted
+            Berdasarkan perbandingan produk sejenis yang laku
           </p>
         </div>
       </div>
@@ -185,12 +185,12 @@ export function AikobiSweetSpotVisualizer({ data, className = '' }: SweetSpotVis
       <div className="p-4 sm:p-5 rounded-xl border-l-4 border-blue-500 bg-blue-50/60 dark:bg-blue-950/30 text-slate-800 dark:text-slate-200 text-xs sm:text-sm leading-relaxed space-y-1.5">
         <div className="flex items-center gap-1.5 font-bold text-blue-900 dark:text-blue-300">
           <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-400" />
-          <span>Sintesis Evaluasi AIKOBI</span>
+          <span>Rangkuman Saran AIKOBI</span>
         </div>
         <p className="text-justify font-normal">{data.rekomendasi}</p>
       </div>
 
-      {/* 4. Interactive Sweet-Spot Range Spectrum */}
+      {/* 4. Interactive Fair Price Range Spectrum */}
       <div className="p-5 sm:p-7 rounded-2xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/80 dark:border-slate-800 space-y-6">
         {/* Spectrum Subheader */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -199,7 +199,7 @@ export function AikobiSweetSpotVisualizer({ data, className = '' }: SweetSpotVis
               <Scale className="w-4 h-4" />
             </div>
             <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
-              Rentang Harga Wajar Pasar (Sweet-Spot)
+              Rentang Harga Paling Pas di Pasar
             </h3>
           </div>
 
@@ -285,7 +285,7 @@ export function AikobiSweetSpotVisualizer({ data, className = '' }: SweetSpotVis
           <div className="p-3.5 rounded-xl bg-emerald-500/10 dark:bg-emerald-950/30 border border-emerald-500/30 text-center">
             <div className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 flex items-center justify-center gap-1">
               <Target className="w-3 h-3" />
-              Target Zona Wajar (Sweet-Spot)
+              Target Harga Paling Pas
             </div>
             <div className="text-sm sm:text-base font-extrabold text-emerald-700 dark:text-emerald-300 tabular-nums mt-0.5">
               Rp {wMin.toLocaleString('id-ID')} – Rp {wMax.toLocaleString('id-ID')}

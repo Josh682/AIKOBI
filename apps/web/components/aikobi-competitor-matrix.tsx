@@ -160,7 +160,7 @@ export function AikobiCompetitorMatrix({ data, className = '' }: CompetitorMatri
                 Produk Serupa (Kompetitor Sejenis)
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed text-justify">
-                Pencarian real-time toko kompetitor sejenis di Tokopedia dengan spesifikasi dan satuan transaksi setara.
+                Pencarian langsung toko pesaing sejenis di Tokopedia dengan jenis produk dan isi satuan yang sama.
               </p>
             </div>
 

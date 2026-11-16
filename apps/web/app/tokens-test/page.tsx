@@ -64,7 +64,7 @@ export default function TokensTestPage() {
           <div className="flat-surface p-4 space-y-2 border-t-4 border-t-emerald-600">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                Sweet-Spot
+                Harga Pas
               </span>
               <TrendingUp className="w-4 h-4 text-emerald-600" />
             </div>
@@ -94,7 +94,7 @@ export default function TokensTestPage() {
           <div className="flat-surface p-4 space-y-2 border-t-4 border-t-rose-600">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">
-                Overpriced
+                Kemahalan
               </span>
               <AlertOctagon className="w-4 h-4 text-rose-600" />
             </div>
@@ -179,7 +179,7 @@ export default function TokensTestPage() {
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
               </div>
               <div className="font-bold text-sm text-slate-900 dark:text-white">
-                Estimasi Sweet-Spot Demand
+                Perkiraan Batas Harga Paling Pas
               </div>
               <div className="tabular-num text-xs text-slate-600 dark:text-slate-300">
                 Blur 14px + elevasi z-depth untuk dialog konfirmasi.
@@ -207,7 +207,7 @@ export default function TokensTestPage() {
             </div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
               <CheckCircle2 className="w-4 h-4" />
-              Harga Toko Masuk Zona Sweet-Spot
+              Harga Toko Masuk Zona Harga Pas
             </div>
           </div>
 
@@ -220,7 +220,7 @@ export default function TokensTestPage() {
             </div>
 
             <div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 uppercase font-semibold">Median Pasar (Q50)</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 uppercase font-semibold">Harga Tengah Pasar</div>
               <div className="tabular-num text-2xl font-bold text-slate-600 dark:text-slate-300 mt-1">
                 Rp 138.500
               </div>

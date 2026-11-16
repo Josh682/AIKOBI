@@ -37,12 +37,12 @@ export function AikobiFooter() {
               </div>
             </Link>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md leading-relaxed">
-              Platform kecerdasan buatan pendamping strategi penetapan harga, audit ulasan pasar,
-              dan keunggulan kompetitor logistik lokal khusus etalase marketplace Tokopedia untuk merchant & UMKM.
+              Pendamping pintar untuk membantu pelaku UMKM menentukan harga jual paling pas, memahami keluhan ulasan
+              pembeli, dan bersaing ongkir lokal di Tokopedia.
             </p>
             <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 pt-1">
               <Shield className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Privasi data toko terjamin • Tanpa kredensial login akun</span>
+              <span>Privasi data toko terjamin • Tanpa password akun seller</span>
             </div>
           </div>
 
@@ -83,24 +83,24 @@ export function AikobiFooter() {
           {/* Column 3: Fitur & Metodologi */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
-              Teknologi Sensor
+              Cara Kerja AIKOBI
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                Live Tokopedia GQL Scraper
+                Baca Data Etalase Tokopedia Langsung
               </li>
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                Sweet-Spot Quantile Regression
+                Hitung Batas Harga Paling Pas
               </li>
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                Peta Sentimen Ulasan Pembeli
+                Ringkas Pujian &amp; Keluhan Pembeli
               </li>
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                Filter Ongkos Kirim Lokal
+                Cek Ongkos Kirim Sesama Wilayah
               </li>
             </ul>
           </div>

@@ -19,19 +19,19 @@ export const metadata: Metadata = {
   keywords: [
     'AIKOBI',
     'Akal Imitasi Konsultan Bisnis',
-    'Konsultan AI UMKM',
-    'Tokopedia Price Optimizer',
-    'Riset Pasar E-Commerce',
+    'Konsultan Harga UMKM',
+    'Penentu Harga Tokopedia',
+    'Cek Harga Pasar Online',
     'Strategi Harga Tokopedia',
-    'Sweet Spot Tokopedia',
-    'Scraper Tokopedia',
+    'Harga Paling Pas Tokopedia',
+    'Cek Data Etalase Tokopedia',
   ],
   authors: [{ name: 'Tim AIKOBI' }],
   creator: 'AIKOBI',
   openGraph: {
     title: 'AIKOBI | Akal Imitasi Konsultan Bisnis',
     description:
-      'Platform riset pasar & strategi harga Tokopedia real-time berbasis AI untuk UMKM & Penjual Online.',
+      'Bantu pemilik toko UMKM cek harga pasar, ulasan pembeli, dan strategi jualan Tokopedia secara langsung dan mudah dipahami.',
     siteName: 'AIKOBI',
     locale: 'id_ID',
     type: 'website',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'AIKOBI | Akal Imitasi Konsultan Bisnis',
     description:
-      'Platform riset pasar & strategi harga Tokopedia real-time berbasis AI untuk UMKM & Penjual Online.',
+      'Bantu pemilik toko UMKM cek harga pasar, ulasan pembeli, dan strategi jualan Tokopedia secara langsung dan mudah dipahami.',
   },
   icons: {
     icon: [
@@ -92,7 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className="min-h-[100dvh] flex flex-col bg-aikobi-bg text-aikobi-text-primary antialiased overflow-x-clip"
       >
         <AikobiTopbar />
-        <main className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">
+        <main className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2 sm:pt-3 pb-6">
           {children}
         </main>
         <AikobiFooter />

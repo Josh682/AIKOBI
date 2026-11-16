@@ -34,7 +34,7 @@ export interface AnalysisData {
   competitors: number[];
 }
 
-export function TokopediaAnalyzer({ title = 'Analisis Optimasi Harga Produk Tokopedia', subtitle = 'Masukkan URL produk Tokopedia untuk scraping otomatis & rekomendasi harga berbasis AI' }: { title?: string; subtitle?: string }) {
+export function TokopediaAnalyzer({ title = 'Cek Harga Produk Tokopedia yang Paling Pas', subtitle = 'Tempel link produk Tokopedia untuk ambil data otomatis dan lihat saran harga terbaik' }: { title?: string; subtitle?: string }) {
   const [url, setUrl] = useState('');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [competitorKeyword, setCompetitorKeyword] = useState('');
@@ -52,10 +52,10 @@ export function TokopediaAnalyzer({ title = 'Analisis Optimasi Harga Produk Toko
   ];
 
   const steps = [
-    { label: 'Mengambil metadata produk Tokopedia...', pct: 25 },
-    { label: 'Scraping data pasar & harga kompetitor...', pct: 60 },
-    { label: 'Menjalankan model AI Price Optimizer...', pct: 85 },
-    { label: 'Menyusun rekomendasi & strategi harga...', pct: 100 },
+    { label: 'Membaca detail produk Tokopedia...', pct: 25 },
+    { label: 'Mengumpulkan harga toko pesaing di pasar...', pct: 60 },
+    { label: 'Menghitung batas harga paling pas...', pct: 85 },
+    { label: 'Menyiapkan saran harga dan langkah jualan...', pct: 100 },
   ];
 
   const handleAnalyze = async (targetUrl?: string) => {
@@ -327,7 +327,7 @@ export function TokopediaAnalyzer({ title = 'Analisis Optimasi Harga Produk Toko
                 <Loader2 className="w-5 h-5 animate-spin" />
               </div>
               <div>
-                <h4 className="text-white font-bold text-base">Proses Scraping & Analisis AI Berjalan</h4>
+                <h4 className="text-white font-bold text-base">Sedang Membaca &amp; Menghitung Harga Pasar</h4>
                 <p className="text-slate-400 text-xs">{steps[currentStep].label}</p>
               </div>
             </div>
@@ -479,9 +479,9 @@ export function TokopediaAnalyzer({ title = 'Analisis Optimasi Harga Produk Toko
               <div className="flex items-center justify-between">
                 <h4 className="text-white font-bold text-base flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-emerald-400" />
-                  Benchmark Harga Listing Kompetitor Tokopedia
+                  Perbandingan Harga Pesaing Tokopedia
                 </h4>
-                <span className="text-xs text-slate-400">{result.competitors.length} Data Kompetitor Scraped</span>
+                <span className="text-xs text-slate-400">{result.competitors.length} Data Pesaing Terbaca</span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">

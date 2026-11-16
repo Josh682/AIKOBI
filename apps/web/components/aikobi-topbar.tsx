@@ -5,11 +5,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export function AikobiTopbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isConsultationTab = pathname === '/konsultasi' || pathname === '/ai';
 
   const navLinks = [
     { label: 'Beranda', href: '/' },
@@ -20,8 +21,8 @@ export function AikobiTopbar() {
   ];
 
   return (
-    <header className="sticky top-3 sm:top-4 z-50 w-full px-3 sm:px-6 max-w-7xl mx-auto transition-transform duration-200">
-      <div className="liquid-glass-nav px-4 sm:px-6 h-14 sm:h-16 rounded-full flex items-center justify-between">
+    <header className="sticky top-2 sm:top-3 z-50 w-full px-3 sm:px-6 max-w-7xl mx-auto transition-transform duration-200">
+      <div className="liquid-glass-nav px-4 sm:px-6 h-13 sm:h-14 rounded-full flex items-center justify-between">
         {/* Brand Monogram & Title (Horizontal Compact Lockup) */}
         <Link
           href="/"
@@ -48,9 +49,6 @@ export function AikobiTopbar() {
           <div className="flex flex-col leading-tight">
             <span className="font-extrabold text-base tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               AIKOBI
-            </span>
-            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 tracking-wider uppercase">
-              Konsultan Bisnis
             </span>
           </div>
         </Link>
@@ -79,19 +77,20 @@ export function AikobiTopbar() {
           })}
         </nav>
 
-        {/* Right Section: Status Beacon + Theme Toggle + Mobile Toggle */}
+        {/* Right Section: Status Beacon (Konsultasi Tab Only) + Theme Toggle + Mobile Toggle */}
         <div className="flex items-center gap-2.5 sm:gap-3">
-          {/* Tokopedia Sensor Ready Static Operational Beacon */}
-          <div
-            className="hidden lg:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold select-none"
-            title="Sistem sensor dan ekstraksi Tokopedia aktif normal"
-          >
-            <span className="relative flex h-2 w-2" aria-hidden="true">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span>Tokopedia Sensor Ready</span>
-          </div>
+          {isConsultationTab && (
+            <div
+              className="hidden lg:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold select-none"
+              title="Sistem pembaca data etalase Tokopedia aktif normal"
+            >
+              <span className="relative flex h-2 w-2" aria-hidden="true">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span>Terhubung ke Tokopedia</span>
+            </div>
+          )}
 
           <ThemeToggle />
 
@@ -111,13 +110,15 @@ export function AikobiTopbar() {
       {/* Mobile Menu Dropdown Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden mt-2 liquid-glass-modal p-4 space-y-1.5 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="px-3 py-1.5 mb-2 inline-flex items-center gap-2 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-semibold w-full">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            Tokopedia Sensor Ready
-          </div>
+          {isConsultationTab && (
+            <div className="px-3 py-1.5 mb-2 inline-flex items-center gap-2 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-semibold w-full">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Terhubung ke Tokopedia
+            </div>
+          )}
 
           {navLinks.map((link) => {
             const isActive =

@@ -42,10 +42,10 @@ export default function TentangPage() {
             <BarChart3 className="w-4 h-4" />
           </div>
           <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
-            Real-time Live Scraping
+            Ambil Data Etalase Langsung
           </h3>
           <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed text-justify">
-            Rekomendasi ditarik langsung dari data persaingan etalase, varian produk, rating, dan ulasan pembeli Tokopedia secara real-time.
+            Rekomendasi diambil langsung dari daftar harga pesaing, pilihan varian produk, bintang rating, dan ulasan pembeli Tokopedia saat itu juga.
           </p>
         </div>
 
@@ -54,10 +54,10 @@ export default function TentangPage() {
             <Truck className="w-4 h-4" />
           </div>
           <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
-            Analisis Wilayah & Lokal
+            Cek Ongkir &amp; Pesaing Sekota
           </h3>
           <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed text-justify">
-            AIKOBI membandingkan produk Anda dengan kompetitor lokal sesama wilayah pengiriman untuk mengoptimalkan ongkos kirim.
+            AIKOBI membandingkan produk Anda dengan toko pesaing yang berada di wilayah pengiriman yang sama agar ongkir Anda lebih bersaing.
           </p>
         </div>
 
@@ -66,10 +66,10 @@ export default function TentangPage() {
             <Target className="w-4 h-4" />
           </div>
           <h3 className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">
-            Rekomendasi AI Konsultan
+            Saran Jualan Siap Pakai
           </h3>
           <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed text-justify">
-            Menyajikan zona harga wajar (Sweet-Spot), sintetis ulasan pembeli, penyebab selisih harga, dan action plan toko.
+            Menyajikan rentang harga paling pas, rangkuman isi ulasan pembeli, alasan perbedaan harga pesaing, dan langkah praktis 30 hari.
           </p>
         </div>
       </section>

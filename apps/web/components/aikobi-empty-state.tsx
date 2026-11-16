@@ -5,20 +5,20 @@ import { TrendingUp, MessageSquareHeart, Truck, ShieldCheck, Sparkles } from 'lu
 export function AikobiEmptyState() {
   const pillars = [
     {
-      title: 'Zona Wajar Sweet-Spot',
-      desc: 'Deteksi batas harga wajar kuantil demand agar margin toko terlindungi tanpa kehilangan pembeli.',
+      title: 'Batas Harga Paling Pas',
+      desc: 'Tentukan harga wajar agar toko tetap untung tanpa membuat calon pembeli kabur.',
       icon: TrendingUp,
       accent: 'emerald',
     },
     {
-      title: 'Sintesis Ulasan Pembeli',
-      desc: 'Pemetaan otomatis poin kepuasan pembeli dan kelemahan operasional kompetitor sejenis.',
+      title: 'Rangkuman Ulasan Pembeli',
+      desc: 'Merangkum otomatis hal yang disukai pembeli dan kekurangan pesaing sejenis.',
       icon: MessageSquareHeart,
       accent: 'blue',
     },
     {
-      title: 'Keunggulan Ongkir Lokal',
-      desc: 'Identifikasi kompetitor sesama kota pengiriman untuk strategi harga bersaing vs seller antarpulau.',
+      title: 'Unggul Ongkir Sekota',
+      desc: 'Cari pesaing di kota pengiriman yang sama supaya strategi ongkir lebih hemat dari toko luar pulau.',
       icon: Truck,
       accent: 'amber',
     },
@@ -38,10 +38,10 @@ export function AikobiEmptyState() {
           />
         </div>
         <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          KOBI Menyapa: Siap Mengaudit Produk Tokopedia Anda
+          KOBI Menyapa: Siap Mengecek Produk Tokopedia Anda
         </h2>
         <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
-          Tempel tautan produk Tokopedia atau klik salah satu sampel cepat di atas. AIKOBI akan mengekstrak etalase, varian, dan ulasan secara real-time.
+          Tempel tautan produk Tokopedia atau klik salah satu contoh cepat di atas. AIKOBI akan langsung membaca harga, variasi ukuran, dan ulasan pembeli.
         </p>
       </div>
 
@@ -75,7 +75,7 @@ export function AikobiEmptyState() {
       {/* Trust Badge */}
       <div className="pt-2 flex items-center justify-center gap-2 text-xs text-slate-500 dark:text-slate-400">
         <ShieldCheck className="w-4 h-4 text-emerald-500" />
-        <span>Ekstraksi data etalase publik Tokopedia tanpa membutuhkan password atau login akun</span>
+        <span>Hanya membaca halaman etalase publik Tokopedia tanpa membutuhkan password atau login akun</span>
       </div>
     </div>
   );

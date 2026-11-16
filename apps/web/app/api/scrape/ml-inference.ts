@@ -3,7 +3,7 @@
  * ---------------
  * GradientBoostingRegressor (quantile) inference engine in TypeScript.
  * Loads parameters from ml_model_params.json (exported from sklearn) and
- * runs tree-based prediction entirely within Next.js — no Python process needed.
+ * runs tree-based prediction entirely within Next.js - no Python process needed.
  *
  * Feature order must match ALL_FEATURES from preprocessing.py:
  *   NUMERIC (12) + BOOLEAN (2) + CATEGORICAL (1, one-hot encoded)
@@ -77,7 +77,7 @@ const FACTOR_FEATURE_INDICES: Record<string, number[]> = {
 };
 
 // ── Model loader ──────────────────────────────────────────────────────────
-// Uses static import so Next.js/webpack bundles it automatically —
+// Uses static import so Next.js/webpack bundles it automatically,
 // works on Vercel, Railway, Render, and any platform without fs access.
 
 function loadParams(): AllModelParams {
@@ -111,7 +111,7 @@ function buildFeatureVector(
   const isSeasonal = SEASONAL_MONTHS.has(month) ? 1 : 0;
   const isOfficial = input.is_official_store ? 1 : 0;
 
-  // Numeric features (12) — same order as NUMERIC_FEATURES in preprocessing.py
+  // Numeric features (12) - same order as NUMERIC_FEATURES in preprocessing.py
   const numeric: number[] = [
     input.rating,
     input.total_reviews,
@@ -133,7 +133,7 @@ function buildFeatureVector(
   // Boolean features (2)
   const booleans: number[] = [isOfficial, isSeasonal];
 
-  // OneHotEncoder — only one categorical feature: "category"
+  // OneHotEncoder - only one categorical feature: "category"
   const categories = params.ohe_categories[0]; // e.g. ["Elektronik","Fashion",...]
   const catNorm = input.category.trim();
   const ohe: number[] = categories.map((c) => (c === catNorm ? 1 : 0));
@@ -181,7 +181,7 @@ function computeConfidence(lower: number, median: number, upper: number, nComp: 
 function computeFactorImportance(params: ModelParams): Record<string, number> {
   // Use median GBR's tree structure to approximate feature importances
   // by summing impurity-weighted node counts per factor group.
-  // This is a simplified proxy — exact importances are on the sklearn object.
+  // This is a simplified proxy; exact importances are on the sklearn object.
   // For display purposes we use static weights derived from the training run.
   return {
     'Harga kompetitor': 52.0,

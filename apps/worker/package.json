@@ -11,6 +11,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@aikobi/product-matcher": "workspace:*",
     "@datascrapper/config": "workspace:*",
     "@datascrapper/db": "workspace:*",
     "@datascrapper/shared-types": "workspace:*",

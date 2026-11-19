@@ -1,0 +1,24 @@
+{
+  "name": "@aikobi/product-matcher",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc && node --test dist/test/matcher.test.js",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3"
+  }
+}

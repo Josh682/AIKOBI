@@ -9,6 +9,7 @@
  *   NUMERIC (12) + BOOLEAN (2) + CATEGORICAL (1, one-hot encoded)
  */
 
+import { classifyProductCategory } from '@aikobi/product-matcher';
 import mlModelParams from './ml_model_params.json';
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -47,6 +48,7 @@ export interface MLPredictInput {
   is_official_store: boolean;
   location: string;
   competitor_prices: number[];
+  competitor_weights?: number[];
 }
 
 export interface MLPredictResult {
@@ -90,17 +92,56 @@ function buildFeatureVector(
   params: ModelParams,
   input: MLPredictInput,
 ): number[] {
-  const prices = input.competitor_prices.filter((p) => p > 0);
-  if (prices.length === 0) throw new Error('No valid competitor prices');
+  const hasMatchingWeights =
+    Array.isArray(input.competitor_weights) &&
+    input.competitor_weights.length === input.competitor_prices.length;
 
-  const mean = prices.reduce((a, b) => a + b, 0) / prices.length;
-  const sorted = [...prices].sort((a, b) => a - b);
-  const median = prices.length % 2 === 0
-    ? (sorted[prices.length / 2 - 1] + sorted[prices.length / 2]) / 2
-    : sorted[Math.floor(prices.length / 2)];
-  const std = prices.length > 1
-    ? Math.sqrt(prices.reduce((acc, p) => acc + (p - mean) ** 2, 0) / prices.length)
-    : 0;
+  const weightedEntries = input.competitor_prices
+    .map((p, idx) => ({
+      price: p,
+      weight: hasMatchingWeights ? Math.max(0.05, input.competitor_weights![idx] ?? 1) : 1,
+    }))
+    .filter((entry) => Number.isFinite(entry.price) && entry.price > 0);
+
+  if (weightedEntries.length === 0) throw new Error('No valid competitor prices');
+
+  const prices = weightedEntries.map((e) => e.price);
+  const totalWeight = weightedEntries.reduce((acc, e) => acc + e.weight, 0);
+
+  const mean =
+    totalWeight > 0
+      ? weightedEntries.reduce((acc, e) => acc + e.price * e.weight, 0) / totalWeight
+      : prices.reduce((a, b) => a + b, 0) / prices.length;
+
+  const sortedEntries = [...weightedEntries].sort((a, b) => a.price - b.price);
+  let median: number;
+  if (hasMatchingWeights && totalWeight > 0) {
+    let cumWeight = 0;
+    const halfWeight = totalWeight / 2;
+    median = sortedEntries[sortedEntries.length - 1].price;
+    for (const entry of sortedEntries) {
+      cumWeight += entry.weight;
+      if (cumWeight >= halfWeight) {
+        median = entry.price;
+        break;
+      }
+    }
+  } else {
+    median =
+      sortedEntries.length % 2 === 0
+        ? (sortedEntries[sortedEntries.length / 2 - 1].price +
+            sortedEntries[sortedEntries.length / 2].price) /
+          2
+        : sortedEntries[Math.floor(sortedEntries.length / 2)].price;
+  }
+
+  const std =
+    weightedEntries.length > 1 && totalWeight > 0
+      ? Math.sqrt(
+          weightedEntries.reduce((acc, e) => acc + e.weight * (e.price - mean) ** 2, 0) /
+            totalWeight,
+        )
+      : 0;
   const min = Math.min(...prices);
   const max = Math.max(...prices);
 
@@ -135,7 +176,10 @@ function buildFeatureVector(
 
   // OneHotEncoder - only one categorical feature: "category"
   const categories = params.ohe_categories[0]; // e.g. ["Elektronik","Fashion",...]
-  const catNorm = input.category.trim();
+  const rawCat = input.category.trim();
+  const catNorm = categories.includes(rawCat)
+    ? rawCat
+    : classifyProductCategory(rawCat).modelCategory;
   const ohe: number[] = categories.map((c) => (c === catNorm ? 1 : 0));
 
   return [...scaled, ...booleans, ...ohe];

@@ -137,6 +137,9 @@ model Product {
   totalSold     Int?
   badge         String?     // "Terlaris", "Pilihan", etc.
   rawData       Json?       // Full raw scraped JSON (JSONB)
+  extractedAttributes Json? // Structured attributes: { packQuantity, netWeightGrams, netVolumeMl, storageGb, isAccessoryOrRefill }
+  embedding           Float[] // 384-dim L2-normalized semantic vector
+  canonicalCategory   String? // Standardized ML OHE category name
   lastScrapedAt DateTime    @default(now())
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt

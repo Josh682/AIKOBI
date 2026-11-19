@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@aikobi/product-matcher": ["../../packages/product-matcher/src/index.ts"]
     }
   },
   "include": [

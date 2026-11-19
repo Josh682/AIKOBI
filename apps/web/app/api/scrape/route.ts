@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import https from 'https';
 import http from 'http';
+import {
+  extractProductAttributes,
+  matchAndFilterCompetitors,
+  classifyProductCategory,
+  type MatchedCompetitor,
+} from '@aikobi/product-matcher';
 import { predictFromModel } from './ml-inference';
 
 // Tell Vercel to allow up to 60 seconds for this route (Pro plan)
@@ -30,28 +36,6 @@ async function fetchHtml(targetUrl: string): Promise<{ html: string; statusCode:
   } catch {
     return { html: '', statusCode: 500 };
   }
-}
-
-function detectPackQuantity(title: string): number {
-  const l = title.toLowerCase();
-
-  if (l.includes('12 pasang') || l.includes('12pasang') || l.includes('1 lusin') || l.includes('selusin') || l.includes('isi 12') || l.includes('12pcs') || l.includes('12-in-1') || l.includes('12 in 1')) {
-    return 12;
-  }
-  if (l.includes('6 pasang') || l.includes('6pasang') || l.includes('isi 6') || l.includes('6pcs') || l.includes('6in1') || l.includes('6 in 1') || l.includes('set 6')) {
-    return 6;
-  }
-  if (l.includes('3 pasang') || l.includes('3pasang') || l.includes('isi 3') || l.includes('3pcs') || l.includes('3in1') || l.includes('3 in 1') || l.includes('isi 3psg') || l.includes('set 3') || l.includes('3-in-1')) {
-    return 3;
-  }
-  if (l.includes('2 pasang') || l.includes('2pasang') || l.includes('isi 2') || l.includes('2pcs') || l.includes('2in1') || l.includes('2 in 1')) {
-    return 2;
-  }
-  if (l.includes('1 pasang') || l.includes('1pasang') || l.includes('isi 1') || l.includes('1pcs') || l.includes('single') || l.includes('1 pasg') || l.includes('1-pasang')) {
-    return 1;
-  }
-
-  return 1;
 }
 
 const CITY_TO_FCITY: Record<string, number | number[]> = {
@@ -147,17 +131,13 @@ function getFCityParam(cityName: string): string {
   return '';
 }
 
-async function fetchNaturalSearchWithOutlierFiltering(title: string, basePrice: number, targetCity?: string) {
-  const targetQty = detectPackQuantity(title);
-
-  const cleanKeyword = title
-    .replace(/[^\w\s]/gi, ' ')
-    .split(' ')
-    .filter((w) => w.length > 2 && !['dengan', 'untuk', 'yang', 'dan', 'atau', 'pria', 'wanita', 'original', 'promo', 'murah', 'grosir', 'berkualitas', 'tebal', 'bahan', 'premium', 'made', 'usa'].includes(w.toLowerCase()))
-    .slice(0, 4)
-    .join(' ');
-
-  const searchQuery = cleanKeyword || title;
+async function fetchNaturalSearchWithOutlierFiltering(
+  title: string,
+  basePrice: number,
+  targetCity?: string,
+): Promise<MatchedCompetitor[]> {
+  const targetAttrs = extractProductAttributes(title);
+  const searchQuery = targetAttrs.searchQuery || title;
 
   async function runQuery(fcityVal?: string, userCityStr?: string) {
     let paramsStr = `device=desktop&navsource=home&ob=23&page=1&q=${encodeURIComponent(searchQuery)}&rows=30&source=search`;
@@ -228,50 +208,11 @@ async function fetchNaturalSearchWithOutlierFiltering(title: string, basePrice: 
     });
   }
 
-  const competitors: { nama: string; toko: string; city: string; harga: number; price: number; rating: number; url: string }[] = [];
-
-  for (const p of rawProducts) {
-    if (!p.priceInt || p.priceInt <= 0) continue;
-
-    const compQty = detectPackQuantity(p.name);
-
-    if (targetQty === 1 && compQty > 1) continue;
-    if (targetQty > 1 && compQty !== targetQty) continue;
-
-    if (basePrice > 0) {
-      const ratio = p.priceInt / basePrice;
-      if (ratio > 2.3 || ratio < 0.35) continue;
-    }
-
-    const rawCity = p.shop?.city || 'Jakarta';
-
-    if (!competitors.some((c) => c.nama === p.name)) {
-      competitors.push({
-        nama: p.name,
-        toko: p.shop?.name || 'Tokopedia Seller',
-        city: rawCity,
-        harga: p.priceInt,
-        price: p.priceInt,
-        rating: parseFloat(p.ratingAverage) || 4.8,
-        url: p.url || `https://www.tokopedia.com/search?q=${encodeURIComponent(searchQuery)}`,
-      });
-    }
-  }
-
-  return competitors.slice(0, 35);
-}
-
-function classifyCategory(title: string) {
-  const lower = title.toLowerCase();
-
-  if (lower.includes('kaos kaki') || lower.includes('sock')) return 'Fashion & Kaos Kaki Sport';
-  if (lower.includes('mixer') || lower.includes('frother') || lower.includes('foam') || lower.includes('beater') || lower.includes('blender')) return 'Peralatan Dapur & Mixer';
-  if (lower.includes('sepatu') || lower.includes('sneakers') || lower.includes('kets') || lower.includes('sport') || lower.includes('sandal') || lower.includes('boots')) return 'Fashion & Sepatu Pria';
-  if (lower.includes('dripper') || lower.includes('v60') || (lower.includes('kopi') && lower.includes('filter'))) return 'Peralatan Kopi & Dapur';
-  if (lower.includes('batik') || lower.includes('kemeja') || lower.includes('baju') || lower.includes('kaos')) return 'Fashion & Pakaian Pria';
-  if (lower.includes('tongsis') || lower.includes('etoll') || lower.includes('tongkat')) return 'Aksesori Mobil & Gadget';
-
-  return 'Fashion & Consumer Goods';
+  return matchAndFilterCompetitors(title, rawProducts, {
+    basePrice,
+    targetCity,
+    maxResults: 35,
+  });
 }
 
 export async function POST(req: Request) {
@@ -533,7 +474,8 @@ export async function POST(req: Request) {
 
     // Step 2: 2-Pass Search System with Exact fcity Location Filtering
     const topCleanCompetitors = await fetchNaturalSearchWithOutlierFiltering(title, price, targetShopCity);
-    const categoryName = classifyCategory(title);
+    const categoryInfo = classifyProductCategory(title);
+    const categoryName = categoryInfo.displayCategory;
 
     const compPrices = topCleanCompetitors.map((c: any) => c.harga);
 
@@ -723,7 +665,7 @@ export async function POST(req: Request) {
       badge_stat_label: isExactCityMatch ? `SELLER ${targetShopCity.toUpperCase()}` : `SELLER REGIONAL`,
       total_ditemukan: displayLocalCompetitors.length,
       insight: localConsultantInsight,
-      produk: displayLocalCompetitors.slice(0, 4).map((c: any) => {
+      produk: displayLocalCompetitors.slice(0, 4).map((c: MatchedCompetitor) => {
         const diffP = c.harga - price;
         const diffPctP = Math.round(Math.abs((c.harga - price) / price) * 100);
         return {
@@ -733,6 +675,8 @@ export async function POST(req: Request) {
           harga: c.harga,
           rating: c.rating,
           url: c.url,
+          similarityScore: c.similarityScore,
+          matchedAttributes: c.matchedAttributes,
           selisih_nominal: diffP,
           selisih_pct: diffPctP,
           is_cheaper: c.harga < price,
@@ -817,7 +761,7 @@ export async function POST(req: Request) {
 
     try {
       const mlResult = predictFromModel({
-        category: categoryName,
+        category: categoryInfo.modelCategory,
         rating: realRating,
         total_reviews: realTotalReviews,
         total_sold: 0,
@@ -825,6 +769,7 @@ export async function POST(req: Request) {
         is_official_store: false,
         location: targetShopCity,
         competitor_prices: compPrices,
+        competitor_weights: topCleanCompetitors.map((c: MatchedCompetitor) => c.similarityScore ?? 1),
       });
       // Use ML predictions for the fair price zone
       mlWajarMin = Math.max(minP, mlResult.lower);

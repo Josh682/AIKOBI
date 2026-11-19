@@ -6,6 +6,12 @@ import { ShopeeScraper } from '../scrapers/shopee.scraper.js';
 import { prisma } from '@datascrapper/db';
 import { logger } from '../utils/logger.js';
 import { Decimal } from '@prisma/client/runtime/library';
+import {
+  extractProductAttributes,
+  matchAndFilterCompetitors,
+  classifyProductCategory,
+  embedProductTitle,
+} from '@aikobi/product-matcher';
 import { aiClient } from '../services/ai.client.js';
 
 export async function processProductJob(
@@ -38,17 +44,41 @@ export async function processProductJob(
     logger.info({ taskId, url }, 'Step 1: Extracting product detail');
     const detail = await scraper.getProductDetails(url, includeReviews);
 
+    const extractedAttrs = extractProductAttributes(detail.name);
+    const categoryClassification = classifyProductCategory(detail.name);
+    const productEmbedding = embedProductTitle(detail.name);
+
     // Step 2: Extract competitor prices
     let competitorPrices: number[] = [];
-    const searchKeyword = competitorKeyword || detail.name.split(' ').slice(0, 3).join(' ');
+    const searchKeyword =
+      competitorKeyword ||
+      extractedAttrs.searchQuery ||
+      detail.name.split(' ').slice(0, 3).join(' ');
 
     if (searchKeyword) {
       try {
         logger.info({ taskId, searchKeyword }, 'Step 2: Gathering competitor price snapshot');
         const searchResults = await scraper.searchProducts(searchKeyword, { perPage: 15 });
-        competitorPrices = searchResults.items
-          .map((item: { price: number }) => item.price)
-          .filter((price: number) => price > 0);
+        const matchedCompetitors = matchAndFilterCompetitors(
+          detail.name,
+          searchResults.items.map((item) => ({
+            id: item.externalId,
+            name: item.name,
+            price: item.price,
+            url: item.url,
+            rating: item.rating,
+            seller: item.seller?.name,
+            location: item.location ?? item.seller?.location,
+          })),
+          { basePrice: detail.price },
+        );
+
+        competitorPrices =
+          matchedCompetitors.length > 0
+            ? matchedCompetitors.map((c) => c.harga)
+            : searchResults.items
+                .map((item) => item.price)
+                .filter((price) => price > 0);
       } catch (err) {
         logger.warn({ taskId, err }, 'Failed to scrape competitor search, falling back to simulated snapshot');
       }
@@ -70,7 +100,7 @@ export async function processProductJob(
     logger.info({ taskId }, 'Step 3: Running AI Price Optimizer inference model');
     const aiRecommendation = await aiClient.predictRecommendation({
       product_name: detail.name,
-      category: detail.category || 'General',
+      category: categoryClassification.modelCategory,
       user_price: detail.price,
       rating: detail.rating || 4.8,
       total_reviews: detail.totalReviews || 10,
@@ -111,6 +141,9 @@ export async function processProductJob(
         totalReviews: detail.totalReviews,
         totalSold: detail.totalSold,
         rawData: fullRawData as any,
+        extractedAttributes: extractedAttrs as any,
+        embedding: productEmbedding,
+        canonicalCategory: categoryClassification.modelCategory,
         lastScrapedAt: new Date(),
       },
       update: {
@@ -123,6 +156,9 @@ export async function processProductJob(
         totalReviews: detail.totalReviews,
         totalSold: detail.totalSold,
         rawData: fullRawData as any,
+        extractedAttributes: extractedAttrs as any,
+        embedding: productEmbedding,
+        canonicalCategory: categoryClassification.modelCategory,
         lastScrapedAt: new Date(),
       },
     });

@@ -72,11 +72,6 @@ export function AikobiFooter() {
                   Tentang Platform & Misi
                 </Link>
               </li>
-              <li>
-                <Link href="/tokens-test" className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                  Token Sandbox
-                </Link>
-              </li>
             </ul>
           </div>
 

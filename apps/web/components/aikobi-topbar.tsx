@@ -17,12 +17,11 @@ export function AikobiTopbar() {
     { label: 'Konsultasi Bisnis', href: '/konsultasi' },
     { label: 'Tanya KOBI', href: '/tanya' },
     { label: 'Tentang', href: '/tentang' },
-    { label: 'Sandbox', href: '/tokens-test' },
   ];
 
   return (
     <header className="sticky top-2 sm:top-3 z-50 w-full px-3 sm:px-6 max-w-7xl mx-auto transition-transform duration-200">
-      <div className="liquid-glass-nav px-4 sm:px-6 h-13 sm:h-14 rounded-full flex items-center justify-between">
+      <div className="relative liquid-glass-nav px-4 sm:px-6 h-13 sm:h-14 rounded-full flex items-center justify-between">
         {/* Brand Monogram & Title (Horizontal Compact Lockup) */}
         <Link
           href="/"
@@ -54,7 +53,10 @@ export function AikobiTopbar() {
         </Link>
 
         {/* Desktop Nav Items */}
-        <nav className="hidden md:flex items-center gap-1.5" aria-label="Navigasi Utama">
+        <nav
+          className="hidden md:flex items-center gap-1.5 md:absolute md:left-1/2 md:-translate-x-1/2"
+          aria-label="Navigasi Utama"
+        >
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||

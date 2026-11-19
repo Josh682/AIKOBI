@@ -254,87 +254,15 @@ export function AikobiAdvisoryCards({ data, className = '' }: AdvisoryCardsProps
               )}
             </div>
           )}
-
-          {/* Card 3: Deep Market Sensitivity Analysis */}
-          {ar && (
-            <div className="flat-surface p-6 sm:p-8 space-y-6 shadow-sm">
-              <div className="flex items-center gap-2 border-b border-slate-200/80 dark:border-slate-800 pb-4">
-                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-                  <BarChart3 className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white">
-                    Sensitivitas Permintaan & Celah Kompetitor
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Mengapa kompetitor menjual lebih mahal atau lebih murah di Tokopedia
-                  </p>
-                </div>
-              </div>
-
-              {/* Causes of price differences */}
-              {ar.penyebab_perbedaan && ar.penyebab_perbedaan.length > 0 && (
-                <div className="space-y-2.5">
-                  <div className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                    Akar Penyebab Perbedaan Harga Kompetitor:
-                  </div>
-                  <ul className="space-y-1.5 pl-1">
-                    {ar.penyebab_perbedaan.map((p, idx) => (
-                      <li
-                        key={idx}
-                        className="text-xs text-slate-600 dark:text-slate-400 flex items-start gap-2 leading-relaxed"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0 mt-1.5" />
-                        <span>{p}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Customer sensitivity & sales correlation */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                {ar.signifikansi_pembeli && (
-                  <div className="p-4 rounded-xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200/60 dark:border-blue-900/40 space-y-2">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-blue-900 dark:text-blue-300">
-                      <Users className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                      <span>Signifikansi bagi Pembeli:</span>
-                    </div>
-                    <div className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200">
-                      {ar.signifikansi_pembeli.tingkat}
-                    </div>
-                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed text-justify">
-                      {ar.signifikansi_pembeli.analisis}
-                    </p>
-                  </div>
-                )}
-
-                {ar.korelasi_penjualan && (
-                  <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 space-y-2">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900 dark:text-amber-300">
-                      <TrendingUp className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                      <span>Korelasi Harga vs Penjualan:</span>
-                    </div>
-                    <div className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200">
-                      {ar.korelasi_penjualan.kesimpulan}
-                    </div>
-                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed text-justify">
-                      {ar.korelasi_penjualan.analisis}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* ========================================================= */}
         {/* RIGHT COLUMN: 40% Width on Desktop (lg:col-span-5)        */}
-        {/* Focus on Buyer Reviews, Praise and Complaints             */}
+        {/* Focus on Buyer Reviews & Market Sensitivity Analysis      */}
         {/* ========================================================= */}
         <div className="lg:col-span-5 space-y-6 sm:space-y-8">
           {eu && (
-            <div className="flat-surface p-6 sm:p-8 space-y-6 shadow-sm sticky top-24">
+            <div className="flat-surface p-6 sm:p-8 space-y-6 shadow-sm">
               {/* Header with Star Rating and Satisfaction % */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 dark:border-slate-800 pb-4">
                 <div className="flex items-center gap-2">
@@ -401,6 +329,78 @@ export function AikobiAdvisoryCards({ data, className = '' }: AdvisoryCardsProps
                     <li className="italic text-slate-500">Tidak ada komplain mayor yang terdeteksi.</li>
                   )}
                 </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Deep Market Sensitivity Analysis (Below Evaluasi Ulasan, beside Rekomendasi Harga) */}
+          {ar && (
+            <div className="flat-surface p-6 sm:p-8 space-y-6 shadow-sm">
+              <div className="flex items-center gap-2 border-b border-slate-200/80 dark:border-slate-800 pb-4">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                  <BarChart3 className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white">
+                    Sensitivitas Permintaan & Celah Kompetitor
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Mengapa kompetitor menjual lebih mahal atau lebih murah di Tokopedia
+                  </p>
+                </div>
+              </div>
+
+              {/* Causes of price differences */}
+              {ar.penyebab_perbedaan && ar.penyebab_perbedaan.length > 0 && (
+                <div className="space-y-2.5">
+                  <div className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                    Akar Penyebab Perbedaan Harga Kompetitor:
+                  </div>
+                  <ul className="space-y-1.5 pl-1">
+                    {ar.penyebab_perbedaan.map((p, idx) => (
+                      <li
+                        key={idx}
+                        className="text-xs text-slate-600 dark:text-slate-400 flex items-start gap-2 leading-relaxed"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0 mt-1.5" />
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Customer sensitivity & sales correlation */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 pt-2">
+                {ar.signifikansi_pembeli && (
+                  <div className="p-4 rounded-xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200/60 dark:border-blue-900/40 space-y-2">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-blue-900 dark:text-blue-300">
+                      <Users className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                      <span>Signifikansi bagi Pembeli:</span>
+                    </div>
+                    <div className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200">
+                      {ar.signifikansi_pembeli.tingkat}
+                    </div>
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed text-justify">
+                      {ar.signifikansi_pembeli.analisis}
+                    </p>
+                  </div>
+                )}
+
+                {ar.korelasi_penjualan && (
+                  <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 space-y-2">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900 dark:text-amber-300">
+                      <TrendingUp className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                      <span>Korelasi Harga vs Penjualan:</span>
+                    </div>
+                    <div className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200">
+                      {ar.korelasi_penjualan.kesimpulan}
+                    </div>
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed text-justify">
+                      {ar.korelasi_penjualan.analisis}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}

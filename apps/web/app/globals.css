@@ -993,6 +993,15 @@ body {
   }
 }
 
+@keyframes aikobi-mascot-greet {
+  0%, 100% {
+    transform: translate3d(0, 0px, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0) rotate(-1.2deg);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .aikobi-hero-spin {
     animation: aikobi-hero-spin 42s linear infinite;
@@ -1008,6 +1017,10 @@ body {
 
   .aikobi-hero-float-right {
     animation: aikobi-hero-float-right 6.0s ease-in-out infinite;
+  }
+
+  .aikobi-mascot-greet {
+    animation: aikobi-mascot-greet 4.8s ease-in-out infinite;
   }
 }
 

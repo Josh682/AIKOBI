@@ -18,12 +18,6 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     url: 'https://www.tokopedia.com/batikdanar/kemeja-batik-pria-premium-katun-lengan-panjang',
   },
   {
-    id: 'tws',
-    name: 'TWS Bluetooth 5.3 Bass',
-    category: 'Elektronik',
-    url: 'https://www.tokopedia.com/gadgetcenter/tws-earphone-bluetooth-5-3-bass-boost-waterproof',
-  },
-  {
     id: 'kopi',
     name: 'Kopi Arabika Gayo 250g',
     category: 'Kuliner',
@@ -96,7 +90,7 @@ export function AikobiHeroInput({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           disabled={loading}
-          placeholder="Tempel tautan produk Tokopedia (contoh: https://www.tokopedia.com/...)"
+          placeholder="Tempel tautan produk Tokopedia"
           className="flex-1 bg-transparent text-sm sm:text-base text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 font-medium focus:outline-none min-w-0"
           autoComplete="off"
           spellCheck="false"
@@ -143,10 +137,7 @@ export function AikobiHeroInput({
               <span>Memproses...</span>
             </>
           ) : (
-            <>
-              <Sparkles className="w-4 h-4 text-amber-300" />
-              <span>Mulai Konsultasi</span>
-            </>
+            <span>Analisis</span>
           )}
         </button>
       </form>

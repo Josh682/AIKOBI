@@ -38,7 +38,7 @@ export function AikobiEmptyState() {
           />
         </div>
         <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          KOBI Menyapa: Siap Mengecek Produk Tokopedia Anda
+          Siap Mengecek Produk Tokopedia Anda
         </h2>
         <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
           Tempel tautan produk Tokopedia atau klik salah satu contoh cepat di atas. AIKOBI akan langsung membaca harga, variasi ukuran, dan ulasan pembeli.

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useId, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -15,25 +15,29 @@ import {
   ShieldCheck,
   Search,
   ArrowRight,
-  Bot,
   User,
-  Lightbulb,
-  ExternalLink,
-  MessageSquare,
   HelpCircle,
-  TrendingUp,
   X,
   ChevronRight,
+  Square,
+  AlertCircle,
+  Database,
+  Trash2,
 } from 'lucide-react';
+import {
+  clearChatHistory,
+  clearLatestScrapeContext,
+  getChatHistory,
+  getLatestScrapeContext,
+  saveChatHistory,
+  saveLatestScrapeContext,
+  subscribeChatHistory,
+  subscribeScrapeContext,
+  type PersistedChatMessage,
+  type StoredScrapeContext,
+} from '@/lib/scrape-context';
 
-export interface ChatMessage {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: string;
-  category?: string;
-  followUps?: string[];
-}
+export type ChatMessage = PersistedChatMessage;
 
 export interface PromptStarter {
   id: string;
@@ -43,199 +47,144 @@ export interface PromptStarter {
   iconName: 'tag' | 'truck' | 'shopping-bag' | 'shield-check' | 'search';
   badge: string;
   summary: string;
-  dummyAnswer: string;
-  followUps: string[];
 }
 
 const STARTER_PROMPTS: PromptStarter[] = [
   {
     id: 'starter-1',
-    title: 'Strategi Harga Produk Baru vs Official Store',
+    title: 'Cara Menentukan Harga Produk Baru Biar Laku',
     category: 'Strategi Harga',
-    badge: 'Penetration Pricing',
+    badge: 'Atur Harga',
     iconName: 'tag',
-    summary: 'Taktik penetrasi harga bersaing tanpa merusak persepsi mutu produk di Tokopedia.',
-    prompt: 'Bagaimana cara menentukan harga produk baru agar bersaing dengan Official Store di Tokopedia?',
-    dummyAnswer: `Menembus pasar Tokopedia melawan Official Store yang sudah mengantongi ribuan ulasan membutuhkan strategi **Naik Harga Bertahap ke Harga Paling Pas**, bukan sekadar perang harga banting murah.
-
-Berikut 3 langkah operasional taktis rekomendasi KOBI:
-
-### 1. Fase Awal Menarik Pembeli (1 - 20 Transaksi Pertama)
-* **Pasang Harga Lebih Hemat (-10% s/d -15% di bawah Official Store)**: Jangan memberi diskon terlalu ekstrem (>25%) karena konsumen Indonesia justru mencurigai barang cacat, rekondisi, atau tiruan (*fake product*).
-* **Manfaatkan Fitur 'Harga Coret' Tokopedia**: Tampilkan harga normal misal **Rp 135.000** dicoret menjadi **Rp 109.000**. Algoritma pencarian Tokopedia memprioritaskan etalase yang memiliki diskon aktif.
-
-### 2. Diferensiasi Layanan yang Tidak Bisa Diberikan Official Store
-Official Store biasanya memiliki respon chat yang lambat (rata-rata 15-30 menit) dan antrean pengemasan yang panjang.
-* **Kecepatan Balas Chat**: Jaga waktu respons di bawah 3 menit. Pembeli e-commerce yang bertanya ketersediaan stok akan langsung beralih jika chat tidak segera dibalas.
-* **Proteksi Ekstra Gratis**: Tonjolkan di foto kedua: *"Free Box Kardus + 3 Lapis Bubble Wrap Tebal"*. Ini meniadakan kekhawatiran terbesar pembeli barang rusak di perjalanan.
-
-### 3. Kenaikan Harga Bertahap ke Titik Harga Paling Pas
-Setelah produk Anda mengumpulkan **15-20 ulasan bintang 5 dengan foto asli**:
-* Naikkan harga secara bertahap **+4% hingga +6% per minggu** menuju harga wajar rata-rata pasar yang laris.
-* Konsumen yang datang setelah ada ulasan sosial tidak lagi terlalu sensitif terhadap selisih harga Rp 5.000 - Rp 10.000.`,
-    followUps: [
-      'Bagaimana draf deskripsi produk untuk menonjolkan garansi?',
-      'Cara menaikkan rating toko ke 4.8 dalam 30 hari',
-    ],
+    summary: 'Cara pasang harga bersaing untuk produk baru tanpa bikin rugi atau terkesan murahan.',
+    prompt: 'Bagaimana cara menentukan harga produk baru agar tetap laku dan bisa bersaing dengan toko besar di Tokopedia?',
   },
   {
     id: 'starter-2',
-    title: 'Keunggulan Ongkir Seller Daerah vs Jakarta',
+    title: 'Tips Menang Saing Ongkir untuk Toko Luar Jakarta',
     category: 'Logistik & Ongkir',
-    badge: 'Regional Advantage',
+    badge: 'Hemat Ongkir',
     iconName: 'truck',
-    summary: 'Maksimalkan ongkir hemat & pengiriman cepat untuk menguasai pasar Jawa Tengah & Timur.',
-    prompt: 'Toko saya berlokasi di Solo/Bandung, bagaimana cara bersaing ongkir dengan seller Jakarta?',
-    dummyAnswer: `Berlokasi di luar Jabodetabek bukanlah kelemahan, melainkan **keunggulan logistik komparatif** yang sangat bernilai jika Anda membidik segmen pasar regional yang tepat!
-
-Berikut formula KOBI untuk memenangkan pesanan dari seller Jakarta:
-
-### 1. Kuasai Segmen Pembeli Jawa Tengah, DIY, & Jawa Timur
-* Pembeli di Solo, Semarang, Jogja, Surabaya, dan Malang dikenakan ongkir hanya **Rp 8.000 - Rp 11.000** dari toko Anda dengan waktu sampai 1 hari (*Next Day Delivery*).
-* Sebagai perbandingan, pengiriman seller Jakarta ke area tersebut memakan biaya **Rp 16.000 - Rp 22.000** dan waktu transit 2-3 hari kerja.
-* **Aksi Taktis**: Pasang banner etalase bertuliskan: *"Kirim dari Solo: Ongkir Lebih Hemat & Tiba Lebih Cepat untuk Seluruh Jateng & Jatim"*.
-
-### 2. Manfaatkan Efisiensi Biaya Daerah untuk Subsidi Ongkir
-Biaya sewa gudang dan operasional harian di daerah umumnya lebih terukur dibanding Jakarta.
-* Alokasikan sebagian marjin penghematan tersebut untuk mengaktifkan **Bebas Ongkir Tokopedia** dan buat **Voucher Subsidi Ongkir Toko (Rp 5.000)** dengan syarat belanja tertentu.
-* Pembeli Tokopedia sangat memperhitungkan *Total Checkout Amount* (harga barang + ongkir).
-
-### 3. Maksimalkan Cut-Off Waktu Pick-Up Kurir Sore
-* Jalin kerja sama dengan hub kurir lokal (J&T, SiCepat, JNE) agar drop-off / pick-up dapat dilakukan hingga pukul **17.00 - 18.00 WIB**.
-* Cantumkan dengan jelas di deskripsi: *"Pesanan sebelum pukul 16.00 dikirim pada hari yang sama!"*. Ini menjadi penentu konversi saat pembeli membutuhkan barang segera.`,
-    followUps: [
-      'Hitung estimasi penghematan ongkir vs seller Jakarta',
-      'Format teks banner etalase untuk toko daerah',
-    ],
+    summary: 'Manfaatkan ongkir lebih murah dan pengiriman cepat untuk pembeli di kota sekitar.',
+    prompt: 'Toko saya di luar Jakarta (misal Solo atau Bandung), bagaimana cara agar ongkir tetap menarik bagi pembeli?',
   },
   {
     id: 'starter-3',
-    title: 'Formula Bundling untuk Menaikkan AOV',
+    title: 'Cara Buat Paket Bundling Biar Pembeli Belanja Lebih Banyak',
     category: 'Margin & Bundling',
-    badge: 'AOV Multiplier',
+    badge: 'Paket Hemat',
     iconName: 'shopping-bag',
-    summary: 'Paket komplementer dan anchor pricing untuk mendongkrak margin tanpa terkesan mahal.',
-    prompt: 'Apa strategi bundling yang efektif untuk menaikkan Average Order Value (AOV) tanpa terkesan mahal?',
-    dummyAnswer: `Menaikkan harga produk satuan secara sepihak berisiko menurunkan angka konversi (*conversion drop*). Cara paling teruji untuk melipatgandakan omzet toko adalah **Strategi Bundling Komplementer**.
-
-KOBI merekomendasikan formula **Anchor + Hero Bundle + Complementary Add-on**:
-
-### 1. Produk Satuan sebagai Anchor Price (Jangkar)
-* Tampilkan produk satuan di harga pasar normal (misal: *Kopi Arabika 250g seharga Rp 65.000*). Ini berfungsi sebagai patokan psikologis (*price anchor*) bagi calon pembeli.
-
-### 2. Bentuk Paket Bundling Pahlawan (Hero Bundle)
-* Gabungkan 2 unit produk sejenis atau pasangkan dengan barang komplementer:
-  - *Isi Paket*: 2x Kopi Arabika 250g + 1x Drip Bag Tester.
-  - *Harga Beli Terpisah*: Rp 130.000 + Rp 15.000 = Rp 145.000.
-  - *Harga Bundling Promo*: **Rp 125.000** (Pembeli merasa hemat Rp 20.000).
-* **Keuntungan Nyata Toko**: Nilai transaksi (AOV) melonjak dari Rp 65.000 menjadi Rp 125.000 (**+92% AOV**), sementara biaya kardus packing dan waktu pengerjaan admin hanya keluar 1 kali!
-
-### 3. Trik Tampilan Etalase Tokopedia
-* Jadikan opsi bundling sebagai **Varian Produk** di halaman etalase yang sama.
-* Beri label varian yang menarik: *"Paket Hemat 2 Pcs (+Bonus Tester)"*.
-* Pembeli yang awalnya hanya berniat membeli 1 unit akan terdorong beralih ke paket bundling karena melihat perbandingan nilai yang jauh lebih menguntungkan.`,
-    followUps: [
-      'Contoh ide bundling untuk kategori fashion & aksesoris',
-      'Bagaimana menghitung batas diskon bundling agar tidak rugi?',
-    ],
+    summary: 'Gabungkan produk pelengkap jadi paket hemat supaya nilai belanja pembeli naik.',
+    prompt: 'Bagaimana cara bikin paket bundling produk yang menarik agar pembeli belanja lebih banyak tanpa merasa kemahalan?',
   },
   {
     id: 'starter-4',
-    title: 'SOP & Mitigasi Penanganan Ulasan Bintang 1',
+    title: 'Cara Membalas Komplain & Ulasan Bintang 1 dengan Baik',
     category: 'Ulasan & Reputasi',
-    badge: 'Crisis Recovery',
+    badge: 'Jaga Rating',
     iconName: 'shield-check',
-    summary: 'Cara merespons komplain publik agar calon pembeli lain tetap percaya dan konversi aman.',
-    prompt: 'Bagaimana cara merespons ulasan bintang 1 agar calon pembeli lain tetap percaya dan konversi tidak anjlok?',
-    dummyAnswer: `Prinsip fundamental konsultan bisnis: **Balasan ulasan negatif Anda bukan untuk berdebat dengan pengomplain, melainkan untuk meyakinkan ratusan calon pembeli masa depan yang membaca etalase tersebut!**
-
-Berikut SOP 3 langkah mitigasi ulasan bintang 1 dari KOBI:
-
-### 1. Jangan Defensif atau Menyalahkan Pembeli & Kurir
-Hindari balasan seperti *"Salah sendiri tidak membaca deskripsi"* atau *"Kurir yang lelet kenapa rating toko yang dirusak"*. Balasan bernada emosional langsung menurunkan kepercayaan pembeli baru hingga 35%.
-
-### 2. Gunakan Template Balasan Solutif & Terbuka
-Berikut draf balasan standar emas KOBI:
-> *"Halo Kak [Nama Pembeli], terima kasih banyak atas masukannya. Kami memohon maaf yang sebesar-besarnya atas ketidaknyamanan terkait [sebut kendala spesifik, misal: kemasan yang penyok / jahitan yang terlepas]. Kepuasan pembeli adalah prioritas nomor 1 kami.*
->
-> *Tim kami telah mengirimkan pesan personal melalui chat Tokopedia untuk memberikan solusi penggantian unit baru 100% gratis tanpa biaya tambahan. Mohon berkenan mengecek inbox ya Kak. Terima kasih telah membantu toko kami menjadi lebih baik."*
-
-### 3. Taktik 'Tenggelamkan' Rating Negatif Secara Sehat
-Ulasan bintang 1 paling merusak ketika berada di 3 baris teratas tab ulasan.
-* Hubungi 15-20 pembeli terakhir yang sudah menerima pesanan dengan baik: *"Halo Kak, paketnya sudah tiba ya? Jika Kakak berkenan meluangkan 1 menit memberi ulasan bintang 5 dengan foto, ada voucher diskon Rp 10.000 untuk order berikutnya!"*
-* Masuknya 5-10 ulasan bintang 5 baru dengan foto akan secara otomatis menggeser ulasan negatif ke halaman bawah.`,
-    followUps: [
-      'Draf balasan untuk kendala barang rusak akibat ekspedisi',
-      'Cara klaim asuransi barang rusak ke Tokopedia Care',
-    ],
+    summary: 'Cara membalas komplain pembeli dengan sopan supaya calon pembeli lain tetap percaya.',
+    prompt: 'Bagaimana cara membalas ulasan bintang 1 dengan sopan agar pembeli lain tetap percaya dan mau belanja?',
   },
   {
     id: 'starter-5',
-    title: 'Formula Judul & Foto Etalase Standar SEO',
+    title: 'Cara Bikin Judul & Foto Produk Biar Mudah Dicari Pembeli',
     category: 'Etalase & SEO',
-    badge: 'Discovery Algorithm',
+    badge: 'Rapikan Etalase',
     iconName: 'search',
-    summary: 'Struktur judul 70 karakter & hierarki 4 foto produk berdaya konversi tinggi.',
-    prompt: 'Format judul etalase dan susunan foto produk apa yang paling disukai algoritma pencarian Tokopedia?',
-    dummyAnswer: `Algoritma pencarian Tokopedia (*Search Discovery Engine*) memprioritaskan relevansi kata kunci judul dan rasio klik (*Click-Through Rate* / CTR) foto utama etalase Anda.
-
-Berikut susunan etalase standar emas rekomendasi KOBI:
-
-### 1. Formula Judul Produk (Maksimal 70 Karakter)
-Gunakan rumus baku: **[Jenis Produk] + [Merek / Nama Toko] + [Spesifikasi Utama] + [Keunggulan / Bahan / Varian]**
-* *Contoh Dihindari (Keyword Stuffing)*: \`KEMEJA BATIK PRIA MURAH BANGET PROMO DISKON TERLARIS 2026\` (Beresiko terkena penalti algoritma karena spam kata sifat).
-* *Contoh Standar Emas*: \`Kemeja Batik Pria Lengan Panjang Motif Parang Solo Katun Halus Slim Fit\`
-
-### 2. Hierarki 4 Foto Utama Etalase (Rasio 1:1)
-* **Foto 1 (Cover Utama / Thumbnail)**: Wajib latar belakang putih bersih atau pencahayaan studio jelas, resolusi minimal 1000x1000 px. Tampilkan produk utuh tanpa watermark yang menutupi lebih dari 15% area.
-* **Foto 2 (Detail Material / Macro Zoom-in)**: Tampilkan tekstur serat kain, bahan komponen, atau jahitan untuk memberikan rasa percaya mutu fisik.
-* **Foto 3 (Infografis Panduan Ukuran / Size Chart)**: Tabel ukuran nyata (panjang, lingkar dada, berat) untuk memangkas angka retur komplain ukuran hingga 40%.
-* **Foto 4 (Kemasan Asli & Proteksi Packing)**: Tunjukkan kotak kardus atau kemasan tebal yang akan diterima pembeli di rumah.
-
-### 3. Kunci Deskripsi Produk
-Gunakan 3 paragraf ringkas dengan poin-poin tegas (*bullet points*). Masukkan kata kunci pencarian sekunder di 100 kata pertama deskripsi.`,
-    followUps: [
-      'Audit judul produk saya apakah sudah memenuhi kaidah SEO',
-      'Berapa rasio CTR foto etalase yang tergolong sehat di Tokopedia?',
-    ],
+    summary: 'Susun judul dan foto produk yang jelas supaya gampang ditemukan saat pembeli mencari.',
+    prompt: 'Seperti apa judul produk dan susunan foto yang bagus supaya produk saya mudah ditemukan pembeli di Tokopedia?',
   },
 ];
 
-const PREVIEW_CONVERSATION: ChatMessage[] = [
-  {
-    id: 'sample-1',
-    role: 'user',
-    content: 'Bagaimana cara menentukan harga produk baru agar bersaing dengan Official Store di Tokopedia?',
-    timestamp: '12:35',
-  },
-  {
-    id: 'sample-2',
-    role: 'assistant',
-    content: STARTER_PROMPTS[0].dummyAnswer,
-    timestamp: '12:35',
-    category: 'Strategi Harga',
-    followUps: STARTER_PROMPTS[0].followUps,
-  },
-];
+const TOKOPEDIA_URL_REGEX = /https?:\/\/(?:www\.)?tokopedia\.com\/[^\s]+/i;
+
+function formatCurrentTime(): string {
+  return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+}
+
+function getServerScrapeSnapshot(): StoredScrapeContext | null {
+  return null;
+}
+
+function renderInlineFormatting(text: string) {
+  const tokens = text.split(/(\*\*.*?\*\*|\*[^*]+\*|`[^`]+`)/g);
+  return tokens.map((token, idx) => {
+    if (token.startsWith('**') && token.endsWith('**') && token.length > 4) {
+      return (
+        <strong key={idx} className="font-bold text-slate-900 dark:text-white">
+          {token.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (token.startsWith('*') && token.endsWith('*') && token.length > 2) {
+      return (
+        <em key={idx} className="italic">
+          {token.slice(1, -1)}
+        </em>
+      );
+    }
+    if (token.startsWith('`') && token.endsWith('`') && token.length > 2) {
+      return (
+        <code
+          key={idx}
+          className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-mono text-[11px] sm:text-xs"
+        >
+          {token.slice(1, -1)}
+        </code>
+      );
+    }
+    return token;
+  });
+}
+
+const EMPTY_SERVER_CHAT: ChatMessage[] = [];
+
+function getServerChatSnapshot(): ChatMessage[] {
+  return EMPTY_SERVER_CHAT;
+}
+
+function createMessageId(prefix: 'user' | 'assistant', seq: number): string {
+  return `${prefix}-${Date.now()}-${seq}`;
+}
 
 export function AikobiChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const messages = useSyncExternalStore(
+    subscribeChatHistory,
+    getChatHistory,
+    getServerChatSnapshot,
+  );
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [statusLabel, setStatusLabel] = useState<string>('KOBI sedang menyusun jawaban...');
+  const [errorBanner, setErrorBanner] = useState<{ message: string; retryPrompt?: string } | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Semua');
+  const activeScrape = useSyncExternalStore(
+    subscribeScrapeContext,
+    getLatestScrapeContext,
+    getServerScrapeSnapshot,
+  );
 
+  const chatInputId = useId();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const messageSeqRef = useRef(0);
 
   const categories = ['Semua', 'Strategi Harga', 'Logistik & Ongkir', 'Margin & Bundling', 'Ulasan & Reputasi', 'Etalase & SEO'];
 
-  // Auto-scroll to latest message
   useEffect(() => {
     if (messages.length > 0) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isTyping]);
+
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -243,82 +192,179 @@ export function AikobiChat() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const handleSendPrompt = (promptText: string, starter?: PromptStarter) => {
-    if (!promptText.trim() || isTyping) return;
+  const handleClearScrapeContext = () => {
+    clearLatestScrapeContext();
+  };
 
-    const userMsgId = `user-${Date.now()}`;
-    const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+  const handleStopGeneration = () => {
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    setIsTyping(false);
+    saveChatHistory((prev) =>
+      prev.map((m) => (m.isStreaming ? { ...m, isStreaming: false } : m)),
+    );
+  };
 
-    const newUserMsg: ChatMessage = {
-      id: userMsgId,
+  const handleSendPrompt = async (promptText: string, starter?: PromptStarter, isRetry = false) => {
+    const trimmed = promptText.trim();
+    if (!trimmed || isTyping) return;
+
+    setErrorBanner(null);
+
+    messageSeqRef.current += 1;
+    const now = formatCurrentTime();
+    const userMsg: ChatMessage = {
+      id: createMessageId('user', messageSeqRef.current),
       role: 'user',
-      content: promptText.trim(),
+      content: trimmed,
       timestamp: now,
     };
 
-    setMessages((prev) => [...prev, newUserMsg]);
-    setInputValue('');
+    const baseHistory = isRetry ? messages : [...messages, userMsg];
+    if (!isRetry) {
+      saveChatHistory(baseHistory);
+      setInputValue('');
+    }
+
     setIsTyping(true);
+    setStatusLabel('KOBI sedang menyusun jawaban...');
 
-    // Realistic consultative response delay simulation
-    setTimeout(() => {
-      let assistantResponse = '';
-      let followUps: string[] = [];
-      let category = 'Konsultasi Bisnis';
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
-      if (starter) {
-        assistantResponse = starter.dummyAnswer;
-        followUps = starter.followUps;
-        category = starter.category;
-      } else {
-        // Find if matches starter prompt keyword
-        const matched = STARTER_PROMPTS.find(
-          (s) =>
-            promptText.toLowerCase().includes(s.title.toLowerCase()) ||
-            promptText.toLowerCase().includes(s.category.toLowerCase()) ||
-            promptText.toLowerCase().includes(s.badge.toLowerCase())
-        );
+    let currentScrape = activeScrape;
 
-        if (matched) {
-          assistantResponse = matched.dummyAnswer;
-          followUps = matched.followUps;
-          category = matched.category;
+    // Auto-scrape if user pasted a Tokopedia product URL directly in chat
+    const matchedUrl = trimmed.match(TOKOPEDIA_URL_REGEX)?.[0];
+    if (matchedUrl && (!currentScrape || currentScrape.sourceUrl !== matchedUrl)) {
+      try {
+        setStatusLabel('Mengambil data produk & kompetitor dari Tokopedia...');
+        const scrapeRes = await fetch('/api/scrape', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: matchedUrl }),
+          signal: controller.signal,
+        });
+        const scrapeJson = await scrapeRes.json().catch(() => null);
+        if (scrapeRes.ok && scrapeJson?.success && scrapeJson?.data) {
+          saveLatestScrapeContext(matchedUrl, scrapeJson.data);
+          currentScrape = {
+            sourceUrl: matchedUrl,
+            scrapedAt: new Date().toISOString(),
+            data: scrapeJson.data,
+          };
+        }
+      } catch (err) {
+        if ((err as Error)?.name === 'AbortError') {
+          setIsTyping(false);
+          return;
+        }
+        // If scraping fails, continue answering within UMKM/business scope
+      }
+      setStatusLabel('KOBI sedang menganalisis data dengan Gemini Flash...');
+    }
+
+    messageSeqRef.current += 1;
+    const assistantMsgId = createMessageId('assistant', messageSeqRef.current);
+    const assistantCategory = starter?.category || (currentScrape ? 'Berbasis Data Scraping' : 'Konsultasi UMKM');
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: baseHistory.map((m) => ({ role: m.role, content: m.content })),
+          scrapeContext: currentScrape?.data ?? null,
+        }),
+        signal: controller.signal,
+      });
+
+      if (!response.ok || !response.body) {
+        const errJson = await response.json().catch(() => null);
+        throw new Error(errJson?.error || 'Gagal terhubung ke layanan KOBI AI.');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let accumulatedText = '';
+      let assistantInserted = false;
+
+      const upsertAssistantChunk = (text: string, streaming: boolean) => {
+        if (!assistantInserted) {
+          assistantInserted = true;
+          saveChatHistory((prev) => [
+            ...prev,
+            {
+              id: assistantMsgId,
+              role: 'assistant',
+              content: text,
+              timestamp: formatCurrentTime(),
+              category: assistantCategory,
+              isStreaming: streaming,
+            },
+          ]);
         } else {
-          // Dynamic consultative fallback dummy response
-          assistantResponse = `Terima kasih atas pertanyaan Anda mengenai **"${promptText.trim()}"**.
+          saveChatHistory((prev) =>
+            prev.map((m) =>
+              m.id === assistantMsgId ? { ...m, content: text, isStreaming: streaming } : m,
+            ),
+          );
+        }
+      };
 
-Berikut tinjauan strategis dan rekomendasi operasional dari KOBI untuk toko Anda di Tokopedia:
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
 
-### 1. Evaluasi & Cek Masalah Toko
-Pertanyaan Anda menyentuh aspek penting dalam pertumbuhan penjualan etalase toko online. Berdasarkan data persaingan pedagang Tokopedia, performa produk ditentukan oleh tiga faktor utama: **Harga yang Pas bagi Pembeli**, **Kecepatan Layanan & Ongkos Kirim**, serta **Rasio Ulasan Positif Pembeli**.
+        buffer += decoder.decode(value, { stream: true });
+        const events = buffer.split('\n\n');
+        buffer = events.pop() ?? '';
 
-### 2. Rencana Langkah Praktis
-* **Bandingkan Harga Pesaing**: Bandingkan harga toko Anda dengan rata-rata 20 pesaing aktif terdekat. Jangan mematok harga terlalu mahal tanpa dukungan ulasan bintang 4.8+.
-* **Tingkatkan Daya Tarik Foto**: Pastikan foto produk memperlihatkan detail kemasan kardus pelindung dan kelengkapan isi untuk membedakan toko Anda dari penjual lain.
-* **Gunakan Fitur Promosi Tokopedia**: Aktifkan fitur *Bebas Ongkir* dan buat voucher toko minimal belanja untuk mendorong pembeli menambah jumlah produk di keranjang.
+        for (const rawEvent of events) {
+          const dataLine = rawEvent
+            .split('\n')
+            .find((line) => line.startsWith('data: '));
+          if (!dataLine) continue;
 
-### 3. Cek dengan Data Nyata
-Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembeli otomatis, Anda dapat mengecek produk Tokopedia Anda secara langsung di menu **Konsultasi Bisnis**.`;
-          followUps = [
-            'Bagaimana cara menghitung margin laba bersih setelah potongan fee Tokopedia?',
-            'Cara membuat foto produk menarik dengan modal smartphone',
-            'Rekomendasi kata kunci pencarian untuk kategori produk saya',
-          ];
+          const payloadStr = dataLine.slice(6).trim();
+          if (!payloadStr) continue;
+
+          let parsed: { type?: string; text?: string; message?: string };
+          try {
+            parsed = JSON.parse(payloadStr);
+          } catch {
+            continue;
+          }
+
+          if (parsed.type === 'chunk' && parsed.text) {
+            accumulatedText += parsed.text;
+            upsertAssistantChunk(accumulatedText, true);
+          } else if (parsed.type === 'error') {
+            throw new Error(parsed.message || 'Terjadi kendala saat menghasilkan jawaban.');
+          } else if (parsed.type === 'done') {
+            if (assistantInserted) {
+              upsertAssistantChunk(accumulatedText, false);
+            }
+          }
         }
       }
 
-      const assistantMsg: ChatMessage = {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: assistantResponse,
-        timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
-        category,
-        followUps,
-      };
-
-      setMessages((prev) => [...prev, assistantMsg]);
+      if (assistantInserted) {
+        upsertAssistantChunk(accumulatedText, false);
+      } else {
+        throw new Error('KOBI tidak menerima respons dari model. Silakan coba lagi.');
+      }
+    } catch (err) {
+      if ((err as Error)?.name === 'AbortError') {
+        return;
+      }
+      const message = err instanceof Error ? err.message : 'Terjadi kesalahan jaringan.';
+      setErrorBanner({ message, retryPrompt: trimmed });
+    } finally {
+      abortControllerRef.current = null;
       setIsTyping(false);
-    }, 700);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -329,13 +375,12 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
   };
 
   const handleReset = () => {
-    setMessages([]);
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+    clearChatHistory();
     setInputValue('');
     setIsTyping(false);
-  };
-
-  const handleLoadSample = () => {
-    setMessages(PREVIEW_CONVERSATION);
+    setErrorBanner(null);
   };
 
   const filteredStarters =
@@ -360,71 +405,68 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
     }
   };
 
-  // Helper to format assistant markdown text cleanly
   const renderFormattedContent = (content: string) => {
     const lines = content.split('\n');
     return lines.map((line, idx) => {
-      // Heading 3
+      if (line.startsWith('## ')) {
+        return (
+          <h3
+            key={idx}
+            className="text-base font-bold text-slate-900 dark:text-white mt-4 mb-2 flex items-center gap-2"
+          >
+            <span className="w-1.5 h-4 rounded-full bg-blue-600 dark:bg-blue-500 inline-block" aria-hidden="true" />
+            {line.replace('## ', '')}
+          </h3>
+        );
+      }
       if (line.startsWith('### ')) {
         return (
           <h4
             key={idx}
             className="text-sm sm:text-base font-bold text-slate-900 dark:text-white mt-4 mb-2 flex items-center gap-2"
           >
-            <span className="w-1.5 h-4 rounded-full bg-blue-600 dark:bg-blue-500 inline-block" />
+            <span className="w-1.5 h-4 rounded-full bg-blue-600 dark:bg-blue-500 inline-block" aria-hidden="true" />
             {line.replace('### ', '')}
           </h4>
         );
       }
-      // Blockquote
       if (line.startsWith('> ')) {
         return (
           <blockquote
             key={idx}
             className="my-3 pl-3.5 py-1.5 border-l-2 border-blue-500 bg-blue-50/60 dark:bg-blue-950/30 text-xs sm:text-sm text-slate-700 dark:text-slate-300 italic rounded-r-lg"
           >
-            {line.replace('> ', '').replace(/\*\*(.*?)\*\*/g, '$1')}
+            {renderInlineFormatting(line.replace('> ', ''))}
           </blockquote>
         );
       }
-      // Bullet list item
-      if (line.trim().startsWith('* ') || line.trim().startsWith('- ')) {
-        const cleanLine = line.trim().replace(/^[\*\-]\s+/, '');
-        // Replace bold **text**
-        const parts = cleanLine.split(/(\*\*.*?\*\*)/g);
+      const trimmedLine = line.trim();
+      if (trimmedLine === '---' || trimmedLine === '***') {
+        return <hr key={idx} className="my-3 border-slate-200/80 dark:border-slate-800" />;
+      }
+      if (trimmedLine.startsWith('* ') || trimmedLine.startsWith('- ')) {
+        const cleanLine = trimmedLine.replace(/^[\*\-]\s+/, '');
         return (
           <li key={idx} className="ml-4 list-disc text-xs sm:text-sm text-slate-700 dark:text-slate-300 my-1 leading-relaxed">
-            {parts.map((p, pIdx) => {
-              if (p.startsWith('**') && p.endsWith('**')) {
-                return (
-                  <strong key={pIdx} className="font-bold text-slate-900 dark:text-white">
-                    {p.slice(2, -2)}
-                  </strong>
-                );
-              }
-              return p;
-            })}
+            {renderInlineFormatting(cleanLine)}
           </li>
         );
       }
-      // Empty line spacer
-      if (!line.trim()) {
+      const numberedMatch = trimmedLine.match(/^(\d+)\.\s+(.*)$/);
+      if (numberedMatch) {
+        return (
+          <p key={idx} className="ml-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300 my-1 leading-relaxed">
+            <span className="font-bold text-slate-900 dark:text-white mr-1.5">{numberedMatch[1]}.</span>
+            {renderInlineFormatting(numberedMatch[2])}
+          </p>
+        );
+      }
+      if (!trimmedLine) {
         return <div key={idx} className="h-2" />;
       }
-      // Normal paragraph
-      const parts = line.split(/(\*\*.*?\*\*)/g);
       return (
         <p key={idx} className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed my-1">
-          {parts.map((p, pIdx) => {
-            if (p.startsWith('**') && p.endsWith('**')) {
-              return (
-                <strong key={pIdx} className="font-bold text-slate-900 dark:text-white">
-                  {p.slice(2, -2)}
-                </strong>
-              );
-            }
-            return p;
-          })}
+          {renderInlineFormatting(line)}
         </p>
       );
     });
@@ -432,84 +474,98 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
 
   return (
     <div className="space-y-6 py-2 max-w-5xl mx-auto">
-      {/* Top Header & Session Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-slate-800">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-semibold mb-1">
-            <Bot className="w-3.5 h-3.5" />
-            Asisten Chatbot AIKOBI
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            Tanya KOBI
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
-            Konsultasikan strategi harga, audit etalase Tokopedia, mitigasi ulasan, dan rencana aksi toko Anda secara interaktif.
-          </p>
-        </div>
-
-        {/* Action Controls */}
-        <div className="flex items-center gap-2">
-          {messages.length > 0 ? (
-            <button
-              type="button"
-              onClick={handleReset}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold transition"
-              title="Kembali ke tampilan awal prompt starter"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Mulai Sesi Baru
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleLoadSample}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition"
-              title="Lihat contoh percakapan konsultasi lengkap"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              Lihat Contoh Percakapan
-            </button>
-          )}
-
-          <Link
-            href="/konsultasi"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-700 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20 transition"
-          >
-            <TrendingUp className="w-3.5 h-3.5" />
-            Audit Produk Tokopedia
-          </Link>
-        </div>
+      {/* Top Header */}
+      <div className="pb-2 border-b border-slate-200/80 dark:border-slate-800">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          Tanya KOBI
+        </h1>
       </div>
 
       {/* Main Chat Frame */}
       <div className="flat-surface overflow-hidden flex flex-col min-h-[600px] max-h-[820px] shadow-sm relative">
+        {/* Active Scraped Context Status Bar */}
+        <div className="px-4 sm:px-6 py-2.5 border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+          {activeScrape ? (
+            <>
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold whitespace-nowrap">
+                  <Database className="w-3 h-3" aria-hidden="true" />
+                  Data Scraping Aktif
+                </span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[240px] sm:max-w-md">
+                  {activeScrape.data.produk}
+                </span>
+                <span className="hidden sm:inline text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                  (Toko: Rp {activeScrape.data.harga_toko.toLocaleString('id-ID')} • Pasar: Rp {activeScrape.data.harga_pasar.toLocaleString('id-ID')})
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                {messages.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium transition"
+                  >
+                    <RotateCcw className="w-3 h-3" aria-hidden="true" />
+                    <span>Mulai Sesi Baru</span>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={handleClearScrapeContext}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 font-medium transition"
+                >
+                  <Trash2 className="w-3 h-3" aria-hidden="true" />
+                  <span>Hapus Konteks</span>
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                <Database className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" aria-hidden="true" />
+                <span>
+                  Mode UMKM &amp; Bisnis Online Indonesia (belum ada data scraping aktif — tempel link Tokopedia di chat atau analisis dulu).
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                {messages.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium transition"
+                  >
+                    <RotateCcw className="w-3 h-3" aria-hidden="true" />
+                    <span>Mulai Sesi Baru</span>
+                  </button>
+                )}
+                <Link
+                  href="/konsultasi"
+                  className="text-blue-600 dark:text-blue-400 font-semibold hover:underline whitespace-nowrap"
+                >
+                  Scrape Produk →
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+
         {/* Chat Stream Area */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-          {/* ======================================================== */}
-          {/* STATE 1: EMPTY STATE (BELUM ADA CHAT)                    */}
-          {/* ======================================================== */}
+          {/* STATE 1: EMPTY STATE */}
           {messages.length === 0 && (
             <div className="space-y-8 py-4 sm:py-6 animate-in fade-in duration-300">
-              {/* Welcoming Greeting Emblem */}
               <div className="text-center max-w-2xl mx-auto space-y-3">
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200/90 dark:border-slate-700/80 p-2.5 mx-auto flex items-center justify-center shadow-md shadow-blue-500/10">
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200/90 dark:border-slate-700/80 p-1.5 mx-auto flex items-center justify-center shadow-md shadow-blue-500/10">
                   <Image
-                    src="/brand/logo-mark.png"
+                    src="/brand/mascot/mascot-pointing.png"
                     alt="KOBI AI Avatar"
-                    width={56}
-                    height={56}
-                    className="w-full h-full object-contain dark:hidden"
+                    width={84}
+                    height={84}
+                    className="w-full h-full object-contain"
                     priority
                   />
-                  <Image
-                    src="/brand/logo-mark-dark.png"
-                    alt="KOBI AI Avatar"
-                    width={56}
-                    height={56}
-                    className="w-full h-full object-contain hidden dark:block"
-                    priority
-                  />
-                  <span className="absolute -bottom-1 -right-1 flex h-4 w-4">
+                  <span className="absolute -bottom-1 -right-1 flex h-4 w-4" aria-hidden="true">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white dark:border-slate-900"></span>
                   </span>
@@ -517,84 +573,36 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
 
                 <div className="space-y-1.5">
                   <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                    Halo! Ada yang bisa KOBI bantu untuk toko Anda?
+                    Halo! Ada yang bisa KOBI bantu untuk bisnis Anda?
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-lg mx-auto">
-                    KOBI adalah mitra konsultasi bisnis cerdas Anda. Pilih salah satu saran topik di bawah atau ketik langsung kendala etalase Tokopedia Anda di kolom chat.
-                  </p>
-                </div>
-
-                {/* 3 Value Badges */}
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                  <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700">
-                    Fokus Marketplace Tokopedia
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700">
-                    Rencana Aksi Operasional 30 Hari
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700">
-                    Bebas Biaya Tanpa Login Toko
-                  </span>
                 </div>
               </div>
 
-              {/* Category Filter Tabs */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                    <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
-                    Pilih Saran Topik Konsultasi Cepat:
-                  </h3>
-                  <span className="text-[11px] text-slate-400">Klik kartu untuk melihat jawaban</span>
-                </div>
-
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat}
-                      type="button"
-                      onClick={() => setActiveCategory(cat)}
-                      className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
-                        activeCategory === cat
-                          ? 'bg-blue-600 text-white shadow-xs'
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Starter Prompt Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                   {filteredStarters.map((starter) => (
                     <button
                       key={starter.id}
                       type="button"
                       onClick={() => handleSendPrompt(starter.prompt, starter)}
-                      className="group p-4 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 hover:border-blue-400 dark:hover:border-blue-500/50 text-left transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between"
+                      className="group cursor-pointer p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 hover:bg-blue-50/60 dark:hover:bg-blue-950/30 hover:border-blue-500/60 dark:hover:border-blue-500/50 text-left transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] flex flex-col gap-3"
                     >
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:scale-105 transition-transform">
-                            {getStarterIcon(starter.iconName)}
-                          </div>
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:scale-105 group-hover:bg-blue-500/10 transition-all">
+                          {getStarterIcon(starter.iconName)}
+                        </div>
+                        <div className="flex items-center gap-1.5">
                           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                             {starter.badge}
                           </span>
+                          <span className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-blue-600 text-slate-400 group-hover:text-white flex items-center justify-center transition-colors">
+                            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                          </span>
                         </div>
-                        <h4 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                          {starter.title}
-                        </h4>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                          {starter.summary}
-                        </p>
                       </div>
-
-                      <div className="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] font-semibold text-blue-600 dark:text-blue-400">
-                        <span>Tanyakan Topik Ini</span>
-                        <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                      </div>
+                      <h4 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
+                        {starter.title}
+                      </h4>
                     </button>
                   ))}
                 </div>
@@ -602,9 +610,7 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
             </div>
           )}
 
-          {/* ======================================================== */}
-          {/* STATE 2: ACTIVE CONVERSATION STREAM                      */}
-          {/* ======================================================== */}
+          {/* STATE 2: ACTIVE CONVERSATION STREAM */}
           {messages.map((msg) => {
             const isUser = msg.role === 'user';
 
@@ -613,7 +619,6 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
                 key={msg.id}
                 className={`flex gap-3 sm:gap-4 ${isUser ? 'justify-end' : 'justify-start'} animate-in fade-in duration-200`}
               >
-                {/* Assistant Avatar */}
                 {!isUser && (
                   <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1 flex-shrink-0 flex items-center justify-center shadow-xs">
                     <Image
@@ -633,9 +638,7 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
                   </div>
                 )}
 
-                {/* Message Bubble Container */}
                 <div className={`space-y-1.5 max-w-[88%] sm:max-w-[80%] ${isUser ? 'items-end' : 'items-start'}`}>
-                  {/* Sender Meta Info */}
                   <div
                     className={`flex items-center gap-2 text-[11px] font-medium text-slate-500 dark:text-slate-400 ${
                       isUser ? 'justify-end' : 'justify-start'
@@ -650,7 +653,6 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
                     <span>{msg.timestamp}</span>
                   </div>
 
-                  {/* Bubble Content */}
                   <div
                     className={`p-4 sm:p-5 rounded-2xl ${
                       isUser
@@ -665,46 +667,52 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
                     ) : (
                       <div className="space-y-2">
                         {renderFormattedContent(msg.content)}
+                        {msg.isStreaming && (
+                          <span
+                            className="inline-block w-1.5 h-4 align-middle bg-blue-600 dark:bg-blue-400 animate-pulse ml-1"
+                            aria-hidden="true"
+                          />
+                        )}
 
-                        {/* Assistant Action Bar */}
-                        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
-                          <button
-                            type="button"
-                            onClick={() => handleCopy(msg.content, msg.id)}
-                            className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition"
-                          >
-                            {copiedId === msg.id ? (
-                              <>
-                                <Check className="w-3.5 h-3.5 text-emerald-500" />
-                                <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                                  Tersalin ke Clipboard!
-                                </span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3.5 h-3.5" />
-                                <span>Salin Jawaban</span>
-                              </>
-                            )}
-                          </button>
+                        {!msg.isStreaming && (
+                          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleCopy(msg.content, msg.id)}
+                              className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition"
+                            >
+                              {copiedId === msg.id ? (
+                                <>
+                                  <Check className="w-3.5 h-3.5 text-emerald-500" aria-hidden="true" />
+                                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+                                    Tersalin ke Clipboard!
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="w-3.5 h-3.5" aria-hidden="true" />
+                                  <span>Salin Jawaban</span>
+                                </>
+                              )}
+                            </button>
 
-                          <Link
-                            href="/konsultasi"
-                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline"
-                          >
-                            <span>Coba di Audit Produk Tokopedia</span>
-                            <ArrowRight className="w-3 h-3" />
-                          </Link>
-                        </div>
+                            <Link
+                              href="/konsultasi"
+                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                            >
+                              <span>Coba di Audit Produk Tokopedia</span>
+                              <ArrowRight className="w-3 h-3" aria-hidden="true" />
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
 
-                  {/* Follow-up Suggestion Chips for Assistant Messages */}
-                  {!isUser && msg.followUps && msg.followUps.length > 0 && (
+                  {!isUser && !msg.isStreaming && msg.followUps && msg.followUps.length > 0 && (
                     <div className="pt-2 space-y-1.5">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-blue-500" />
+                        <Sparkles className="w-3 h-3 text-blue-500" aria-hidden="true" />
                         Tanya Lebih Lanjut:
                       </span>
                       <div className="flex flex-wrap gap-1.5">
@@ -723,18 +731,17 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
                   )}
                 </div>
 
-                {/* User Avatar */}
                 {isUser && (
                   <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-600 text-white flex-shrink-0 flex items-center justify-center font-bold text-xs shadow-xs">
-                    <User className="w-4 h-4" />
+                    <User className="w-4 h-4" aria-hidden="true" />
                   </div>
                 )}
               </div>
             );
           })}
 
-          {/* Typing Indicator */}
-          {isTyping && (
+          {/* Typing Indicator (only before first streamed chunk arrives) */}
+          {isTyping && !messages[messages.length - 1]?.isStreaming && (
             <div className="flex gap-3 sm:gap-4 items-start animate-in fade-in duration-150">
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1 flex items-center justify-center shadow-xs">
                 <Image
@@ -759,21 +766,40 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
                   <span className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '150ms' }} />
                   <span className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '300ms' }} />
                   <span className="text-xs text-slate-500 dark:text-slate-400 font-medium ml-2">
-                    KOBI sedang menganalisis strategi...
+                    {statusLabel}
                   </span>
                 </div>
               </div>
             </div>
           )}
 
+          {/* Error Banner */}
+          {errorBanner && (
+            <div
+              role="alert"
+              className="p-3.5 rounded-xl border border-rose-300 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/30 flex flex-wrap items-center justify-between gap-3 text-xs text-rose-800 dark:text-rose-200"
+            >
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0" aria-hidden="true" />
+                <span>{errorBanner.message}</span>
+              </div>
+              {errorBanner.retryPrompt && (
+                <button
+                  type="button"
+                  onClick={() => handleSendPrompt(errorBanner.retryPrompt!, undefined, true)}
+                  className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-semibold transition"
+                >
+                  Coba Lagi
+                </button>
+              )}
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
 
-        {/* ======================================================== */}
-        {/* DOCKED CHAT INPUT COLUMN (KOLOM CHAT KOBI)               */}
-        {/* ======================================================== */}
+        {/* DOCKED CHAT INPUT COLUMN */}
         <div className="p-3 sm:p-4 border-t border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 backdrop-blur-md space-y-2">
-          {/* Quick Context Chips Above Input */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px]">
             <span className="text-slate-400 font-semibold uppercase text-[10px] tracking-wider whitespace-nowrap pl-1">
               Topik Cepat:
@@ -781,34 +807,37 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
             <button
               type="button"
               onClick={() => handleSendPrompt('Bagaimana cara menentukan harga coret diskon yang efektif di Tokopedia?')}
-              className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500 whitespace-nowrap transition"
+              disabled={isTyping}
+              className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500 whitespace-nowrap transition disabled:opacity-50"
             >
               Strategi Harga Coret
             </button>
             <button
               type="button"
               onClick={() => handleSendPrompt('Bagaimana rumus menghitung margin bersih setelah potongan komisi Tokopedia?')}
-              className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500 whitespace-nowrap transition"
+              disabled={isTyping}
+              className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500 whitespace-nowrap transition disabled:opacity-50"
             >
               Potongan Fee Tokopedia
             </button>
             <button
               type="button"
-              onClick={() => handleSendPrompt('Apa tanda-tanda produk saya dipasang terlalu mahal dibanding toko lain?')}
-              className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500 whitespace-nowrap transition"
+              onClick={() => handleSendPrompt('Strategi apa yang efektif untuk mengembangkan UMKM kuliner atau fashion di pasar online Indonesia?')}
+              disabled={isTyping}
+              className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500 whitespace-nowrap transition disabled:opacity-50"
             >
-              Cek Harga Kemahalan
+              Strategi Kembangkan UMKM
             </button>
             <button
               type="button"
               onClick={() => handleSendPrompt('Bagaimana cara optimasi deskripsi etalase agar lolos pencarian Tokopedia?')}
-              className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500 whitespace-nowrap transition"
+              disabled={isTyping}
+              className="px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-500 whitespace-nowrap transition disabled:opacity-50"
             >
               Optimasi SEO Etalase
             </button>
           </div>
 
-          {/* Input Box Wrapper */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -816,44 +845,59 @@ Untuk mendapatkan perhitungan batas harga paling pas dan rangkuman ulasan pembel
             }}
             className="relative flex items-center gap-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus-within:border-blue-500 dark:focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-500/20 shadow-xs p-1.5 transition-all"
           >
+            <label htmlFor={chatInputId} className="sr-only">
+              Tulis pertanyaan konsultasi bisnis ke KOBI
+            </label>
             <textarea
+              id={chatInputId}
               ref={textareaRef}
               rows={1}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Tanyakan strategi harga, etalase Tokopedia, atau kendala tokomu ke KOBI... (Tekan Enter)"
+              placeholder="Tanyakan strategi bisnis online, UMKM Indonesia, atau tempel tautan Tokopedia... (Enter)"
               className="flex-1 max-h-32 min-h-[38px] py-1.5 px-3 bg-transparent text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none resize-none leading-relaxed"
             />
 
-            {inputValue.trim() && (
+            {inputValue.trim() && !isTyping && (
               <button
                 type="button"
                 onClick={() => setInputValue('')}
                 className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg transition"
-                title="Hapus teks input"
+                aria-label="Hapus teks input"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" aria-hidden="true" />
               </button>
             )}
 
-            <button
-              type="submit"
-              disabled={!inputValue.trim() || isTyping}
-              aria-label="Kirim pesan ke KOBI"
-              className={`p-2 rounded-xl transition-all flex items-center justify-center ${
-                inputValue.trim() && !isTyping
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/25 active:scale-95'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
-              }`}
-            >
-              <Send className="w-4 h-4" />
-            </button>
+            {isTyping ? (
+              <button
+                type="button"
+                onClick={handleStopGeneration}
+                aria-label="Hentikan respons KOBI"
+                className="px-2.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm flex items-center gap-1.5 transition"
+              >
+                <Square className="w-3.5 h-3.5 fill-current" aria-hidden="true" />
+                <span className="hidden sm:inline">Hentikan</span>
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={!inputValue.trim()}
+                aria-label="Kirim pesan ke KOBI"
+                className={`p-2 rounded-xl transition-all flex items-center justify-center ${
+                  inputValue.trim()
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/25 active:scale-95'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                }`}
+              >
+                <Send className="w-4 h-4" aria-hidden="true" />
+              </button>
+            )}
           </form>
 
-          {/* Micro Disclaimer */}
           <p className="text-[10px] text-center text-slate-400 dark:text-slate-500">
-            KOBI AI dirancang untuk pendampingan strategi e-commerce Tokopedia. Rekomendasi bersifat panduan analitis dan siap diintegrasikan dengan model LLM.
+            KOBI AI ditenagai oleh Google Gemini Flash dengan cakupan khusus bisnis online &amp; UMKM Indonesia. Gunakan hasil analisis sebagai pendamping keputusan bisnis Anda.
           </p>
         </div>
       </div>
